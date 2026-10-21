@@ -26,7 +26,7 @@
     'Following': 'Abonné·e',
     '＋ Follow': '＋ Suivre',
     'Built for curious minds across Algeria': 'Pour les esprits curieux d’Algérie',
-    'Your university journey, one level at a time': 'Votre parcours universitaire, un niveau à la fois',
+    'Kasdi Merbah University': 'Université Kasdi Merbah', 'Follow us on LinkedIn': 'Suivez-nous sur LinkedIn',
     'Your university, your community': 'Votre université, votre communauté',
     'How it works': 'Comment ça marche', 'Explore faculties': 'Explorer les facultés',
     'Explore subjects': 'Explorer les matières', 'The learning path': 'Parcours d’apprentissage',
