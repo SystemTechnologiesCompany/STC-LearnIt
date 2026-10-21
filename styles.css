@@ -634,13 +634,13 @@
 .animated-button svg{position:absolute;z-index:2;width:20px;height:20px;color:#66883f;overflow:visible;transition:all .7s cubic-bezier(.23,1,.32,1)}
 .animated-button .arr-1{right:12px}.animated-button .arr-2{left:-25%}
 .animated-button .circle{position:absolute;z-index:0;left:50%;top:50%;width:18px;height:18px;border-radius:50%;background:#a8d36c;opacity:0;transform:translate(-50%,-50%);transition:all .7s cubic-bezier(.23,1,.32,1)}
-.animated-button .text{position:relative;z-index:1;transform:translateX(-7px);font:800 11px 'DM Sans',sans-serif;white-space:nowrap;transition:transform .7s cubic-bezier(.23,1,.32,1)}
+.animated-button .text{position:relative;z-index:1;transform:translateX(-7px);font:800 11px 'DM Sans',sans-serif;color:#49652c;white-space:nowrap;transition:transform .7s cubic-bezier(.23,1,.32,1),color .35s ease}
 .animated-button:hover{transform:translateY(-2px);border-radius:13px;background:transparent;color:#1e2b20;box-shadow:0 0 0 10px transparent}
-.animated-button:hover .arr-1{right:-25%}.animated-button:hover .arr-2{left:12px}.animated-button:hover .text{transform:translateX(8px)}.animated-button:hover svg{color:#1e2b20}
+.animated-button:hover .arr-1{right:-25%}.animated-button:hover .arr-2{left:12px}.animated-button:hover .text{transform:translateX(8px);color:#1e2b20}.animated-button:hover svg{color:#1e2b20}
 .animated-button:hover .circle{width:230px;height:230px;opacity:1}
 .animated-button:active{transform:scale(.96);box-shadow:0 0 0 3px #91b75e}
 :root[data-theme="dark"] .animated-button{background:rgba(38,53,39,.88);color:#c7e99b;box-shadow:0 0 0 1.5px #a6cc70}
-:root[data-theme="dark"] .animated-button svg{color:#c7e99b}:root[data-theme="dark"] .animated-button .circle{background:#b5dc7d}:root[data-theme="dark"] .animated-button:hover{color:#1a241b}:root[data-theme="dark"] .animated-button:hover svg{color:#1a241b}
+:root[data-theme="dark"] .animated-button .text{color:#d1efa3}:root[data-theme="dark"] .animated-button svg{color:#c7e99b}:root[data-theme="dark"] .animated-button .circle{background:#b5dc7d}:root[data-theme="dark"] .animated-button:hover{color:#1a241b}:root[data-theme="dark"] .animated-button:hover .text,:root[data-theme="dark"] .animated-button:hover svg{color:#1a241b}
 @media(max-width:680px){.nav-actions .animated-button{min-width:108px;min-height:36px;padding:8px 18px;border-radius:999px}.nav-actions .animated-button .text{font-size:10px}.nav-actions .animated-button svg{width:17px;height:17px}.nav-actions .animated-button .arr-1{right:8px}.nav-actions .animated-button:hover .arr-2{left:8px}}
 @media(prefers-reduced-motion:reduce){.animated-button,.animated-button svg,.animated-button .text,.animated-button .circle{transition:none!important}.animated-button:hover .circle{width:0;height:0}.animated-button:hover{background:#a8d36c;color:#1e2b20}}
 
