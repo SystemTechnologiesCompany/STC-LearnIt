@@ -4,6 +4,7 @@ create extension if not exists pgcrypto;
 create table if not exists public.profiles (
   id uuid primary key references auth.users(id) on delete cascade,
   public_id text not null unique default ('STC-' || upper(substr(replace(gen_random_uuid()::text, '-', ''), 1, 6))),
+  username text not null default ('student_' || lower(substr(replace(gen_random_uuid()::text, '-', ''), 1, 8))) check (username ~ '^[a-zA-Z0-9._]{3,30}$'),
   display_name text not null default 'STC Learner' check (char_length(display_name) between 1 and 32),
   faculty text,
   avatar_url text,
@@ -12,11 +13,12 @@ create table if not exists public.profiles (
 );
 
 create index if not exists profiles_by_faculty on public.profiles(faculty);
+create unique index if not exists profiles_username_unique_ci on public.profiles (lower(username));
 
 alter table public.profiles enable row level security;
 grant select on public.profiles to authenticated;
-grant insert (id, display_name, faculty, avatar_url) on public.profiles to authenticated;
-grant update (display_name, faculty, avatar_url, updated_at) on public.profiles to authenticated;
+grant insert (id, username, display_name, faculty, avatar_url) on public.profiles to authenticated;
+grant update (username, display_name, faculty, avatar_url, updated_at) on public.profiles to authenticated;
 
 drop policy if exists "Signed-in students can view profiles" on public.profiles;
 create policy "Signed-in students can view profiles"

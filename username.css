@@ -1,0 +1,5 @@
+.username-handle{margin:1px 0 4px;color:#829477;font:600 9px 'DM Sans',sans-serif;letter-spacing:.02em}
+.username-input{margin-bottom:4px}
+.profile-page .username-input input{text-transform:lowercase}
+.profile-page .username-input:focus-within i{background:#edf5e4}
+:root[data-theme="dark"] .username-handle{color:#b1c3a5}

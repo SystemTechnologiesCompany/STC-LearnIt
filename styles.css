@@ -631,6 +631,8 @@
 
 /* Animated, brand-colored Get started button */
 .animated-button{position:relative;display:flex;align-items:center;justify-content:center;gap:4px;min-width:132px;min-height:42px;padding:10px 24px;border:2px solid transparent;border-radius:999px;background:rgba(237,245,226,.72);color:#66883f;box-shadow:0 0 0 1.5px #91b75e;cursor:pointer;overflow:hidden;isolation:isolate;transition:all .6s cubic-bezier(.23,1,.32,1)}
+.animated-button[hidden]{display:none!important}
+.user-profile[hidden]{display:none!important}
 .animated-button svg{position:absolute;z-index:2;width:20px;height:20px;color:#66883f;overflow:visible;transition:all .7s cubic-bezier(.23,1,.32,1)}
 .animated-button .arr-1{right:12px}.animated-button .arr-2{left:-25%}
 .animated-button .circle{position:absolute;z-index:0;left:50%;top:50%;width:18px;height:18px;border-radius:50%;background:#a8d36c;opacity:0;transform:translate(-50%,-50%);transition:all .7s cubic-bezier(.23,1,.32,1)}
@@ -652,6 +654,16 @@
 .user-profile:hover .user-profile-inner,.user-profile:focus-visible .user-profile-inner{background:#334d36}
 .user-profile:hover svg,.user-profile:focus-visible svg{fill:#e1f5c4;transform:scale(1.08)}
 .user-profile:active{transform:scale(.97)}
+.logout-button{width:106px;background:linear-gradient(135deg,#a8d36c 0%,rgba(168,211,108,0) 42%);background-color:rgba(143,183,91,.13)}
+.logout-button .user-profile-inner{background:#f3f6ed;color:#425536;gap:7px;font-size:10px}
+.logout-button .user-profile-inner svg{fill:none;stroke:#73954b;stroke-width:1.8}
+.logout-button:hover .user-profile-inner,.logout-button:focus-visible .user-profile-inner{background:#e7efd9}
+.logout-button:hover svg,.logout-button:focus-visible svg{fill:none;stroke:#57783c}
+:root[data-theme="dark"] .logout-button{background-color:rgba(157,203,103,.15)}
+:root[data-theme="dark"] .logout-button .user-profile-inner{background:#263729;color:#e7efe3}
+:root[data-theme="dark"] .logout-button .user-profile-inner svg{fill:none;stroke:#c9e69d}
+:root[data-theme="dark"] .logout-button:hover .user-profile-inner,:root[data-theme="dark"] .logout-button:focus-visible .user-profile-inner{background:#354b34}
+@media(max-width:680px){.nav-actions .logout-button{width:80px;height:34px;padding:2px;border-radius:11px}.nav-actions .logout-button .user-profile-inner{gap:5px;border-radius:9px;font-size:9px}.nav-actions .logout-button .user-profile-inner svg{width:15px;height:15px}}
 :root[data-theme="dark"] .user-profile{background-color:rgba(157,203,103,.17)}:root[data-theme="dark"] .user-profile-inner{background:#263729;color:#e7efe3}:root[data-theme="dark"] .user-profile-inner svg{fill:#c9e69d}:root[data-theme="dark"] .user-profile:hover .user-profile-inner{background:#354b34}
 @media(max-width:680px){.nav-actions .user-profile{width:72px;height:34px;padding:2px;border-radius:11px}.nav-actions .user-profile-inner{gap:5px;border-radius:9px;font-size:9px}.nav-actions .user-profile-inner svg{width:15px;height:15px}}
 /* Supabase account dialog states */

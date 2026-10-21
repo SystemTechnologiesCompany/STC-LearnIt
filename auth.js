@@ -40,11 +40,14 @@
   function clearFeedback() { setFeedback(''); }
   function updateAuthUi() {
     const label = document.querySelector('#loginBtn .user-profile-inner > span');
+    const loginButton = document.querySelector('#loginBtn');
     const createButton = document.querySelector('#signupBtn');
-    if (label) label.textContent = currentSession
-      ? (document.documentElement.dataset.language === 'fr' ? 'Déconnexion' : 'Log out')
-      : (document.documentElement.dataset.language === 'fr' ? 'Se connecter' : 'Log in');
-    if (createButton) createButton.hidden = Boolean(currentSession);
+    const logoutButton = document.querySelector('#logoutBtn');
+    const signedIn = Boolean(currentSession);
+    if (label) label.textContent = document.documentElement.dataset.language === 'fr' ? 'Se connecter' : 'Log in';
+    if (loginButton) loginButton.hidden = signedIn;
+    if (createButton) createButton.hidden = signedIn;
+    if (logoutButton) logoutButton.hidden = !signedIn;
     window.dispatchEvent(new CustomEvent('stc:auth-state', { detail: { session: currentSession } }));
   }
   function setMode(next) {
@@ -99,7 +102,9 @@
 
   document.querySelector('#loginBtn')?.addEventListener('click', async () => {
     if (!currentSession) return openAuth('login');
-    if (!supabaseClient) return openAuth('login');
+  });
+  document.querySelector('#logoutBtn')?.addEventListener('click', async () => {
+    if (!currentSession || !supabaseClient) return;
     const { error } = await supabaseClient.auth.signOut();
     if (error) setFeedback(humanizeError(error), 'error');
   });

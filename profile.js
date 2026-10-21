@@ -7,7 +7,7 @@
       })
     : null;
 
-  const PROFILE_COLUMNS = 'id,public_id,display_name,faculty,avatar_url';
+  const PROFILE_COLUMNS = 'id,public_id,username,display_name,faculty,avatar_url';
   const FACULTY_NAMES = {
     medicine: 'Faculty of Medicine',
     itc: 'Faculty of New Information Technologies & Communication',
@@ -74,6 +74,8 @@
   function renderProfile() {
     const displayName = profile.display_name || 'STC Learner';
     document.querySelector('#displayName').textContent = displayName;
+    document.querySelector('#usernameDisplay').textContent = `@${profile.username || 'student'}`;
+    document.querySelector('#usernameInput').value = profile.username || '';
     document.querySelector('#nameInput').value = profile.display_name || '';
     document.querySelector('#facultySelect').value = profile.faculty || '';
     document.querySelector('#displayFaculty').textContent = FACULTY_NAMES[profile.faculty] || text('Faculty not selected', 'Aucune faculté sélectionnée');
@@ -111,11 +113,11 @@
   }
   function setDatabaseError(error) {
     console.error('STC Learnit profile setup:', error);
-    const notReady = /relation .* does not exist|permission denied|row-level security/i.test(error?.message || '');
+    const notReady = /relation .* does not exist|column .* does not exist|permission denied|row-level security/i.test(error?.message || '');
     showGate({
       title: text('Your student profile is not ready yet.', 'Votre profil étudiant n’est pas encore prêt.'),
       message: notReady
-        ? text('The profile database needs its setup SQL. Run the latest supabase/setup.sql in the Supabase SQL Editor, then try again.', 'La base de données du profil nécessite son script d’installation. Exécutez le fichier supabase/setup.sql dans l’éditeur SQL de Supabase, puis réessayez.')
+        ? text('The profile database needs an update. Run supabase/unique-username.sql in the Supabase SQL Editor, then try again.', 'La base de données du profil doit être mise à jour. Exécutez supabase/unique-username.sql dans l’éditeur SQL de Supabase, puis réessayez.')
         : text('We could not load your profile. Check your connection and try again.', 'Impossible de charger votre profil. Vérifiez votre connexion et réessayez.'),
       retry: true
     });
@@ -159,7 +161,7 @@
     const name = document.createElement('strong');
     name.textContent = person.display_name || 'STC Learner';
     const info = document.createElement('small');
-    info.textContent = `${person.public_id} · ${FACULTY_NAMES[person.faculty] || ''}`;
+    info.textContent = `@${person.username || 'student'} · ${person.public_id} · ${FACULTY_NAMES[person.faculty] || ''}`;
     details.append(name, info);
     row.append(avatar, details);
 
@@ -251,24 +253,40 @@
     event.preventDefault();
     if (!user || !profile) return;
     const displayName = document.querySelector('#nameInput').value.trim();
+    const username = document.querySelector('#usernameInput').value.trim().toLowerCase();
     const faculty = document.querySelector('#facultySelect').value;
-    if (!displayName || displayName.length > 32 || !faculty) return;
+    if (!displayName || displayName.length > 32 || !/^[a-z0-9._]{3,30}$/.test(username) || !faculty) return;
     const saveButton = form.querySelector('[type="submit"]');
     saveButton.disabled = true;
     const { data, error } = await client.from('profiles').update({
+      username,
       display_name: displayName,
       faculty,
       updated_at: new Date().toISOString()
     }).eq('id', user.id).select(PROFILE_COLUMNS).single();
     saveButton.disabled = false;
     if (error) {
+      if (error.code === '23505') {
+        const input = document.querySelector('#usernameInput');
+        input.setCustomValidity(text('That username is already taken.', 'Ce nom d’utilisateur est déjà pris.'));
+        input.reportValidity();
+        document.querySelector('#saveFeedback').textContent = text('Choose another username.', 'Choisissez un autre nom d’utilisateur.');
+        return;
+      }
       toast(text('Could not save your profile. Please try again.', 'Impossible d’enregistrer votre profil. Réessayez.'));
       return;
     }
+    document.querySelector('#usernameInput').setCustomValidity('');
+    document.querySelector('#saveFeedback').textContent = '';
     profile = data;
     renderProfile();
     await renderPeople(searchInput.value);
     toast(text('Profile updated ✓', 'Profil mis à jour ✓'));
+  });
+
+  document.querySelector('#usernameInput').addEventListener('input', event => {
+    event.currentTarget.setCustomValidity('');
+    document.querySelector('#saveFeedback').textContent = '';
   });
 
   document.querySelector('#photoInput').addEventListener('change', async event => {

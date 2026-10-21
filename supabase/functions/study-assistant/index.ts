@@ -30,6 +30,7 @@ Deno.serve(async (request: Request) => {
 
   const geminiKey = Deno.env.get('GEMINI_API_KEY');
   if (!geminiKey) return json({ error: 'AI service is not configured.' }, 503);
+  const groqKey = Deno.env.get('GROQ_API_KEY');
 
   let body: { messages?: unknown; language?: unknown; studyContext?: unknown };
   try {
@@ -45,7 +46,10 @@ Deno.serve(async (request: Request) => {
   const messages = body.messages.map((message: any) => {
     if (!message || !['user', 'assistant'].includes(message.role) || typeof message.content !== 'string') return null;
     const content = message.content.trim();
-    if (!content || content.length > 400) return null;
+    // Previous model replies are often longer than a student's question. The
+    // old shared 400-character cap caused every follow-up to reject its own history.
+    const maxLength = message.role === 'assistant' ? 12000 : 6000;
+    if (!content || content.length > maxLength) return null;
     return { role: message.role, content };
   });
   if (messages.some((message: unknown) => message === null) || messages[messages.length - 1]?.role !== 'user') {
@@ -74,35 +78,66 @@ Deno.serve(async (request: Request) => {
     'Do not claim to access course materials or university records that were not provided in the conversation.',
   ].join(' ');
 
+  let geminiStatus = 0;
   try {
     const response = await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash-lite:generateContent', {
       method: 'POST',
-      headers: {
-        'x-goog-api-key': geminiKey,
-        'Content-Type': 'application/json',
-      },
+      headers: { 'x-goog-api-key': geminiKey, 'Content-Type': 'application/json' },
       body: JSON.stringify({
         systemInstruction: { parts: [{ text: instructions }] },
         contents: messages.map((message: { role: string; content: string }) => ({
           role: message.role === 'assistant' ? 'model' : 'user',
           parts: [{ text: message.content }],
         })),
-        generationConfig: { maxOutputTokens: 500, temperature: 0.4 },
+        generationConfig: { maxOutputTokens: 1800, temperature: 0.4 },
       }),
     });
-
-    if (!response.ok) {
-      const status = response.status === 429 ? 429 : 502;
-      return json({ error: status === 429 ? 'Free AI usage limit reached. Try again later.' : 'The AI provider could not answer.' }, status);
+    geminiStatus = response.status;
+    if (response.ok) {
+      const result = await response.json();
+      const answer = Array.isArray(result.candidates?.[0]?.content?.parts)
+        ? result.candidates[0].content.parts.map((part: { text?: string }) => part.text || '').join('').trim()
+        : '';
+      if (answer) return json({ answer, provider: 'gemini' });
     }
-
-    const result = await response.json();
-    const answer = Array.isArray(result.candidates?.[0]?.content?.parts)
-      ? result.candidates[0].content.parts.map((part: { text?: string }) => part.text || '').join('').trim()
-      : '';
-    if (!answer) return json({ error: 'The AI returned an empty answer.' }, 502);
-    return json({ answer });
   } catch {
-    return json({ error: 'Could not reach the AI provider.' }, 502);
+    // Continue to the backup provider if Gemini is temporarily unreachable.
+  }
+
+  // Only retry on rate limits, provider failures, network errors, or empty replies.
+  const shouldFallback = geminiStatus === 0 || geminiStatus === 429 || geminiStatus >= 500;
+  if (!shouldFallback) {
+    return json({ error: 'The primary AI provider rejected the request.' }, 502);
+  }
+  if (!groqKey) {
+    return json({ error: geminiStatus === 429 ? 'Free AI usage limit reached. Try again later.' : 'The AI provider could not answer.' }, geminiStatus === 429 ? 429 : 502);
+  }
+
+  try {
+    const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${groqKey}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'openai/gpt-oss-120b',
+        messages: [
+          { role: 'system', content: instructions },
+          ...messages.map((message: { role: string; content: string }) => ({ role: message.role, content: message.content })),
+        ],
+        max_completion_tokens: 1800,
+        temperature: 0.4,
+      }),
+    });
+    if (!response.ok) {
+      console.error('Groq fallback returned HTTP', response.status);
+      return json({ error: response.status === 429 ? 'AI providers are busy. Please try again later.' : 'Both AI providers could not answer.' }, response.status === 429 ? 429 : 502);
+    }
+    const result = await response.json();
+    const answer = typeof result.choices?.[0]?.message?.content === 'string'
+      ? result.choices[0].message.content.trim()
+      : '';
+    if (!answer) return json({ error: 'Both AI providers returned an empty answer.' }, 502);
+    return json({ answer, provider: 'groq' });
+  } catch {
+    return json({ error: 'Both AI providers are temporarily unreachable.' }, 502);
   }
 });

@@ -19,6 +19,8 @@
     'Could not load classmates. Try again in a moment.': 'Impossible de charger les camarades. Réessayez dans un instant.',
     'Could not update your follows. Please try again.': 'Impossible de mettre à jour vos abonnements. Réessayez.',
     'Could not save your profile. Please try again.': 'Impossible d’enregistrer votre profil. Réessayez.',
+    'Username': 'Nom d’utilisateur', 'Choose a unique username': 'Choisissez un nom d’utilisateur unique',
+    'Your username is unique. Use 3–30 letters, numbers, dots or underscores.': 'Votre nom d’utilisateur est unique. Utilisez 3 à 30 lettres, chiffres, points ou tirets bas.',
     'Could not upload your photo. Check the avatar storage setup and try again.': 'Impossible d’envoyer votre photo. Vérifiez la configuration du stockage des avatars et réessayez.',
     'Log out': 'Se déconnecter',
     'Following': 'Abonné·e',
@@ -496,6 +498,9 @@
     const nodes = [];
     while (walker.nextNode()) nodes.push(walker.currentNode);
     for (const node of nodes) {
+      // Authentication updates this label from the live Supabase session.
+      // Keep the language observer from restoring its original static text.
+      if (node.parentElement?.closest('#loginBtn')) continue;
       if (!originalText.has(node)) originalText.set(node, node.nodeValue);
       const source = originalText.get(node);
       const key = source.trim();
