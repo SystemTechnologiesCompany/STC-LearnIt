@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <script>try{if(localStorage.getItem('stc-learnit-theme')==='dark')document.documentElement.dataset.theme='dark'}catch{}</script>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f7f8f4"><meta name="description" content="See the STC Learnit XP leaderboard.">
+  <title>STC Leaderboard</title>
+  <link rel="icon" type="image/png" href="logo%20only%20head.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="leaderboard.css">
+</head>
+<body><div class="site-starfield" aria-hidden="true"><i class="sky-stars sky-stars--small"></i><i class="sky-stars sky-stars--medium"></i><i class="sky-stars sky-stars--bright"></i></div>
+  <div class="announcement"><span class="sparkle" aria-hidden="true">✦</span><span class="announcement-copy">Built for curious minds across Algeria</span><a class="announce-right" href="https://www.univ-ouargla.dz/" target="_blank" rel="noopener noreferrer">Your university journey, one level at a time <span aria-hidden="true">↗</span></a><button class="announcement-close" type="button" aria-label="Close announcement">×</button></div>
+  <header class="topbar">
+    <a class="brand" href="index.html" aria-label="STC Learnit home"><span class="brand-mark">STC<img class="brand-symbol logo-glyph" src="logo%20only%20head.png" alt=""></span><span class="brand-name">Learn<span>it</span></span></a>
+    <nav class="main-nav" aria-label="Main navigation"><a href="index.html#faculties">Explore faculties</a><a href="learn.html">Learn &amp; practice</a><a href="index.html#levels">The learning path</a><a class="active-leader-link" href="leaderboard.html" aria-current="page">Leaderboard</a><a href="profile.html">My profile</a></nav>
+    <div class="nav-actions"><div class="language-picker"><button type="button" class="language-toggle" id="languageToggle" aria-label="Choose language" aria-haspopup="true" aria-expanded="false"><img src="assets/icons/languages.svg" alt="" aria-hidden="true"></button><div class="language-menu" id="languageMenu" role="menu" aria-label="Choose language" hidden><button type="button" role="menuitemradio" data-language-option="en" aria-checked="true">EN <span>English</span></button><button type="button" role="menuitemradio" data-language-option="fr" aria-checked="false">FR <span>Français</span></button></div></div><label class="theme-toggle theme-switch" title="Toggle light and dark mode"><input type="checkbox" class="theme-switch__checkbox" id="themeToggle" aria-label="Dark mode"><div class="theme-switch__container" aria-hidden="true"><div class="theme-switch__clouds"></div><div class="theme-switch__stars-container"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 144 55" fill="none"><path d="M135.8 3C135 4 134.1 4.3 133 4.4c1.1.1 2 .5 2.8 1.4.8.8 1.2 1.8 1.2 3 0-.8.2-1.5.5-2.1.4-.7.8-1.2 1.5-1.6.6-.4 1.3-.6 2-.7-1.1-.1-2-.5-2.8-1.3-.8-.9-1.2-1.9-1.2-3 0 1.1-.4 2.1-1.2 3z" fill="currentColor"/></svg></div><div class="theme-switch__circle-container"><div class="theme-switch__sun-moon-container"><div class="theme-switch__moon"><div class="theme-switch__spot"></div><div class="theme-switch__spot"></div><div class="theme-switch__spot"></div></div></div></div></div></label><a class="btn btn-quiet leader-profile-link" href="profile.html">My profile</a><button class="menu-toggle" id="leaderMenuToggle" aria-label="Open menu">☰</button></div>
+  </header>
+  <main class="leaderboard-page">
+    <section class="leader-hero"><div class="leader-hero-copy"><div class="eyebrow"><span class="eyebrow-icon"><img class="logo-glyph" src="logo%20only%20head.png" alt=""></span> LEARN TOGETHER. RISE TOGETHER.</div><h1>Every point<br>takes you <span>higher.</span></h1><p>Learn, practice and earn XP as you make progress through your university subjects.</p><a class="btn btn-dark" href="learn.html">Earn XP <span>↗</span></a></div><div class="leader-art" aria-hidden="true"><div class="leader-orbit"></div><div class="trophy">🏆</div><span class="spark spark-a">✦</span><span class="spark spark-b">✧</span><span class="leader-chip">⚡ XP</span></div></section>
+    <section class="leader-content" aria-labelledby="leaderTitle"><div class="leader-heading"><div><div class="eyebrow"><span class="eyebrow-icon"><img class="logo-glyph" src="logo%20only%20head.png" alt=""></span> THE STC LEARNIT RANKS</div><h2 id="leaderTitle">Leaderboard</h2></div></div>
+      <div class="leader-filters" role="group" aria-label="Leaderboard period"><button type="button" class="leader-filter active" data-period="all">All time</button><button type="button" class="leader-filter" data-period="week">This week</button></div>
+      <div class="podium" aria-label="Top three learners"><div class="podium-place second"><div class="podium-avatar">2</div><div class="podium-name">2nd place</div><div class="podium-xp">— XP</div><div class="podium-block">02</div></div><div class="podium-place first"><div class="crown">♛</div><div class="podium-avatar">1</div><div class="podium-name">1st place</div><div class="podium-xp">— XP</div><div class="podium-block">01</div></div><div class="podium-place third"><div class="podium-avatar">3</div><div class="podium-name">3rd place</div><div class="podium-xp">— XP</div><div class="podium-block">03</div></div></div>
+      <div class="ranking-card"><div class="ranking-top"><div><h3>Top learners</h3><p>Sorted by total experience points</p></div><span class="ranking-period">ALL TIME</span></div><div class="ranking-columns"><span>RANK</span><span>STUDENT</span><span>FACULTY</span><span>XP EARNED</span></div><div id="leaderRows" class="leader-rows"></div><div class="leader-empty" id="leaderEmpty"><div class="empty-medal">✦</div><h3>Your first lesson starts the climb.</h3><p>Choose a subject, sharpen your skills and earn XP as you learn.</p><a class="btn btn-dark" href="learn.html">Start learning <span>↗</span></a></div></div>
+    </section>
+  </main>
+  <footer><a class="brand" href="index.html"><span class="brand-mark">STC<img class="brand-symbol logo-glyph" src="logo%20only%20head.png" alt=""></span><span class="brand-name">Learn<span>it</span></span></a><span>STC The Way To Greatness</span><a href="index.html#faculties">Find your study path ↗</a></footer>
+  <script src="theme.js"></script><script src="leaderboard.js"></script><script src="language.js"></script>
+</body>
+</html>
+
+
+
+
+
