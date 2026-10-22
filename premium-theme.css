@@ -133,6 +133,7 @@
 :root[data-premium-theme="galaxy"] .level-up-banner strong{color:#c5ddff}
 :root[data-premium-theme="galaxy"] .unit-section+.unit-section{border-color:rgba(149,189,239,.18)}
 :root[data-premium-theme="galaxy"] .map-line{background:repeating-linear-gradient(to bottom,#4f78ad 0 5px,transparent 5px 10px)}
+:root[data-premium-theme="galaxy"] .infinite-energy-icon{display:block;width:24px;height:24px;object-fit:contain;filter:brightness(0) saturate(100%) invert(79%) sepia(14%) saturate(1304%) hue-rotate(179deg) brightness(103%) contrast(101%) drop-shadow(0 0 5px rgba(120,181,255,.7))}
 @media(max-width:680px){
   :root[data-premium-theme="galaxy"] .subject-faculty h3{font-size:8px}
   :root[data-premium-theme="galaxy"] .subject-option-text strong{font-size:9px}

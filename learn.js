@@ -142,7 +142,7 @@ function updateEnergyView(){
   refreshLocalEnergy();
   const energyCount=document.querySelector('#energyCount'),energyTimer=document.querySelector('#energyTimer');
   const unlimited=document.documentElement.dataset.membership==='stc';
-  if(unlimited){if(energyCount)energyCount.textContent='∞';if(energyTimer)energyTimer.textContent=energyLanguage()?'Illimitée':'Unlimited';return}
+  if(unlimited){if(energyCount)energyCount.innerHTML='<img class="infinite-energy-icon" src="infinity-symbol-svgrepo-com.svg" alt="" aria-hidden="true">';if(energyTimer)energyTimer.textContent=energyLanguage()?'Illimitée':'Unlimited';return}
   if(energyCount)energyCount.textContent=progress.energy;
   if(!energyTimer)return;
   if(progress.energy>=20)energyTimer.textContent=energyLanguage()?'Pleine':'Full';
