@@ -41,8 +41,38 @@ function makeCourseStages(subject){if(subject==='Earth Science and Universe')sub
 let courseStages=makeCourseStages('Geology');
 
 const storageKey='stc-learn-practice-v1';
-function readProgress(){try{const saved=JSON.parse(localStorage.getItem(storageKey)||'{}');return{completed:Array.isArray(saved.completed)?saved.completed.filter(id=>typeof id==='string'):[],xp:Number.isFinite(saved.xp)?Math.max(0,saved.xp):0,streak:Number.isFinite(saved.streak)?Math.max(0,saved.streak):0,lastActive:typeof saved.lastActive==='string'?saved.lastActive:'',todayXP:Number.isFinite(saved.todayXP)?Math.max(0,saved.todayXP):0,goalDate:typeof saved.goalDate==='string'?saved.goalDate:''}}catch{return{completed:[],xp:0,streak:0,lastActive:'',todayXP:0,goalDate:''}}}
+const guestStorageKey=`${storageKey}:guest`;
+const legacyOwnerKey=`${storageKey}:legacy-owner`;
+const accountStorageKey=userId=>`${storageKey}:user:${userId}`;
+const config=window.STC_SUPABASE_CONFIG||{};
+const progressClient=/^https:\/\/[a-z0-9-]+\.supabase\.co$/i.test(config.url||'')&&typeof config.publishableKey==='string'&&config.publishableKey.startsWith('sb_publishable_')&&window.supabase?.createClient
+  ?window.supabase.createClient(config.url,config.publishableKey,{auth:{autoRefreshToken:true,persistSession:true,detectSessionInUrl:true}})
+  :null;
+const emptyProgress=()=>({completed:[],xp:0,streak:0,lastActive:'',todayXP:0,goalDate:''});
+const normalizeProgress=saved=>({completed:Array.isArray(saved?.completed)?[...new Set(saved.completed.filter(id=>typeof id==='string'))]:[],xp:Number.isFinite(Number(saved?.xp))?Math.max(0,Number(saved.xp)):0,streak:Number.isFinite(Number(saved?.streak))?Math.max(0,Number(saved.streak)):0,lastActive:typeof(saved?.lastActive??saved?.last_active)==='string'?(saved.lastActive??saved.last_active):'',todayXP:Number.isFinite(Number(saved?.todayXP??saved?.today_xp))?Math.max(0,Number(saved.todayXP??saved.today_xp)):0,goalDate:typeof(saved?.goalDate??saved?.goal_date)==='string'?(saved.goalDate??saved.goal_date):''});
+function readProgress(key=storageKey){try{return normalizeProgress(JSON.parse(localStorage.getItem(key)||'{}'))}catch{return emptyProgress()}}
+const stageXpById=new Map();
+subjectGroups.forEach(group=>group.subjects.forEach(subject=>makeCourseStages(subject).forEach(stage=>stageXpById.set(stage.id,stage.xp))));
+function mergeProgress(first,second){
+  const left=normalizeProgress(first),right=normalizeProgress(second),completed=[...new Set([...left.completed,...right.completed])];
+  const catalogXp=completed.reduce((sum,id)=>sum+(stageXpById.get(id)||0),0);
+  const activityOrder=left.lastActive.localeCompare(right.lastActive);
+  const latestActivity=activityOrder>0?left:activityOrder<0?right:{...right,streak:Math.max(left.streak,right.streak)};
+  const earlierActivity=activityOrder>0?right:left;
+  const activeDayGap=latestActivity.lastActive&&earlierActivity.lastActive?(Date.parse(`${latestActivity.lastActive}T00:00:00Z`)-Date.parse(`${earlierActivity.lastActive}T00:00:00Z`))/86400000:0;
+  const mergedStreak=activityOrder===0?Math.max(left.streak,right.streak):activeDayGap===1?Math.max(latestActivity.streak,earlierActivity.streak+1):latestActivity.streak;
+  const goalOrder=left.goalDate.localeCompare(right.goalDate),goal=goalOrder>0?left:goalOrder<0?right:{...right,todayXP:Math.max(left.todayXP,right.todayXP)};
+  return{completed,xp:Math.max(catalogXp,left.xp,right.xp),streak:mergedStreak,lastActive:latestActivity.lastActive,todayXP:goal.todayXP,goalDate:goal.goalDate};
+}
 let progress=readProgress();
+let activeUserId=null,sessionResolved=false,cloudSyncReady=false,authGeneration=0,cloudSyncTimer=0,cloudSyncQueue=Promise.resolve();
+function statusText(state){
+  const french=document.documentElement.dataset.language==='fr';
+  const labels={checking:['Checking your account…','Vérification du compte…'],local:['Saved on this device','Enregistré sur cet appareil'],syncing:['Syncing progress…','Synchronisation de la progression…'],synced:['Progress synced to your account','Progression synchronisée avec votre compte'],error:['Sync unavailable. Progress is saved on this device.','Synchronisation indisponible. Progression enregistrée sur cet appareil.']};
+  return labels[state]?.[french?1:0]||labels.local[french?1:0];
+}
+function setSyncStatus(state){const node=document.querySelector('#progressSyncText');if(node)node.textContent=statusText(state);const badge=document.querySelector('#progressSyncStatus');if(badge)badge.dataset.state=state}
+function writeLocalProgress(){const key=activeUserId?accountStorageKey(activeUserId):sessionResolved?guestStorageKey:storageKey;try{localStorage.setItem(key,JSON.stringify(progress))}catch{}}
 let chosen={faculty:subjectGroups[2].faculty,subject:'Earth Science and Universe'};
 const levelOptions=['Licence · Year 1','Licence · Year 2','Licence · Year 3','Master · Year 1','Master · Year 2'];
 let selectedLevel='Licence · Year 1';
@@ -56,7 +86,77 @@ const pathContent=document.querySelector('#pathContent');
 const lessonDialog=document.querySelector('#lessonDialog');
 const lessonContinue=document.querySelector('#lessonContinue');
 function todayKey(){const date=new Date();return `${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,'0')}-${String(date.getDate()).padStart(2,'0')}`}
-function saveProgress(){try{localStorage.setItem(storageKey,JSON.stringify(progress))}catch{}}
+function scheduleCloudSync(){
+  if(!progressClient||!activeUserId||!cloudSyncReady)return;
+  clearTimeout(cloudSyncTimer);setSyncStatus('syncing');
+  cloudSyncTimer=window.setTimeout(()=>{
+    const userId=activeUserId,snapshot=normalizeProgress(progress);
+    cloudSyncQueue=cloudSyncQueue.then(async()=>{
+      if(activeUserId!==userId)return;
+      try{
+        const {error}=await progressClient.rpc('merge_learning_progress',{
+          p_completed:snapshot.completed,p_xp:snapshot.xp,p_streak:snapshot.streak,
+          p_last_active:snapshot.lastActive||null,p_today_xp:snapshot.todayXP,p_goal_date:snapshot.goalDate||null
+        });
+        if(error)throw error;
+        const {data,error:readError}=await progressClient.from('learning_progress').select('*').eq('user_id',userId).single();
+        if(readError)throw readError;
+        if(activeUserId!==userId)return;
+        const cloudProgress=normalizeProgress(data);
+        progress=mergeProgress(progress,cloudProgress);writeLocalProgress();
+        const needsReconcile=progress.completed.length>cloudProgress.completed.length||progress.xp>cloudProgress.xp||progress.streak>cloudProgress.streak||progress.todayXP>cloudProgress.todayXP;
+        try{localStorage.setItem(legacyOwnerKey,userId)}catch{}
+        setSyncStatus('synced');
+        updateProgressStats();renderPath();
+        if(needsReconcile)scheduleCloudSync();
+      }catch(error){
+        console.error('STC Learnit progress sync:',error);
+        if(activeUserId===userId)setSyncStatus('error');
+      }
+    });
+  },350);
+}
+function saveProgress(){writeLocalProgress();scheduleCloudSync()}
+let loadingUserId=null;
+async function applyLearningSession(session){
+  const userId=session?.user?.id||null;
+  if(userId===activeUserId&&sessionResolved&&(userId===null||cloudSyncReady||loadingUserId===userId))return;
+  const generation=++authGeneration;sessionResolved=true;activeUserId=userId;cloudSyncReady=false;loadingUserId=userId;
+  if(!userId){
+    const owner=(()=>{try{return localStorage.getItem(legacyOwnerKey)}catch{return null}})();
+    const guest=readProgress(guestStorageKey),legacy=!owner?readProgress(storageKey):emptyProgress();
+    progress=mergeProgress(guest,legacy);loadingUserId=null;setSyncStatus('local');updateProgressStats();renderPath();return;
+  }
+  setSyncStatus('checking');
+  const cached=readProgress(accountStorageKey(userId));
+  let owner=null;try{owner=localStorage.getItem(legacyOwnerKey)}catch{}
+  const canImportLegacy=!owner||owner===userId;
+  const legacy=canImportLegacy?mergeProgress(readProgress(storageKey),readProgress(guestStorageKey)):emptyProgress();
+  const localCandidate=mergeProgress(cached,legacy);
+  try{
+    const {data,error}=await progressClient.from('learning_progress').select('*').eq('user_id',userId).maybeSingle();
+    if(error)throw error;
+    if(generation!==authGeneration)return;
+    progress=mergeProgress(localCandidate,data?normalizeProgress(data):emptyProgress());
+    cloudSyncReady=true;loadingUserId=null;
+    writeLocalProgress();updateProgressStats();renderPath();scheduleCloudSync();
+  }catch(error){
+    if(generation!==authGeneration)return;
+    console.error('STC Learnit progress load:',error);
+    progress=localCandidate;cloudSyncReady=true;loadingUserId=null;
+    writeLocalProgress();setSyncStatus('error');updateProgressStats();renderPath();
+  }
+}
+function initializeProgressSync(){
+  if(!progressClient){sessionResolved=true;setSyncStatus('local');updateProgressStats();renderPath();return}
+  progressClient.auth.onAuthStateChange((_event,session)=>{window.setTimeout(()=>applyLearningSession(session),0)});
+  progressClient.auth.getSession().then(({data,error})=>{
+    if(error){console.error('STC Learnit account check:',error);sessionResolved=true;setSyncStatus('local');return}
+    applyLearningSession(data.session);
+  }).catch(error=>{console.error('STC Learnit account check:',error);sessionResolved=true;setSyncStatus('local')});
+}
+window.addEventListener('online',()=>{if(activeUserId&&cloudSyncReady)scheduleCloudSync()});
+window.addEventListener('stc:language-change',()=>setSyncStatus(document.querySelector('#progressSyncStatus')?.dataset.state||'local'));
 function addProgressForStage(stage){
   if(progress.completed.includes(stage.id))return;
   const today=todayKey();
@@ -183,4 +283,4 @@ document.querySelector('#lessonClose').addEventListener('click',()=>lessonDialog
 document.querySelector('#lessonBack').addEventListener('click',()=>lessonDialog.close());
 document.querySelector('#learnMenuToggle').addEventListener('click',()=>document.querySelector('.main-nav').classList.toggle('open'));
 document.querySelectorAll('.main-nav a').forEach(link=>link.addEventListener('click',()=>document.querySelector('.main-nav').classList.remove('open')));
-updateProgressStats();renderSubjects();renderPath();
+updateProgressStats();renderSubjects();renderPath();initializeProgressSync();

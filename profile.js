@@ -86,15 +86,17 @@
     avatar.style.backgroundImage = profile.avatar_url ? `url("${profile.avatar_url}")` : '';
   }
   async function loadOwnCounts() {
-    const [followersResult, followingResult, followingIdsResult] = await Promise.all([
+    const [followersResult, followingResult, followingIdsResult, progressResult] = await Promise.all([
       client.from('follows').select('follower_id', { count: 'exact', head: true }).eq('following_id', user.id),
       client.from('follows').select('following_id', { count: 'exact', head: true }).eq('follower_id', user.id),
-      client.from('follows').select('following_id').eq('follower_id', user.id)
+      client.from('follows').select('following_id').eq('follower_id', user.id),
+      client.from('learning_progress').select('xp').eq('user_id', user.id).maybeSingle()
     ]);
     const resultError = followersResult.error || followingResult.error || followingIdsResult.error;
     if (resultError) throw resultError;
     document.querySelector('#followerCount').textContent = followersResult.count || 0;
     document.querySelector('#followingCount').textContent = followingResult.count || 0;
+    document.querySelector('#learningXP').textContent = `✦ ${progressResult.data?.xp || 0}`;
     followingIds = new Set((followingIdsResult.data || []).map(row => row.following_id));
   }
   async function loadOwnProfile() {

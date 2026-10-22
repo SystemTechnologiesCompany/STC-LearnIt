@@ -2,6 +2,13 @@
 .announcement .announce-university { display: inline-flex; align-items: center; gap: 4px; color: #d5e2cf; text-decoration: none; transition: color .18s ease; }
 .announcement .announce-university:hover { color: #c9ef83; text-decoration: underline; text-underline-offset: 3px; }
 .announcement .announce-university span { color: #bfec62; margin-left: 3px; }
+.progress-sync { gap: 7px; }
+.sync-indicator { width: 7px; height: 7px; flex: 0 0 7px; border-radius: 50%; background: #99a393; }
+.progress-sync[data-state="synced"] .sync-indicator { background: #81b652; box-shadow: 0 0 0 3px rgba(129,182,82,.14); }
+.progress-sync[data-state="syncing"] .sync-indicator,
+.progress-sync[data-state="checking"] .sync-indicator { background: #d3a449; animation: sync-pulse 1s ease-in-out infinite alternate; }
+.progress-sync[data-state="error"] .sync-indicator { background: #d36e62; box-shadow: 0 0 0 3px rgba(211,110,98,.14); }
+@keyframes sync-pulse { to { opacity: .45; transform: scale(.82); } }
 @media (min-width: 681px) {
   .announcement { padding-right: 48px; }
   .announcement-close { right: 12px; z-index: 2; }
@@ -44,6 +51,7 @@
   .hero h1 { font-size: clamp(43px, 12vw, 56px); line-height: .99; }
   .hero-lede { max-width: 38ch; font-size: 14px; line-height: 1.65; }
   .hero-actions { display: grid; grid-template-columns: 1fr 1fr; align-items: stretch; gap: 10px; margin-top: 22px; }
+  .welcome-badges { flex-wrap: wrap; }
   .hero-actions > * { min-height: 46px; justify-content: center; text-align: center; }
   .hero-actions .btn-support { grid-column: 1 / -1; }
   .hero-art { min-height: 350px; margin: 8px 0 0; }
