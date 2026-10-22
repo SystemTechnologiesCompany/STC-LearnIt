@@ -43,6 +43,16 @@
             <button class="btn btn-dark save-profile" type="submit">Save changes <span>↗</span></button><span class="save-feedback" id="saveFeedback" aria-live="polite"></span>
           </form>
         </article>
+        <article class="edit-card theme-choice-card" id="themeChoiceCard" hidden>
+          <div class="card-heading"><div><div class="eyebrow" data-theme-eyebrow>STC MEMBERSHIP</div><h3 data-theme-title>Choose your theme</h3></div><span class="edit-icon" aria-hidden="true">✿</span></div>
+          <p class="theme-choice-intro" data-theme-intro>Personalize your Learnit experience. Your choice follows your account.</p>
+          <div class="theme-choice-options" role="group" aria-label="Choose your website theme">
+            <button class="theme-choice" type="button" data-profile-theme="basic" aria-pressed="false"><span class="theme-choice-swatch theme-choice-swatch--basic" aria-hidden="true"></span><span><strong data-theme-basic>Basic</strong><small data-theme-basic-copy>Classic Learnit colors</small></span><span class="theme-choice-check" aria-hidden="true">✓</span></button>
+            <button class="theme-choice" type="button" data-profile-theme="sakura" aria-pressed="false"><span class="theme-choice-swatch theme-choice-swatch--sakura" aria-hidden="true">✿</span><span><strong data-theme-sakura>Sakura</strong><small data-theme-sakura-copy>Blush pink and soft white</small></span><span class="theme-choice-check" aria-hidden="true">✓</span></button>
+            <button class="theme-choice" type="button" data-profile-theme="galaxy" aria-pressed="false"><span class="theme-choice-swatch theme-choice-swatch--galaxy" aria-hidden="true">✦</span><span><strong data-theme-galaxy>Galaxy</strong><small data-theme-galaxy-copy>Midnight blue and starlight</small></span><span class="theme-choice-check" aria-hidden="true">✓</span></button>
+          </div>
+          <p class="theme-choice-status" id="themeChoiceStatus" role="status" aria-live="polite"></p>
+        </article>
       </section>
       <aside class="community-column">
         <article class="community-card">

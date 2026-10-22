@@ -38,6 +38,8 @@
   let followingIds = new Set();
   let queryVersion = 0;
   let toastTimer;
+  const themeChoiceCard = document.querySelector('#themeChoiceCard');
+  const themeChoiceStatus = document.querySelector('#themeChoiceStatus');
 
   const isFrench = () => document.documentElement.dataset.language === 'fr';
   const text = (english, french) => isFrench() ? french : english;
@@ -71,6 +73,47 @@
     badge.classList.toggle('online', online);
     badge.classList.toggle('offline', !online);
     document.querySelector('#presenceLabel').textContent = online ? 'ONLINE' : 'OFFLINE';
+  }
+  function renderThemeChoice({ membership = document.documentElement.dataset.membership, theme = document.documentElement.dataset.premiumTheme || 'basic' } = {}) {
+    if (!themeChoiceCard) return;
+    themeChoiceCard.hidden = membership !== 'stc';
+    if (membership !== 'stc') return;
+    document.querySelector('[data-theme-eyebrow]').textContent = text('STC MEMBERSHIP', 'ABONNEMENT STC');
+    document.querySelector('[data-theme-title]').textContent = text('Choose your theme', 'Choisissez votre thème');
+    document.querySelector('[data-theme-intro]').textContent = text('Personalize your Learnit experience. Your choice follows your account.', 'Personnalisez votre expérience Learnit. Votre choix suit votre compte.');
+    const labels = isFrench()
+      ? { basic: ['Classique', 'Les couleurs originales de Learnit'], sakura: ['Sakura', 'Rose tendre et blanc'], galaxy: ['Galaxie', 'Bleu nuit et étoiles'] }
+      : { basic: ['Basic', 'Classic Learnit colors'], sakura: ['Sakura', 'Blush pink and soft white'], galaxy: ['Galaxy', 'Midnight blue and starlight'] };
+    for (const [name, description] of Object.entries(labels)) {
+      document.querySelector(`[data-theme-${name}]`).textContent = name === 'basic' && isFrench() ? 'Classique' : name === 'galaxy' && isFrench() ? 'Galaxie' : name === 'sakura' ? 'Sakura' : name === 'basic' ? 'Basic' : 'Galaxy';
+      document.querySelector(`[data-theme-${name}-copy]`).textContent = description;
+    }
+    document.querySelectorAll('[data-profile-theme]').forEach(button => {
+      button.setAttribute('aria-pressed', String(button.dataset.profileTheme === theme));
+      button.setAttribute('aria-label', `${labels[button.dataset.profileTheme][0]} — ${labels[button.dataset.profileTheme][1]}`);
+    });
+    if (themeChoiceStatus.dataset.state !== 'saving') themeChoiceStatus.textContent = '';
+  }
+  async function saveThemeChoice(theme) {
+    if (!user || document.documentElement.dataset.membership !== 'stc' || !['basic', 'sakura', 'galaxy'].includes(theme)) return;
+    const buttons = [...document.querySelectorAll('[data-profile-theme]')];
+    buttons.forEach(button => { button.disabled = true; });
+    themeChoiceStatus.dataset.state = 'saving';
+    themeChoiceStatus.textContent = text('Saving your theme…', 'Enregistrement du thème…');
+    const { data, error } = await client.auth.updateUser({ data: { ...(user.user_metadata || {}), stc_theme: theme } });
+    buttons.forEach(button => { button.disabled = false; });
+    if (error) {
+      themeChoiceStatus.dataset.state = 'error';
+      themeChoiceStatus.textContent = text('Could not save your theme. Please try again.', 'Impossible d’enregistrer votre thème. Réessayez.');
+      renderThemeChoice({ membership: 'stc', theme: document.documentElement.dataset.premiumTheme || 'basic' });
+      return;
+    }
+    user = data.user || user;
+    themeChoiceStatus.dataset.state = 'saved';
+    themeChoiceStatus.textContent = text('Theme saved to your account.', 'Thème enregistré sur votre compte.');
+    window.dispatchEvent(new CustomEvent('stc:membership-theme-change', { detail: { theme } }));
+    renderThemeChoice({ membership: 'stc', theme });
+    themeChoiceStatus.textContent = text('Theme saved to your account.', 'Thème enregistré sur votre compte.');
   }
   function renderProfile() {
     const displayName = profile.display_name || 'STC Learner';
@@ -359,12 +402,15 @@
     if (error) toast(text('Could not sign out. Please try again.', 'Impossible de vous déconnecter. Réessayez.'));
   });
   retryButton.addEventListener('click', startProfile);
+  document.querySelectorAll('[data-profile-theme]').forEach(button => button.addEventListener('click', () => saveThemeChoice(button.dataset.profileTheme)));
+  window.addEventListener('stc:membership-theme-ready', event => renderThemeChoice(event.detail));
   document.querySelector('#profileMenuToggle').addEventListener('click', () => document.querySelector('.main-nav').classList.toggle('open'));
   window.addEventListener('online', setPresence);
   window.addEventListener('offline', setPresence);
   window.addEventListener('pageshow', setPresence);
   document.addEventListener('visibilitychange', setPresence);
   window.addEventListener('stc:language-change', () => {
+    renderThemeChoice();
     if (profile) {
       renderProfile();
       renderPeople(searchInput.value);
