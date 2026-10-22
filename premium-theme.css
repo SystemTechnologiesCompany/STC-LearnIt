@@ -281,3 +281,10 @@
 :root[data-premium-theme="sakura"] .theme-choice-status{color:#ffb5d4}
 :root[data-premium-theme="sakura"] .theme-choice-swatch--basic{color:#354531}
 @media(prefers-reduced-motion:reduce){:root.theme-transitioning,:root.theme-transitioning body,:root.theme-transitioning :is(header,main,section,article,aside,footer,button,a,input,textarea,select,dialog){transition:none!important}:root.theme-transitioning::after{animation:none!important;display:none}}
+:root[data-premium-theme="sakura"] .payment-methods{border-color:rgba(244,143,189,.28);background:linear-gradient(145deg,rgba(52,29,48,.9),rgba(30,17,29,.88))}
+:root[data-premium-theme="sakura"] .payment-methods-title{color:#fff5fa}
+:root[data-premium-theme="sakura"] .payment-method{border-color:rgba(238,159,195,.22);background:rgba(55,31,50,.78);color:#fff2f8}
+:root[data-premium-theme="sakura"] .payment-method:hover{border-color:rgba(255,165,205,.55);background:rgba(75,41,66,.9)}
+:root[data-premium-theme="sakura"] .payment-method.is-selected{border-color:#f3a2c6;background:rgba(132,53,91,.5);box-shadow:0 0 0 3px rgba(240,133,180,.13),0 8px 22px rgba(0,0,0,.24)}
+:root[data-premium-theme="sakura"] .payment-method-copy small,:root[data-premium-theme="sakura"] .payment-setup-message{color:#dfc5d2}
+:root[data-premium-theme="sakura"] .payment-method-arrow{color:#ffb5d4}

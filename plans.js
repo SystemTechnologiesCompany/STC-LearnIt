@@ -13,6 +13,11 @@
       premiumLabel: 'Premium plans', premiumPrimary: 'Premium', premiumSubscribed: 'Your plan', premiumHover: 'View plans',
       currentPlan: plan => `Your ${plan} plan`, daysLeft: days => `${days} day${days === 1 ? '' : 's'} left`, lessThanDay: 'Less than a day left', ended: 'Your plan has ended', expired: 'Plan end date unavailable',
       choose: 'Choose plan', soon: 'Payment setup is coming soon. Plans are not available for purchase yet.',
+      paymentTitle: plan => `Choose payment method for ${plan}`,
+      paymentSetup: 'Payment processing is not connected yet. Checkout will be enabled after STC completes merchant setup.',
+      paymentBaridi: 'BaridiMob / BaridPay', paymentBaridiDetail: 'Pay through the official BaridPay merchant QR flow.',
+      paymentVisa: 'Visa', paymentVisaDetail: 'Secure card checkout through an approved bank or payment gateway.',
+      setupRequired: 'SETUP REQUIRED',
       badge: 'BEST VALUE', energyTitle: 'Out of energy?', energyBody: 'Your energy is used for lessons and Sewingo AI messages. Take a look at the membership plans.'
     },
     fr: {
@@ -28,6 +33,11 @@
       premiumLabel: 'Offres Premium', premiumPrimary: 'Premium', premiumSubscribed: 'Votre offre', premiumHover: 'Voir les offres',
       currentPlan: plan => `Votre offre ${plan}`, daysLeft: days => `Encore ${days} jour${days === 1 ? '' : 's'}`, lessThanDay: 'Moins d’un jour restant', ended: 'Votre offre a expiré', expired: 'Date de fin indisponible',
       choose: 'Choisir l’offre', soon: 'Le paiement sera bientôt disponible. Les offres ne sont pas encore achetables.',
+      paymentTitle: plan => `Choisissez un moyen de paiement pour ${plan}`,
+      paymentSetup: 'Le paiement n’est pas encore connecté. Le paiement sera activé après la configuration du compte marchand STC.',
+      paymentBaridi: 'BaridiMob / BaridPay', paymentBaridiDetail: 'Paiement par le QR marchand officiel BaridPay.',
+      paymentVisa: 'Visa', paymentVisaDetail: 'Paiement sécurisé par carte via une banque ou une passerelle agréée.',
+      setupRequired: 'CONFIGURATION REQUISE',
       badge: 'MEILLEUR CHOIX', energyTitle: 'Plus d’énergie ?', energyBody: 'L’énergie est utilisée pour les leçons et les messages à Sewingo AI. Découvrez les offres.'
     }
   };
@@ -49,6 +59,14 @@
         <article class="plan-card plan-card--pro"><div class="plan-card-top"><span class="plan-name"></span><strong class="plan-price"></strong></div><ul></ul><button type="button" class="plan-choose"></button></article>
         <article class="plan-card plan-card--stc"><span class="plan-badge"></span><div class="plan-card-top"><span class="plan-name"></span><strong class="plan-price"></strong></div><ul></ul><button type="button" class="plan-choose"></button></article>
       </div>
+      <section class="payment-methods" hidden aria-live="polite">
+        <div class="payment-methods-heading"><h3 class="payment-methods-title"></h3><span class="payment-setup-badge"></span></div>
+        <div class="payment-method-list">
+          <button class="payment-method" type="button" data-payment-method="baridi" aria-pressed="false"><span class="payment-method-mark payment-method-mark--baridi" aria-hidden="true">B</span><span class="payment-method-copy"><strong class="payment-method-baridi"></strong><small class="payment-method-baridi-detail"></small></span><span class="payment-method-arrow" aria-hidden="true">↗</span></button>
+          <button class="payment-method" type="button" data-payment-method="visa" aria-pressed="false"><span class="payment-method-mark payment-method-mark--visa" aria-hidden="true">V</span><span class="payment-method-copy"><strong class="payment-method-visa"></strong><small class="payment-method-visa-detail"></small></span><span class="payment-method-arrow" aria-hidden="true">↗</span></button>
+        </div>
+        <p class="payment-setup-message"></p>
+      </section>
       <form class="plans-code-form" novalidate>
         <label for="plansCode"></label>
         <div class="plans-code-controls"><input id="plansCode" name="code" type="text" maxlength="32" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder=""><button class="plans-redeem" type="submit"></button></div>
@@ -78,6 +96,14 @@
       else q('.current-plan-time').textContent = t.daysLeft(Math.ceil(remainingMs / (24 * 60 * 60 * 1000)));
     }
     q('.plans-eyebrow span').textContent = t.eyebrow;
+    q('.payment-methods').hidden = true;
+    q('.payment-methods-title').textContent = '';
+    q('.payment-setup-badge').textContent = t.setupRequired;
+    q('.payment-method-baridi').textContent = t.paymentBaridi;
+    q('.payment-method-baridi-detail').textContent = t.paymentBaridiDetail;
+    q('.payment-method-visa').textContent = t.paymentVisa;
+    q('.payment-method-visa-detail').textContent = t.paymentVisaDetail;
+    q('.payment-setup-message').textContent = t.paymentSetup;
     q('#plansTitle').textContent = t.title;
     q('.plans-subtitle').textContent = t.subtitle;
     q('.plans-close').setAttribute('aria-label', t.close);
@@ -92,8 +118,10 @@
       }));
       card.querySelector('.plan-choose').textContent = t.choose;
       card.querySelector('.plan-choose').onclick = () => {
-        q('.plans-status').textContent = t.soon;
-        q('.plans-status').hidden = false;
+        q('.plans-status').hidden = true;
+        q('.payment-methods-title').textContent = t.paymentTitle(name);
+        q('.payment-methods').hidden = false;
+        q('.payment-methods').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
       };
     });
     q('.plans-footnote').textContent = t.soon;
@@ -102,6 +130,13 @@
     q('.plans-redeem').textContent = t.redeem;
   }
   q('.plans-close').addEventListener('click', () => dialog.close());
+  dialog.querySelectorAll('[data-payment-method]').forEach(button => button.addEventListener('click', () => {
+    dialog.querySelectorAll('[data-payment-method]').forEach(option => {
+      const selected = option === button;
+      option.classList.toggle('is-selected', selected);
+      option.setAttribute('aria-pressed', String(selected));
+    });
+  }));
   q('.plans-code-form').addEventListener('submit', async event => {
     event.preventDefault();
     const t = copy[french() ? 'fr' : 'en'];
