@@ -84,3 +84,10 @@
 @keyframes premium-gradient-drift{from{background-position:0% center}to{background-position:100% center}}
 @media(max-width:760px){.plans-nav-button.button,.premium-plans-button.button{min-height:35px;padding:.6em .95em;font-size:10px}}
 @media(prefers-reduced-motion:reduce){.plans-nav-button.button,.premium-plans-button.button,.premium-plans-button svg{animation:none!important;transition:none!important}}
+.plans-current-plan{position:relative;display:flex;align-items:center;justify-content:space-between;gap:12px;margin:-8px 0 20px;padding:13px 15px;border:1px solid rgba(132,178,247,.27);border-radius:13px;background:linear-gradient(110deg,rgba(28,52,84,.72),rgba(17,31,52,.62));color:#dfeaff;animation:plans-card-in .38s cubic-bezier(.2,.8,.2,1) both}
+.plans-current-plan[hidden]{display:none!important}
+.current-plan-label{font-size:10px;font-weight:750;letter-spacing:.02em}
+.current-plan-time{color:#a8d1ff;font-size:11px;font-weight:850;white-space:nowrap}
+:root[data-premium-theme="sakura"] .plans-current-plan{border-color:rgba(244,143,189,.28);background:linear-gradient(110deg,rgba(73,36,62,.76),rgba(42,25,40,.68));color:#fff0f6}
+:root[data-premium-theme="sakura"] .current-plan-time{color:#ffb5d4}
+@media(max-width:420px){.plans-current-plan{align-items:flex-start;flex-direction:column;gap:5px}}

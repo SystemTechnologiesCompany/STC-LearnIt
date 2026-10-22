@@ -10,7 +10,8 @@
       codeInvalid: 'That code is invalid, expired, or has already been used.', codeLimit: 'Too many attempts. Please wait a few minutes and try again.',
       codeSignIn: 'Sign in before redeeming a plan code.', codeService: 'Code redemption is temporarily unavailable. Please try again later.',
       codeSuccess: plan => `${plan} plan activated until`,
-      premiumLabel: 'Premium plans', premiumPrimary: 'Premium', premiumHover: 'View plans',
+      premiumLabel: 'Premium plans', premiumPrimary: 'Premium', premiumSubscribed: 'Your plan', premiumHover: 'View plans',
+      currentPlan: plan => `Your ${plan} plan`, daysLeft: days => `${days} day${days === 1 ? '' : 's'} left`, lessThanDay: 'Less than a day left', ended: 'Your plan has ended', expired: 'Plan end date unavailable',
       choose: 'Choose plan', soon: 'Payment setup is coming soon. Plans are not available for purchase yet.',
       badge: 'BEST VALUE', energyTitle: 'Out of energy?', energyBody: 'Your energy is used for lessons and Sewingo AI messages. Take a look at the membership plans.'
     },
@@ -24,7 +25,8 @@
       codeInvalid: 'Ce code est invalide, expiré ou déjà utilisé.', codeLimit: 'Trop de tentatives. Attendez quelques minutes avant de réessayer.',
       codeSignIn: 'Connectez-vous avant d’activer un code.', codeService: 'L’activation des codes est temporairement indisponible. Réessayez plus tard.',
       codeSuccess: plan => `Offre ${plan} activée jusqu’au`,
-      premiumLabel: 'Offres Premium', premiumPrimary: 'Premium', premiumHover: 'Voir les offres',
+      premiumLabel: 'Offres Premium', premiumPrimary: 'Premium', premiumSubscribed: 'Votre offre', premiumHover: 'Voir les offres',
+      currentPlan: plan => `Votre offre ${plan}`, daysLeft: days => `Encore ${days} jour${days === 1 ? '' : 's'}`, lessThanDay: 'Moins d’un jour restant', ended: 'Votre offre a expiré', expired: 'Date de fin indisponible',
       choose: 'Choisir l’offre', soon: 'Le paiement sera bientôt disponible. Les offres ne sont pas encore achetables.',
       badge: 'MEILLEUR CHOIX', energyTitle: 'Plus d’énergie ?', energyBody: 'L’énergie est utilisée pour les leçons et les messages à Sewingo AI. Découvrez les offres.'
     }
@@ -42,6 +44,7 @@
       <button class="plans-close" type="button" aria-label="Close plans">×</button>
       <div class="plans-eyebrow">✦ <span></span></div>
       <h2 id="plansTitle"></h2><p class="plans-subtitle"></p>
+      <div class="plans-current-plan" hidden><span class="current-plan-label"></span><strong class="current-plan-time"></strong></div>
       <div class="plans-grid">
         <article class="plan-card plan-card--pro"><div class="plan-card-top"><span class="plan-name"></span><strong class="plan-price"></strong></div><ul></ul><button type="button" class="plan-choose"></button></article>
         <article class="plan-card plan-card--stc"><span class="plan-badge"></span><div class="plan-card-top"><span class="plan-name"></span><strong class="plan-price"></strong></div><ul></ul><button type="button" class="plan-choose"></button></article>
@@ -58,9 +61,22 @@
   function render() {
     const t = copy[french() ? 'fr' : 'en'];
     document.querySelectorAll('.premium-plans-button').forEach(button => {
-      button.setAttribute('aria-label', t.premiumLabel);
-      button.querySelector('.premium-button-label').textContent = t.premiumPrimary;
+      const subscribed = Boolean(document.documentElement.dataset.membership);
+      button.setAttribute('aria-label', subscribed ? t.premiumSubscribed : t.premiumLabel);
+      button.querySelector('.premium-button-label').textContent = subscribed ? t.premiumSubscribed : t.premiumPrimary;
     });
+    const plan = document.documentElement.dataset.membership;
+    const currentPlan = q('.plans-current-plan');
+    currentPlan.hidden = !plan;
+    if (plan) {
+      q('.current-plan-label').textContent = t.currentPlan(plan === 'stc' ? 'STC' : 'Pro');
+      const expiry = Date.parse(document.documentElement.dataset.membershipExpiresAt || '');
+      const remainingMs = expiry - Date.now();
+      if (!Number.isFinite(expiry)) q('.current-plan-time').textContent = t.expired;
+      else if (remainingMs <= 0) q('.current-plan-time').textContent = t.ended;
+      else if (remainingMs < 24 * 60 * 60 * 1000) q('.current-plan-time').textContent = t.lessThanDay;
+      else q('.current-plan-time').textContent = t.daysLeft(Math.ceil(remainingMs / (24 * 60 * 60 * 1000)));
+    }
     q('.plans-eyebrow span').textContent = t.eyebrow;
     q('#plansTitle').textContent = t.title;
     q('.plans-subtitle').textContent = t.subtitle;
@@ -135,6 +151,7 @@
   });
   dialog.addEventListener('click', event => { if (event.target === dialog) dialog.close(); });
   window.addEventListener('stc:language-change', render);
+  window.addEventListener('stc:membership-theme-ready', render);
   window.STCPlans = {
     open({ depleted = false } = {}) {
       render();
@@ -150,7 +167,7 @@
     }
   };
   document.querySelectorAll('[data-open-plans]').forEach(button => button.addEventListener('click', event => {
-    event.preventDefault(); window.STCPlans.open();
+    event.preventDefault(); window.STCPlans.open({ membership: document.documentElement.dataset.membership });
   }));
   render();
 })();

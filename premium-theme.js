@@ -6,7 +6,7 @@
   if (!client) return;
   window.stcSupabase = client;
 
-  function apply(plan, savedTheme = 'galaxy') {
+  function apply(plan, savedTheme = 'galaxy', expiresAt = null) {
     const root = document.documentElement;
     const membership = plan === 'pro' || plan === 'stc' ? plan : null;
     const previousTheme = root.dataset.premiumTheme || 'basic';
@@ -19,14 +19,17 @@
     }
     if (membership) {
       root.dataset.membership = membership;
+      if (expiresAt) root.dataset.membershipExpiresAt = expiresAt;
+      else delete root.dataset.membershipExpiresAt;
       const theme = membership === 'pro' ? 'sakura' : ['basic', 'sakura', 'galaxy'].includes(savedTheme) ? savedTheme : 'galaxy';
       if (theme === 'basic') delete root.dataset.premiumTheme;
       else root.dataset.premiumTheme = theme;
       setSakuraPetals(theme === 'sakura');
-      window.dispatchEvent(new CustomEvent('stc:membership-theme-ready', { detail: { membership, theme } }));
+      window.dispatchEvent(new CustomEvent('stc:membership-theme-ready', { detail: { membership, theme, expiresAt } }));
     } else {
       delete document.documentElement.dataset.premiumTheme;
       delete document.documentElement.dataset.membership;
+      delete document.documentElement.dataset.membershipExpiresAt;
       setSakuraPetals(false);
       window.dispatchEvent(new CustomEvent('stc:membership-theme-ready', { detail: { membership: null, theme: 'basic' } }));
     }
@@ -54,14 +57,15 @@
     const { data, error } = await client.from('premium_subscriptions')
       .select('plan,expires_at').eq('user_id', session.user.id).maybeSingle();
     if (error) { console.warn('Could not check STC Learnit membership. Apply premium-codes.sql in Supabase.', error); apply(null); return; }
-    apply(data && Date.parse(data.expires_at) > Date.now() ? data.plan : null, session.user.user_metadata?.stc_theme || 'galaxy');
+    apply(data && Date.parse(data.expires_at) > Date.now() ? data.plan : null, session.user.user_metadata?.stc_theme || 'galaxy', data?.expires_at);
   }
 
   client.auth.getSession().then(({ data }) => refresh(data?.session));
   client.auth.onAuthStateChange((_event, session) => { queueMicrotask(() => refresh(session)); });
   window.addEventListener('stc:membership-change', async event => {
     const { data } = await client.auth.getSession();
-    apply(event.detail?.plan, data?.session?.user?.user_metadata?.stc_theme || 'galaxy');
+    apply(event.detail?.plan, data?.session?.user?.user_metadata?.stc_theme || 'galaxy', event.detail?.expiresAt);
   });
-  window.addEventListener('stc:membership-theme-change', event => apply('stc', event.detail?.theme || 'galaxy'));
+  window.addEventListener('stc:membership-theme-change', event => apply('stc', event.detail?.theme || 'galaxy', rootExpiry()));
+  function rootExpiry() { return document.documentElement.dataset.membershipExpiresAt || null; }
 })();
