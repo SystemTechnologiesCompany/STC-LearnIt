@@ -138,7 +138,7 @@ function addChatMessage(text,role='assistant',label='SEWINGO AI'){
 async function getAssistantError(error){
   const french=document.documentElement.dataset.language==='fr';
   let message=String(error?.message||'');
-  try{const response=error?.context;if(response?.clone){const payload=await response.clone().json();if(payload?.error)message+=` ${payload.error}`}}catch{}
+  try{const response=error?.context;if(response?.clone){const payload=await response.clone().json();if(payload?.error)message+=` ${payload.error}`;if(payload?.code==='ENERGY_DEPLETED'){window.STCPlans?.open({depleted:true});return french?'Votre énergie est épuisée. Découvrez les offres disponibles.':'You are out of energy. View the available plans.'}if(payload?.code==='ENERGY_SYNC_UNAVAILABLE')return french?'La synchronisation de l’énergie est indisponible. Vérifiez la configuration Supabase.':'Energy sync is unavailable. Check the Supabase setup.'}}catch{}
   if(/FunctionsFetchError|Failed to fetch|NetworkError/i.test(message))return french?'Impossible de joindre l’assistant. Vérifiez que la fonction study-assistant a été déployée.':'I couldn’t reach the assistant. Check that the study-assistant function has been deployed.';
   if(/401|JWT|unauthorized/i.test(message))return french?'Reconnectez-vous pour utiliser l’assistant.':'Please sign in again to use the study assistant.';
   if(/429|rate limit/i.test(message))return french?'Trop de questions en peu de temps. Réessayez dans un instant.':'Too many questions in a short time. Please try again shortly.';

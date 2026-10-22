@@ -56,6 +56,32 @@ Deno.serve(async (request: Request) => {
     return json({ error: 'Messages must be valid and end with a student question.' }, 400);
   }
 
+  // Charge once per valid student message. This runs server-side so the browser
+  // cannot bypass the energy cost. Provider failures still consume the attempt.
+  try {
+    const energyResponse = await fetch(`${supabaseUrl}/rest/v1/rpc/spend_learning_energy`, {
+      method: 'POST',
+      headers: {
+        Authorization: authorization,
+        apikey: publishableKey,
+        'Content-Type': 'application/json',
+      },
+      body: '{}',
+    });
+    if (!energyResponse.ok) {
+      console.error('Energy RPC returned HTTP', energyResponse.status);
+      return json({ error: 'Energy sync is unavailable. Please try again after checking the Supabase setup.', code: 'ENERGY_SYNC_UNAVAILABLE' }, 503);
+    }
+    const energyResult = await energyResponse.json();
+    const energyState = Array.isArray(energyResult) ? energyResult[0] : energyResult;
+    if (!energyState?.spent) {
+      return json({ error: 'You are out of energy.', code: 'ENERGY_DEPLETED', energy: energyState?.energy }, 402);
+    }
+  } catch (error) {
+    console.error('Energy RPC could not be reached:', error);
+    return json({ error: 'Energy sync is unavailable. Please try again later.', code: 'ENERGY_SYNC_UNAVAILABLE' }, 503);
+  }
+
   const language = body.language === 'fr' ? 'French' : 'English';
   const studyContext = body.studyContext && typeof body.studyContext === 'object' && !Array.isArray(body.studyContext)
     ? body.studyContext as Record<string, unknown>

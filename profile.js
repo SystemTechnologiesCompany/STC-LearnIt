@@ -1,11 +1,12 @@
 (() => {
   const config = window.STC_SUPABASE_CONFIG || {};
-  const client = /^https:\/\/[a-z0-9-]+\.supabase\.co$/i.test(config.url || '') &&
+  const client = window.stcSupabase || (/^https:\/\/[a-z0-9-]+\.supabase\.co$/i.test(config.url || '') &&
     typeof config.publishableKey === 'string' && config.publishableKey.startsWith('sb_publishable_')
     ? window.supabase?.createClient(config.url, config.publishableKey, {
         auth: { autoRefreshToken: true, persistSession: true, detectSessionInUrl: true }
       })
-    : null;
+    : null);
+  if (client) window.stcSupabase = client;
 
   const PROFILE_COLUMNS = 'id,public_id,username,display_name,faculty,avatar_url';
   const FACULTY_NAMES = {

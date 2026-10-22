@@ -1,0 +1,86 @@
+/* Premium plan modal: midnight navy, electric blue accents, and restrained motion. */
+.plans-dialog{width:min(780px,calc(100% - 28px));max-width:780px;max-height:calc(100dvh - 28px);padding:0;border:0;border-radius:28px;background:transparent;color:#edf4ff;overflow:visible}
+.plans-dialog::backdrop{background:rgba(2,6,16,.78);backdrop-filter:blur(12px);animation:plans-backdrop-in .38s ease both}
+.plans-modal{position:relative;isolation:isolate;overflow:hidden;padding:38px;border:1px solid rgba(113,164,255,.27);border-radius:28px;background:radial-gradient(ellipse at 15% 0%,rgba(35,88,169,.28),transparent 44%),radial-gradient(ellipse at 100% 100%,rgba(20,73,154,.2),transparent 43%),linear-gradient(145deg,#080d19 0%,#0b1426 53%,#07101f 100%);box-shadow:0 36px 110px rgba(0,0,0,.65),0 0 60px rgba(38,105,218,.16),inset 0 1px 0 rgba(255,255,255,.07);animation:plans-modal-in .55s cubic-bezier(.16,1,.3,1) both}
+.plans-modal::before,.plans-modal::after{content:"";position:absolute;z-index:-1;pointer-events:none;border-radius:50%;filter:blur(2px)}
+.plans-modal::before{width:300px;height:300px;right:-125px;top:-155px;background:radial-gradient(circle,rgba(48,118,245,.25),rgba(26,75,159,.1) 42%,transparent 70%);animation:plans-orb 9s ease-in-out infinite alternate}
+.plans-modal::after{width:240px;height:240px;left:-140px;bottom:-155px;background:radial-gradient(circle,rgba(23,91,200,.22),transparent 68%);animation:plans-orb 11s ease-in-out -3s infinite alternate-reverse}
+.plans-close{position:absolute;z-index:2;right:17px;top:16px;display:grid;place-items:center;width:37px;height:37px;border:1px solid rgba(160,190,238,.2);border-radius:12px;background:rgba(31,46,70,.72);color:#dceaff;font-size:22px;cursor:pointer;transition:transform .25s,background .25s,border-color .25s}
+.plans-close:hover{transform:rotate(90deg);border-color:rgba(121,173,255,.65);background:#1b3763}
+.plans-eyebrow{position:relative;display:flex;align-items:center;gap:8px;color:#8db9ff;font-size:10px;font-weight:900;letter-spacing:.17em}
+.plans-eyebrow:first-letter{color:#b9d5ff}
+.plans-modal h2{position:relative;margin:13px 42px 8px 0;color:#f2f6ff;font:800 clamp(27px,5vw,39px)/1.05 Manrope,sans-serif;letter-spacing:-.06em;text-shadow:0 0 28px rgba(102,157,255,.18)}
+.plans-subtitle{position:relative;margin:0 0 25px;color:#a7b6ce;font-size:12px;line-height:1.65}
+.plans-grid{position:relative;display:grid;grid-template-columns:1fr 1fr;gap:15px;perspective:900px}
+.plan-card{position:relative;isolation:isolate;display:flex;flex-direction:column;min-height:250px;padding:22px;border:1px solid rgba(139,168,210,.2);border-radius:20px;background:linear-gradient(145deg,rgba(17,29,49,.96),rgba(12,22,39,.98));box-shadow:0 14px 38px rgba(0,0,0,.25),inset 0 1px 0 rgba(255,255,255,.055);overflow:hidden;animation:plans-card-in .65s cubic-bezier(.2,.8,.2,1) both;transition:transform .3s,border-color .3s,box-shadow .3s}
+.plan-card:nth-child(2){animation-delay:.12s}
+.plan-card::before{content:"";position:absolute;z-index:-1;inset:-1px;background:radial-gradient(ellipse at 0% 0%,rgba(50,111,211,.18),transparent 57%);opacity:.7;transition:opacity .35s}
+.plan-card::after{content:"";position:absolute;z-index:-1;top:-35%;left:-70%;width:42%;height:170%;transform:rotate(20deg);background:linear-gradient(90deg,transparent,rgba(160,198,255,.08),transparent);animation:plans-shine 7s ease-in-out infinite}
+.plan-card:hover{transform:translateY(-5px);border-color:rgba(119,171,255,.55);box-shadow:0 22px 48px rgba(0,0,0,.38),0 0 28px rgba(50,116,221,.12),inset 0 1px 0 rgba(255,255,255,.09)}
+.plan-card:hover::before{opacity:1}
+.plan-card--stc{border-color:rgba(75,139,255,.55);background:linear-gradient(145deg,rgba(16,39,75,.98),rgba(10,24,49,.99));box-shadow:0 15px 38px rgba(0,0,0,.28),0 0 30px rgba(42,111,226,.14),inset 0 1px 0 rgba(152,191,255,.12)}
+.plan-card--stc::before{background:radial-gradient(ellipse at 100% 0%,rgba(42,117,240,.25),transparent 60%);opacity:.9}
+.plan-card-top{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.plan-name{color:#9dbef4;font:900 12px 'DM Sans',sans-serif;letter-spacing:.16em}
+.plan-card--stc .plan-name{color:#b7d4ff}
+.plan-price{color:#f2f6ff;font:800 25px Manrope,sans-serif;letter-spacing:-.06em;white-space:nowrap}
+.plan-card ul{display:grid;gap:11px;margin:21px 0 20px;padding:0;list-style:none;color:#c0ccdf;font-size:11px;font-weight:600}
+.plan-card li{display:flex;align-items:center;min-height:20px}
+.plan-card li:before{content:'✓';display:inline-grid;flex:0 0 19px;place-items:center;width:19px;height:19px;margin-right:9px;border:1px solid rgba(113,165,255,.23);border-radius:50%;background:rgba(44,93,165,.25);color:#9dc4ff;font-size:10px;font-weight:900}
+.plan-card--stc li:before{border-color:rgba(133,181,255,.42);background:rgba(43,111,220,.28);color:#c7deff}
+.plan-choose{position:relative;width:100%;min-height:43px;margin-top:auto;border:1px solid rgba(125,170,239,.35);border-radius:12px;background:linear-gradient(135deg,#1b2c48,#172640);color:#dceaff;font:800 11px 'DM Sans',sans-serif;cursor:pointer;transition:transform .23s,box-shadow .23s,background .23s,border-color .23s}
+.plan-choose:hover{transform:translateY(-2px);border-color:#80adf3;background:linear-gradient(135deg,#263f66,#1b3152);box-shadow:0 8px 24px rgba(35,95,188,.22)}
+.plan-card--stc .plan-choose{border-color:#79aaff;background:linear-gradient(110deg,#4b83e7,#2861c0 55%,#3978dc);background-size:180% 100%;color:#fff;box-shadow:0 6px 22px rgba(35,104,218,.28);animation:plans-button-glow 3.4s ease-in-out infinite}
+.plan-card--stc .plan-choose:hover{background-position:100% 0;box-shadow:0 9px 29px rgba(52,123,241,.4)}
+.plan-badge{position:absolute;right:15px;top:12px;padding:5px 8px;border:1px solid rgba(163,198,255,.28);border-radius:99px;background:rgba(52,102,183,.24);color:#bdd7ff;font-size:7px;font-weight:900;letter-spacing:.1em;box-shadow:0 0 18px rgba(57,122,221,.13)}
+.plan-card--stc .plan-card-top{padding-top:18px}
+.plans-status{position:relative;margin:16px 0 0;padding:11px 13px;border:1px solid rgba(105,157,239,.3);border-radius:11px;background:rgba(21,43,76,.7);color:#c7dcff;font-size:10px;line-height:1.55}
+.plans-footnote{position:relative;margin:14px 0 0;color:#8394ad;font-size:9px;text-align:center}
+.plans-nav-button{flex:0 0 auto;min-height:39px;padding:0 15px;border:1px solid #8cb7fa;border-radius:12px;background:linear-gradient(135deg,#d3e5ff,#a9cbff);color:#122748;font:800 11px 'DM Sans',sans-serif;cursor:pointer;box-shadow:0 5px 18px rgba(68,126,216,.25);transition:transform .22s,box-shadow .22s,filter .22s}
+.plans-nav-button:hover{transform:translateY(-2px);box-shadow:0 9px 24px rgba(68,126,216,.4);filter:saturate(1.08)}
+@keyframes plans-modal-in{from{opacity:0;transform:translateY(22px) scale(.965);filter:blur(8px)}to{opacity:1;transform:translateY(0) scale(1);filter:blur(0)}}
+@keyframes plans-card-in{from{opacity:0;transform:translateY(18px) rotateX(5deg)}to{opacity:1;transform:translateY(0) rotateX(0)}}
+@keyframes plans-backdrop-in{from{opacity:0}to{opacity:1}}
+@keyframes plans-orb{from{transform:translate3d(-8px,-4px,0) scale(.94)}to{transform:translate3d(14px,12px,0) scale(1.12)}}
+@keyframes plans-shine{0%,55%{left:-70%;opacity:0}65%{opacity:.8}90%,100%{left:140%;opacity:0}}
+@keyframes plans-button-glow{0%,100%{box-shadow:0 6px 22px rgba(35,104,218,.24)}50%{box-shadow:0 7px 29px rgba(61,133,255,.48)}}
+@media(max-width:600px){.plans-modal{padding:31px 19px 20px;border-radius:22px}.plans-grid{grid-template-columns:1fr;gap:11px}.plan-card{min-height:0;padding:17px}.plan-card ul{grid-template-columns:1fr 1fr;gap:9px;margin:15px 0}.plan-price{font-size:22px}.plans-subtitle{margin-bottom:18px}.plans-dialog{overflow-y:auto}}
+@media(max-width:760px){.plans-nav-button{min-height:36px;padding:0 11px;font-size:10px}}
+@media(prefers-reduced-motion:reduce){.plans-modal,.plans-modal::before,.plans-modal::after,.plan-card,.plan-card::after,.plan-card--stc .plan-choose,.plans-dialog::backdrop{animation:none!important}.plans-close,.plan-choose,.plans-nav-button,.plan-card{transition:none!important}}
+/* Galactic frame and interior sky */
+.plans-modal{border-color:transparent;background:radial-gradient(ellipse at 15% 0%,rgba(35,88,169,.28),transparent 44%),radial-gradient(ellipse at 100% 100%,rgba(20,73,154,.2),transparent 43%),linear-gradient(145deg,#080d19 0%,#0b1426 53%,#07101f 100%);background-clip:padding-box}
+.plans-modal .plans-galaxy{position:absolute;z-index:-1;inset:-1px;overflow:hidden;border-radius:inherit;pointer-events:none}
+.plans-modal .plans-galaxy::before{content:"";position:absolute;inset:0;border-radius:inherit;padding:1.5px;background:conic-gradient(from var(--galaxy-angle,0deg),transparent 0deg,transparent 36deg,#174c9f 54deg,#91c5ff 67deg,#fff 71deg,#4595ff 76deg,#1b4d9d 93deg,transparent 120deg,transparent 245deg,#244d8b 272deg,#6caaff 290deg,#d5e9ff 296deg,#4c8ee8 301deg,transparent 328deg);-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;filter:drop-shadow(0 0 5px #478df0) drop-shadow(0 0 15px #286ad5);animation:galaxy-frame-spin 12s linear infinite}
+.plans-modal .plans-galaxy::after{content:"";position:absolute;top:-30%;left:-36%;width:45%;height:36%;transform:rotate(28deg);transform-origin:center;background:linear-gradient(90deg,transparent,rgba(53,128,255,.02) 18%,rgba(102,173,255,.22) 63%,rgba(212,234,255,.95) 96%,#fff 100%);filter:blur(1px);opacity:0;animation:galaxy-comet 6.8s cubic-bezier(.35,.08,.5,.96) infinite}
+.plans-modal .plans-galaxy-sky{position:absolute;inset:0;overflow:hidden;border-radius:inherit;pointer-events:none;z-index:-1;background-image:radial-gradient(1px 1px at 8% 24%,#dbeaff 70%,transparent),radial-gradient(1.5px 1.5px at 16% 72%,#83b9ff 70%,transparent),radial-gradient(1px 1px at 31% 15%,#dbeaff 70%,transparent),radial-gradient(1px 1px at 47% 82%,#72aaff 70%,transparent),radial-gradient(1.5px 1.5px at 64% 11%,#e6f2ff 70%,transparent),radial-gradient(1px 1px at 78% 65%,#8dbdff 70%,transparent),radial-gradient(1px 1px at 91% 31%,#dbeaff 70%,transparent),radial-gradient(1px 1px at 88% 88%,#75aaff 70%,transparent);opacity:.52;animation:galaxy-twinkle 4s ease-in-out infinite alternate}
+.plans-modal .plans-meteor{position:absolute;z-index:-1;top:0;right:8%;width:95px;height:1.5px;pointer-events:none;opacity:0;transform:rotate(132deg);transform-origin:right center;background:linear-gradient(90deg,transparent,rgba(119,180,255,.12) 20%,#82baff 83%,#f1f8ff);filter:drop-shadow(0 0 4px #62a5ff) drop-shadow(0 0 10px #3281f7);animation:galaxy-meteor 7.5s ease-in 1.5s infinite}
+.plans-modal .plans-meteor--two{top:18%;right:58%;width:65px;animation-delay:4.6s;animation-duration:9s}
+.plans-modal>*:not(.plans-galaxy):not(.plans-galaxy-sky):not(.plans-meteor):not(.plans-close){position:relative;z-index:1}
+.plans-modal .plans-close{position:absolute;top:16px;right:16px;z-index:3}
+@property --galaxy-angle{syntax:"<angle>";initial-value:0deg;inherits:false}
+@keyframes galaxy-frame-spin{to{--galaxy-angle:360deg}}
+@keyframes galaxy-comet{0%,45%{opacity:0;top:-30%;left:-36%}49%{opacity:.92}63%{opacity:.8;top:108%;left:104%}67%,100%{opacity:0;top:108%;left:104%}}
+@keyframes galaxy-meteor{0%,69%{opacity:0;transform:translate3d(70px,-80px,0) rotate(132deg)}72%{opacity:.95}82%{opacity:.75;transform:translate3d(-200px,235px,0) rotate(132deg)}86%,100%{opacity:0;transform:translate3d(-200px,235px,0) rotate(132deg)}}
+@keyframes galaxy-twinkle{from{opacity:.3}to{opacity:.78}}
+@media(prefers-reduced-motion:reduce){.plans-modal .plans-galaxy::before,.plans-modal .plans-galaxy::after,.plans-modal .plans-galaxy-sky,.plans-modal .plans-meteor{animation:none!important}}
+.plans-code-form{position:relative;margin-top:20px;padding-top:18px;border-top:1px solid rgba(143,174,221,.13)}
+.plans-code-form label{display:block;margin-bottom:9px;color:#b9c9e1;font-size:10px;font-weight:800;letter-spacing:.035em}
+.plans-code-controls{display:flex;gap:9px}
+.plans-code-controls input{min-width:0;flex:1;height:43px;padding:0 13px;border:1px solid rgba(130,165,219,.25);border-radius:11px;outline:none;background:rgba(6,14,27,.86);color:#edf4ff;font:700 11px 'DM Sans',sans-serif;letter-spacing:.09em;transition:border-color .2s,box-shadow .2s}
+.plans-code-controls input::placeholder{color:#71829b;font-size:9px;letter-spacing:.12em}
+.plans-code-controls input:focus{border-color:#6fa7ff;box-shadow:0 0 0 3px rgba(62,129,229,.15),0 0 20px rgba(52,118,224,.12)}
+.plans-redeem{flex:0 0 auto;min-width:120px;padding:0 15px;border:1px solid #75aaff;border-radius:11px;background:linear-gradient(110deg,#4b83e7,#2861c0 55%,#3978dc);background-size:180% 100%;color:#fff;font:800 10px 'DM Sans',sans-serif;cursor:pointer;box-shadow:0 6px 20px rgba(35,104,218,.23);transition:transform .2s,box-shadow .2s,background-position .3s}
+.plans-redeem:hover{transform:translateY(-1px);background-position:100% 0;box-shadow:0 8px 24px rgba(52,123,241,.36)}
+.plans-redeem:disabled{opacity:.68;cursor:wait;transform:none}
+.plans-status[data-state="success"]{border-color:rgba(99,190,150,.36);background:rgba(20,64,54,.6);color:#b6f0d5}
+.plans-status[data-state="error"]{border-color:rgba(112,157,236,.32);background:rgba(29,43,68,.76);color:#d7e5ff}
+@media(max-width:600px){.plans-code-controls{flex-direction:column}.plans-redeem{min-height:42px}}
+/* Premium plans button: supplied gradient treatment, recolored for STC. */
+.plans-nav-button.button,.premium-plans-button.button{width:max-content;min-height:38px;display:flex;flex:0 0 auto;align-items:center;justify-content:center;gap:.4rem;padding:.65em 1.1em;border:1px solid rgba(147,190,255,.25);border-radius:30px;overflow:hidden;background:linear-gradient(15deg,#142d59 0%,#245cb0 20%,#4187ed 40%,#78aaff 50%,#4187ed 60%,#245cb0 80%,#142d59 100%) no-repeat;background-size:300% 100%;background-position:0% center;color:#fff;font:800 11px 'DM Sans',sans-serif;letter-spacing:0;text-shadow:0 1px 3px rgba(0,18,48,.45);cursor:pointer;box-shadow:0 5px 18px rgba(48,105,197,.25);animation:premium-gradient-drift 9s linear infinite;transition:box-shadow .3s ease,transform .2s ease}
+.plans-nav-button.button:hover,.premium-plans-button.button:hover{box-shadow:0 8px 24px rgba(48,105,197,.4);transform:translateY(-1px);animation-duration:4s}
+.premium-plans-button svg{position:static;flex:0 0 18px;width:18px;height:18px;fill:#b9d8ff;stroke:#b9d8ff;stroke-width:1.5;filter:drop-shadow(0 0 4px rgba(130,184,255,.65));transition:fill .3s ease,filter .3s ease}
+.premium-plans-button:hover svg{fill:#fff;stroke:#fff;filter:drop-shadow(0 0 6px rgba(255,255,255,.7))}
+.premium-plans-button:focus-visible{outline:2px solid #a6cbff;outline-offset:4px}
+@keyframes premium-gradient-drift{from{background-position:0% center}to{background-position:100% center}}
+@media(max-width:760px){.plans-nav-button.button,.premium-plans-button.button{min-height:35px;padding:.6em .95em;font-size:10px}}
+@media(prefers-reduced-motion:reduce){.plans-nav-button.button,.premium-plans-button.button,.premium-plans-button svg{animation:none!important;transition:none!important}}

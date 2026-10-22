@@ -88,9 +88,10 @@ const guestStorageKey=`${storageKey}:guest`;
 const legacyOwnerKey=`${storageKey}:legacy-owner`;
 const accountStorageKey=userId=>`${storageKey}:user:${userId}`;
 const config=window.STC_SUPABASE_CONFIG||{};
-const progressClient=/^https:\/\/[a-z0-9-]+\.supabase\.co$/i.test(config.url||'')&&typeof config.publishableKey==='string'&&config.publishableKey.startsWith('sb_publishable_')&&window.supabase?.createClient
+const progressClient=window.stcSupabase||(/^https:\/\/[a-z0-9-]+\.supabase\.co$/i.test(config.url||'')&&typeof config.publishableKey==='string'&&config.publishableKey.startsWith('sb_publishable_')&&window.supabase?.createClient
   ?window.supabase.createClient(config.url,config.publishableKey,{auth:{autoRefreshToken:true,persistSession:true,detectSessionInUrl:true}})
-  :null;
+  :null);
+if(progressClient)window.stcSupabase=progressClient;
 const emptyProgress=()=>({completed:[],xp:0,streak:0,lastActive:'',todayXP:0,goalDate:'',energy:20,energyUpdatedAt:new Date().toISOString()});
 const normalizeProgress=saved=>({completed:Array.isArray(saved?.completed)?[...new Set(saved.completed.filter(id=>typeof id==='string'))]:[],xp:Number.isFinite(Number(saved?.xp))?Math.max(0,Number(saved.xp)):0,streak:Number.isFinite(Number(saved?.streak))?Math.max(0,Number(saved.streak)):0,lastActive:typeof(saved?.lastActive??saved?.last_active)==='string'?(saved.lastActive??saved.last_active):'',todayXP:Number.isFinite(Number(saved?.todayXP??saved?.today_xp))?Math.max(0,Number(saved.todayXP??saved.today_xp)):0,goalDate:typeof(saved?.goalDate??saved?.goal_date)==='string'?(saved.goalDate??saved.goal_date):'',energy:Number.isFinite(Number(saved?.energy))?Math.max(0,Math.min(20,Number(saved.energy))):20,energyUpdatedAt:typeof(saved?.energyUpdatedAt??saved?.energy_updated_at)==='string'?(saved.energyUpdatedAt??saved.energy_updated_at):new Date().toISOString()});
 function readProgress(key=storageKey){try{return normalizeProgress(JSON.parse(localStorage.getItem(key)||'{}'))}catch{return emptyProgress()}}
@@ -148,9 +149,9 @@ function updateEnergyView(){
 function setEnergyNotice(kind){
   const node=document.querySelector('#energyMessage');if(!node)return;
   const messages={
-    low:['You need 10 energy to start a level. One energy returns every 5 minutes.','Il faut 10 énergies pour commencer un niveau. Une énergie revient toutes les 5 minutes.'],
+    low:['You need 3 energy to start a level. One energy returns every 5 minutes.','Il faut 3 énergies pour commencer un niveau. Une énergie revient toutes les 5 minutes.'],
     setup:['Energy sync needs the Supabase setup in supabase/learning-energy.sql.','La synchronisation de l’énergie nécessite le script Supabase supabase/learning-energy.sql.'],
-    normal:['Each level attempt costs 10 energy. One energy returns every 5 minutes.','Chaque tentative de niveau coûte 10 énergies. Une énergie revient toutes les 5 minutes.']
+    normal:['Each level attempt costs 3 energy. One energy returns every 5 minutes.','Chaque tentative de niveau coûte 3 énergies. Une énergie revient toutes les 5 minutes.']
   };
   node.textContent=messages[kind][energyLanguage()?1:0];
   clearTimeout(energyNoticeTimer);if(kind!=='normal')energyNoticeTimer=setTimeout(()=>setEnergyNotice('normal'),6500);
@@ -170,9 +171,9 @@ async function spendEnergy(){
     if(row){progress.energy=Number(row.energy);progress.energyUpdatedAt=row.energy_updated_at||new Date().toISOString();writeLocalProgress()}
     updateEnergyView();if(!row?.spent){setEnergyNotice('low');return false}return true;
   }
-  refreshLocalEnergy();if(progress.energy<10){updateEnergyView();setEnergyNotice('low');return false}
+  refreshLocalEnergy();if(progress.energy<3){updateEnergyView();setEnergyNotice('low');return false}
   if(progress.energy>=20)progress.energyUpdatedAt=new Date().toISOString();
-  progress.energy-=10;writeLocalProgress();updateEnergyView();return true;
+  progress.energy-=3;writeLocalProgress();updateEnergyView();return true;
 }
 function scheduleCloudSync(){
   if(!progressClient||!activeUserId||!cloudSyncReady)return;
@@ -324,13 +325,13 @@ function renderPath(){
     const nodes=unitStages.map(stage=>{
       const index=stage.globalLevel-1,complete=progress.completed.includes(stage.id),unlocked=index===0||progress.completed.includes(courseStages[index-1].id);
       const icon=complete?'✓':stage.type.includes('EXAM')||stage.type.includes('CHECKPOINT')?'★':String(stage.level).padStart(2,'0');
-      const energyLabel=energyLanguage()?'⚡ −10 énergie':'⚡ −10 energy';
-      return `<button type="button" class="path-node ${complete?'is-complete':''} ${unlocked&&!complete?'is-current':''} ${unlocked?'':'is-locked'}" data-stage="${index}" ${unlocked?'':'disabled'} aria-label="${escape(stage.title)} · ${energyLabel}"><span class="node-rail"><span class="node-circle">${icon}</span></span><span class="node-copy"><span class="node-label">${escape(stage.type)}</span><strong>${escape(stage.title)}</strong><small>${escape(stage.summary)}</small></span><span class="node-meta">${complete?'✓ DONE':unlocked?'⚡ 10':'🔒'}</span></button>`;
+      const energyLabel=energyLanguage()?'⚡ −3 énergie':'⚡ −3 energy';
+      return `<button type="button" class="path-node ${complete?'is-complete':''} ${unlocked&&!complete?'is-current':''} ${unlocked?'':'is-locked'}" data-stage="${index}" ${unlocked?'':'disabled'} aria-label="${escape(stage.title)} · ${energyLabel}"><span class="node-rail"><span class="node-circle">${icon}</span></span><span class="node-copy"><span class="node-label">${escape(stage.type)}</span><strong>${escape(stage.title)}</strong><small>${escape(stage.summary)}</small></span><span class="node-meta">${complete?'✓ DONE':unlocked?'⚡ 3':'🔒'}</span></button>`;
     }).join('');
     return `<section class="unit-section"><div class="unit-heading"><div><span class="unit-tag">UNIT ${unitIndex+1} · 20 LEVELS</span><h3>${escape(unitStages[0]?.unitTitle||'')}</h3></div><span class="unit-xp">${unitDone} / 20</span></div><div class="path-track">${nodes}</div></section>`;
   }).join('');
   const unit=subjectBlueprints[categoryFor(chosen.subject)].unit;
-  pathContent.innerHTML=`<div class="path-course-head"><div class="path-course-icon"><img src="assets/icons/${chosen.subject==='Geology'||chosen.subject==='Earth Science and Universe'?'earth-energy.svg':'book-open.svg'}" alt=""></div><div class="path-course-copy"><span class="course-kicker">YOUR LEARNING PATH · ${escape(chosen.faculty)}</span><h2>${escape(chosen.subject)} <span class="level-pill">LEVEL ${currentLevel} / 100</span></h2><p>${escape(selectedLevel)} · ${escape(unit)}</p></div><div class="course-xp"><img src="assets/icons/xp.svg" alt=""><strong>${progress.xp}</strong><small>XP</small></div></div><div class="course-progress-box"><div class="course-progress-top"><span>YOUR PROGRESS</span><strong>${completedCount} / 100 LEVELS</strong></div><div class="course-progress-track"><span style="width:${percent}%"></span></div><div class="level-progress"><span>${currentLevel === 100 && completedCount === 100?'All 100 levels complete':`Current level ${currentLevel}`}</span><span>5 units · 20 levels each</span></div></div>${sections}<div class="path-footer-note">Each level attempt uses 10 energy, whether you pass or not. Energy returns at one point every five minutes.</div>`;
+  pathContent.innerHTML=`<div class="path-course-head"><div class="path-course-icon"><img src="assets/icons/${chosen.subject==='Geology'||chosen.subject==='Earth Science and Universe'?'earth-energy.svg':'book-open.svg'}" alt=""></div><div class="path-course-copy"><span class="course-kicker">YOUR LEARNING PATH · ${escape(chosen.faculty)}</span><h2>${escape(chosen.subject)} <span class="level-pill">LEVEL ${currentLevel} / 100</span></h2><p>${escape(selectedLevel)} · ${escape(unit)}</p></div><div class="course-xp"><img src="assets/icons/xp.svg" alt=""><strong>${progress.xp}</strong><small>XP</small></div></div><div class="course-progress-box"><div class="course-progress-top"><span>YOUR PROGRESS</span><strong>${completedCount} / 100 LEVELS</strong></div><div class="course-progress-track"><span style="width:${percent}%"></span></div><div class="level-progress"><span>${currentLevel === 100 && completedCount === 100?'All 100 levels complete':`Current level ${currentLevel}`}</span><span>5 units · 20 levels each</span></div></div>${sections}<div class="path-footer-note">Each level attempt uses 3 energy, whether you pass or not. Energy returns at one point every five minutes.</div>`;
   pathContent.querySelectorAll('[data-stage]').forEach(button=>button.addEventListener('click',()=>openStage(Number(button.dataset.stage))));
 }
 function openStage(index){
@@ -345,7 +346,7 @@ function openStage(index){
   document.querySelector('#lessonBody').hidden=false;
   document.querySelector('#lessonEnergyNotice').hidden=true;
   document.querySelector('#lessonProgressFill').style.width='0%';
-  const xpTag=document.querySelector('.lesson-xp');xpTag.innerHTML=`<img src="assets/icons/xp.svg" alt=""> +${stage.xp} XP · ${energyLanguage()?'⚡ −10 énergie':'⚡ −10 energy'}`;
+  const xpTag=document.querySelector('.lesson-xp');xpTag.innerHTML=`<img src="assets/icons/xp.svg" alt=""> +${stage.xp} XP · ${energyLanguage()?'⚡ −3 énergie':'⚡ −3 energy'}`;
   lessonContinue.disabled=false;lessonContinue.innerHTML=stage.kind==='matching'?'Start matching <span>↗</span>':'Start practice <span>↗</span>';
   if(!lessonDialog.open)lessonDialog.showModal();
 }
@@ -361,9 +362,11 @@ async function beginLevelAttempt(){
     const french=energyLanguage();
     notice.textContent=noticeKind==='setup'
       ?(french?'La synchronisation de l’énergie est indisponible. Vérifiez le script learning-energy.sql dans Supabase.':'Energy sync is unavailable. Check the learning-energy.sql setup in Supabase.')
-      :(french?'Il vous faut au moins 10 énergies pour commencer. Une énergie revient toutes les 5 minutes.':'You need at least 10 energy to start. One energy returns every 5 minutes.');
+      :(french?'Il vous faut au moins 3 énergies pour commencer. Une énergie revient toutes les 5 minutes.':'You need at least 3 energy to start. One energy returns every 5 minutes.');
     if(noticeKind==='setup'&&energySyncError)notice.textContent+=` (${energySyncError})`;
-    notice.hidden=false;lessonContinue.innerHTML=mode==='failed'?'Try again':'Start practice <span>↗</span>';return false;
+    notice.hidden=false;
+    if(noticeKind==='low')window.STCPlans?.open({depleted:true});
+    lessonContinue.innerHTML=mode==='failed'?'Try again':'Start practice <span>↗</span>';return false;
   }
   questionIndex=0;correctAnswers=0;
   if(courseStages[activeStage].kind==='matching')startMatchingGame();else renderQuestion();

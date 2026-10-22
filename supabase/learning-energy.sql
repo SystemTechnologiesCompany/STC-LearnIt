@@ -1,5 +1,5 @@
 -- Run once in Supabase SQL Editor to enable account-synced learning energy.
--- Energy starts at 20; starting a level spends 10, and 1 energy regenerates every 5 minutes.
+-- Energy starts at 20; starting a level spends 3, and 1 energy regenerates every 5 minutes.
 
 alter table public.learning_progress
   add column if not exists energy integer not null default 20 check (energy between 0 and 20),
@@ -22,7 +22,7 @@ begin
   if v_user is null then
     raise exception 'Sign in to sync energy.' using errcode = '28000';
   end if;
-  if p_cost not in (0, 10) then
+  if p_cost not in (0, 3) then
     raise exception 'Invalid energy cost.' using errcode = '22023';
   end if;
 
@@ -81,7 +81,7 @@ language sql
 security definer
 set search_path = ''
 as $$
-  select * from public._apply_learning_energy(10);
+  select * from public._apply_learning_energy(3);
 $$;
 
 revoke all on function public.get_learning_energy() from public, anon;

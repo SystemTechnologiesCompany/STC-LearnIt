@@ -1,6 +1,7 @@
 (() => {
   const storageKey = 'stc-learnit-language';
   const translations = {
+    'Premium plans': 'Offres Premium',
     'STUDENT ACCOUNT': 'COMPTE ÉTUDIANT',
     'Sign in to manage your profile.': 'Connectez-vous pour gérer votre profil.',
     'Your profile, Learnit ID, followers and classmates are connected to your student account.': 'Votre profil, votre identifiant Learnit, vos abonnés et vos camarades sont liés à votre compte étudiant.',
@@ -26,7 +27,7 @@
     'Your username is unique. Use 3–30 letters, numbers, dots or underscores.': 'Votre nom d’utilisateur est unique. Utilisez 3 à 30 lettres, chiffres, points ou tirets bas.',
     'Could not upload your photo. Check the avatar storage setup and try again.': 'Impossible d’envoyer votre photo. Vérifiez la configuration du stockage des avatars et réessayez.',
     'Log out': 'Se déconnecter',
-    'Following': 'Abonné·e',
+    'Following': 'Abonné·e', 'FOLLOW': 'SUIVRE',
     '＋ Follow': '＋ Suivre',
     'Built for curious minds across Algeria': 'Pour les esprits curieux d’Algérie',
     'Kasdi Merbah University': 'Université Kasdi Merbah', 'Follow us on LinkedIn': 'Suivez-nous sur LinkedIn',
@@ -284,8 +285,9 @@
     'Engineering design basics': 'Bases de la conception en ingénierie', 'Energy, Earth and resources': 'Énergie, Terre et ressources',
     'years': 'années', 'min': 'min', 'pairs': 'paires',
     'Every path starts with lessons, then unlocks a game, a checkpoint and a final exam.': 'Chaque parcours commence par des leçons, puis débloque un jeu, une évaluation et un examen final.',
-    'Each level attempt costs 10 energy. One energy returns every 5 minutes.': 'Chaque tentative de niveau coûte 10 énergies. Une énergie revient toutes les 5 minutes.', '/ 20 energy': '/ 20 énergie',
-    'Each level attempt uses 10 energy, whether you pass or not. Energy returns at one point every five minutes.': 'Chaque tentative coûte 10 énergies, que vous réussissiez ou non. Une énergie revient toutes les cinq minutes.',
+    'Each level attempt costs 3 energy. One energy returns every 5 minutes.': 'Chaque tentative de niveau coûte 3 énergies. Une énergie revient toutes les 5 minutes.',
+    'Each level attempt uses 3 energy, whether you pass or not. Energy returns at one point every five minutes.': 'Chaque tentative coûte 3 énergies, que vous réussissiez ou non. Une énergie revient toutes les cinq minutes.',
+    'You need 3 energy to start a level. One energy returns every 5 minutes.': 'Il vous faut 3 énergies pour commencer un niveau. Une énergie revient toutes les 5 minutes.', '/ 20 energy': '/ 20 énergie',
     'Foundations': 'Fondations', 'Core skills': 'Compétences fondamentales', 'Applied understanding': 'Compréhension appliquée', 'Advanced connections': 'Liens avancés', 'Mastery': 'Maîtrise',
     '5 units · 20 levels each': '5 unités · 20 niveaux chacune', 'All 100 levels complete': 'Les 100 niveaux sont terminés', 'Full': 'Pleine',
     'LESSONS · GAME · EXAM': 'LEÇONS · JEU · EXAMEN', 'PRACTICE GAME': 'JEU D’ENTRAÎNEMENT',

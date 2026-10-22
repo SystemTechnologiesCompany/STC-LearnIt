@@ -4,11 +4,12 @@
   document.querySelectorAll('.main-nav a').forEach(link => link.addEventListener('click', () => document.querySelector('.main-nav')?.classList.remove('open')));
 
   const config = window.STC_SUPABASE_CONFIG || {};
-  const client = /^https:\/\/[a-z0-9-]+\.supabase\.co$/i.test(config.url || '') &&
+  const client = window.stcSupabase || (/^https:\/\/[a-z0-9-]+\.supabase\.co$/i.test(config.url || '') &&
     typeof config.publishableKey === 'string' && config.publishableKey.startsWith('sb_publishable_') &&
     window.supabase?.createClient
     ? window.supabase.createClient(config.url, config.publishableKey, { auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true } })
-    : null;
+    : null);
+  if (client) window.stcSupabase = client;
 
   const filters = [...document.querySelectorAll('.leader-filter')];
   const rowsElement = document.querySelector('#leaderRows');
@@ -28,12 +29,17 @@
   let weeklyRows = [];
   let allRows = [];
   let lastRoundRows = [];
+  let currentUserId = null;
+  let followingIds = new Set();
+  let followBusy = new Set();
   let lang = (() => { try { return localStorage.getItem('stc-learnit-language') === 'fr' ? 'fr' : 'en'; } catch { return 'en'; } })();
 
   const words = {
     en: { all: 'ALL TIME', week: 'THIS WEEK', tournament: 'LIVE TOURNAMENT', allDescription: 'Sorted by total experience points', weekDescription: 'XP earned this week', tournamentDescription: 'Live XP earned in this four-day round', loading: 'Loading live standings…', round: 'Tournament ends in', d: 'd', h: 'h', m: 'm', eligible: 'Students with a completed course step and at least 10 XP are ranked.', empty: 'No eligible learners yet. Complete a course step and earn at least 10 XP to appear here.', failed: 'Rankings could not load. Run supabase/leaderboard.sql in your Supabase SQL Editor, then refresh.', offline: 'Leaderboard data is unavailable. Check your connection and try again.', place: ['1st place', '2nd place', '3rd place'], xp: 'XP' },
     fr: { all: 'TOUS LES TEMPS', week: 'CETTE SEMAINE', tournament: 'TOURNOI EN DIRECT', allDescription: 'Tri par total de points d’expérience', weekDescription: 'XP gagnés cette semaine', tournamentDescription: 'XP gagnés en direct durant ce tournoi de quatre jours', loading: 'Chargement du classement en direct…', round: 'Fin du tournoi dans', d: 'j', h: 'h', m: 'min', eligible: 'Les étudiants ayant terminé une étape et gagné au moins 10 XP sont classés.', empty: 'Aucun étudiant admissible pour le moment. Terminez une étape et gagnez au moins 10 XP.', failed: 'Le classement ne se charge pas. Exécutez supabase/leaderboard.sql dans l’éditeur SQL Supabase, puis actualisez.', offline: 'Classement indisponible. Vérifiez votre connexion et réessayez.', place: ['1re place', '2e place', '3e place'], xp: 'XP' }
   };
+  Object.assign(words.en, { follow: 'Follow', following: 'Following', own: 'You', followError: 'Could not update follow. Please try again.' });
+  Object.assign(words.fr, { follow: 'Suivre', following: 'Abonné·e', own: 'Vous', followError: 'Impossible de suivre ce compte. Réessayez.' });
 
   function t(key) { return words[lang][key]; }
   function safeText(value, fallback = '') { return String(value || fallback).replace(/[<>]/g, ''); }
@@ -60,6 +66,43 @@
     image.src = person.avatar_url;
   }
 
+  function followButton(person, golden = false) {
+    const button = document.createElement('button');
+    const id = person.user_id;
+    const self = Boolean(currentUserId && id === currentUserId);
+    const followed = followingIds.has(id);
+    button.type = 'button';
+    button.className = `leader-follow${golden ? ' leader-follow--gold' : ''}${followed ? ' is-following' : ''}`;
+    button.disabled = self || followBusy.has(id);
+    button.textContent = self ? t('own') : followed ? t('following') : t('follow');
+    button.setAttribute('aria-pressed', String(followed));
+    button.setAttribute('aria-label', `${button.textContent} ${safeText(person.display_name, person.username || 'STC Learner')}`);
+    button.addEventListener('click', () => toggleFollow(person, button));
+    return button;
+  }
+
+  async function toggleFollow(person, button) {
+    const id = person.user_id;
+    if (!id || followBusy.has(id)) return;
+    if (!currentUserId) { window.location.href = 'index.html?auth=login'; return; }
+    if (id === currentUserId) return;
+    followBusy.add(id); button.disabled = true;
+    const followed = followingIds.has(id);
+    try {
+      const result = followed
+        ? await client.from('follows').delete().eq('follower_id', currentUserId).eq('following_id', id)
+        : await client.from('follows').insert({ follower_id: currentUserId, following_id: id });
+      if (result.error) throw result.error;
+      if (followed) followingIds.delete(id); else followingIds.add(id);
+      render();
+    } catch (error) {
+      console.error('STC Learnit leaderboard follow:', error);
+      button.disabled = false;
+      statusElement.textContent = t('followError'); statusElement.dataset.state = 'error';
+      window.setTimeout(() => { if (roundEndsAt) updateCountdown(); }, 3200);
+    } finally { followBusy.delete(id); }
+  }
+
   function paintPodium(entries) {
     for (const rank of [1, 2, 3]) {
       const card = places[rank];
@@ -68,10 +111,13 @@
       const avatar = card.querySelector('.podium-avatar');
       const name = card.querySelector('.podium-name');
       const score = card.querySelector('.podium-xp');
+      let actions = card.querySelector('.podium-actions');
+      if (!actions) { actions = document.createElement('div'); actions.className = 'podium-actions'; card.insertBefore(actions, card.querySelector('.podium-block')); }
       if (!person) {
         avatar.classList.remove('has-photo');
         avatar.replaceChildren();
         avatar.textContent = String(rank);
+        actions.replaceChildren();
         name.textContent = t('place')[rank - 1];
         score.textContent = '— XP';
         card.classList.add('is-empty');
@@ -82,6 +128,7 @@
       name.title = displayName;
       score.textContent = formatXp(person.xp);
       paintAvatar(avatar, person, displayName);
+      actions.replaceChildren(followButton(person, true));
       card.classList.remove('is-empty');
     }
   }
@@ -108,7 +155,8 @@
       const xp = document.createElement('span');
       xp.className = 'leader-xp';
       xp.textContent = formatXp(person.xp);
-      row.append(rank, student, faculty, xp);
+      const action = document.createElement('span'); action.className = 'leader-action'; action.appendChild(followButton(person));
+      row.append(rank, student, faculty, xp, action);
       rowsElement.append(row);
     }
     emptyElement.hidden = entries.length > 0;
@@ -164,21 +212,39 @@
     }
   }
 
+  async function loadFollowState() {
+    if (!client) return;
+    const { data: { user } = {} } = await client.auth.getUser();
+    currentUserId = user?.id || null;
+    if (!currentUserId) { followingIds = new Set(); render(); return; }
+    const { data, error } = await client.from('follows').select('following_id').eq('follower_id', currentUserId);
+    if (error) { console.error('STC Learnit leaderboard follows:', error); return; }
+    followingIds = new Set((data || []).map(row => row.following_id));
+    render();
+  }
+
   filters.forEach(button => button.addEventListener('click', () => {
     selectedPeriod = button.dataset.period;
     render();
   }));
   window.addEventListener('focus', refresh);
+  window.addEventListener('focus', loadFollowState);
   document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') refresh(); });
   window.addEventListener('stc:language-change', event => {
     lang = event.detail?.language === 'fr' ? 'fr' : 'en';
     refresh();
+  });
+  client?.auth.onAuthStateChange((_event, session) => {
+    currentUserId = session?.user?.id || null;
+    followingIds = new Set();
+    loadFollowState();
   });
 
   if (!client) {
     statusElement.textContent = t('offline');
     emptyElement.hidden = false;
   } else {
+    loadFollowState();
     refresh();
     window.setInterval(refresh, 15000);
     window.setInterval(updateCountdown, 30000);
