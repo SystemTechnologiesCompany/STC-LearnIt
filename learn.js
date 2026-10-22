@@ -164,7 +164,7 @@ async function spendEnergy(){
   if(activeUserId&&!energyAccountReady){setEnergyNotice('setup');return false}
   if(activeUserId&&cloudSyncReady&&progressClient){
     const {data,error}=await progressClient.rpc('spend_learning_energy');
-    if(error){console.error('STC Learnit energy sync:',error);setEnergyNotice('setup');return false}
+    if(error){console.error('STC Learnit energy sync:',error);energyAccountReady=false;setEnergyNotice('setup');return false}
     const row=Array.isArray(data)?data[0]:data;
     if(row){progress.energy=Number(row.energy);progress.energyUpdatedAt=row.energy_updated_at||new Date().toISOString();writeLocalProgress()}
     updateEnergyView();if(!row?.spent){setEnergyNotice('low');return false}return true;
@@ -330,10 +330,8 @@ function renderPath(){
   pathContent.innerHTML=`<div class="path-course-head"><div class="path-course-icon"><img src="assets/icons/${chosen.subject==='Geology'||chosen.subject==='Earth Science and Universe'?'earth-energy.svg':'book-open.svg'}" alt=""></div><div class="path-course-copy"><span class="course-kicker">YOUR LEARNING PATH · ${escape(chosen.faculty)}</span><h2>${escape(chosen.subject)} <span class="level-pill">LEVEL ${currentLevel} / 100</span></h2><p>${escape(selectedLevel)} · ${escape(unit)}</p></div><div class="course-xp"><img src="assets/icons/xp.svg" alt=""><strong>${progress.xp}</strong><small>XP</small></div></div><div class="course-progress-box"><div class="course-progress-top"><span>YOUR PROGRESS</span><strong>${completedCount} / 100 LEVELS</strong></div><div class="course-progress-track"><span style="width:${percent}%"></span></div><div class="level-progress"><span>${currentLevel === 100 && completedCount === 100?'All 100 levels complete':`Current level ${currentLevel}`}</span><span>5 units · 20 levels each</span></div></div>${sections}<div class="path-footer-note">Each level attempt uses 10 energy, whether you pass or not. Energy returns at one point every five minutes.</div>`;
   pathContent.querySelectorAll('[data-stage]').forEach(button=>button.addEventListener('click',()=>openStage(Number(button.dataset.stage))));
 }
-async function openStage(index){
+function openStage(index){
   if(index<0||index>=courseStages.length||energySpendPending)return;
-  energySpendPending=true;let hasEnergy=false;try{hasEnergy=await spendEnergy()}catch(error){console.error('STC Learnit energy spend:',error);setEnergyNotice('setup')}finally{energySpendPending=false}
-  if(!hasEnergy)return;
   activeStage=index;questionIndex=0;correctAnswers=0;mode='intro';
   const stage=courseStages[index];
   document.querySelector('#lessonType').textContent=stage.type;
@@ -342,10 +340,30 @@ async function openStage(index){
   document.querySelector('#lessonQuiz').hidden=true;
   document.querySelector('#lessonGame').hidden=true;
   document.querySelector('#lessonBody').hidden=false;
+  document.querySelector('#lessonEnergyNotice').hidden=true;
   document.querySelector('#lessonProgressFill').style.width='0%';
   const xpTag=document.querySelector('.lesson-xp');xpTag.innerHTML=`<img src="assets/icons/xp.svg" alt=""> +${stage.xp} XP · ${energyLanguage()?'⚡ −10 énergie':'⚡ −10 energy'}`;
   lessonContinue.disabled=false;lessonContinue.innerHTML=stage.kind==='matching'?'Start matching <span>↗</span>':'Start practice <span>↗</span>';
   if(!lessonDialog.open)lessonDialog.showModal();
+}
+async function beginLevelAttempt(){
+  if(energySpendPending)return false;
+  const notice=document.querySelector('#lessonEnergyNotice');notice.hidden=true;
+  energySpendPending=true;lessonContinue.disabled=true;lessonContinue.textContent=energyLanguage()?'Démarrage…':'Starting…';
+  let hasEnergy=false,noticeKind='low';
+  try{hasEnergy=await spendEnergy();if(activeUserId&&!energyAccountReady)noticeKind='setup'}
+  catch(error){console.error('STC Learnit energy spend:',error);noticeKind='setup';setEnergyNotice('setup')}
+  finally{energySpendPending=false;lessonContinue.disabled=false}
+  if(!hasEnergy){
+    const french=energyLanguage();
+    notice.textContent=noticeKind==='setup'
+      ?(french?'La synchronisation de l’énergie est indisponible. Réessayez après avoir vérifié la configuration Supabase.':'Energy sync is unavailable. Please try again after checking the Supabase setup.')
+      :(french?'Il vous faut au moins 10 énergies pour commencer. Une énergie revient toutes les 5 minutes.':'You need at least 10 energy to start. One energy returns every 5 minutes.');
+    notice.hidden=false;lessonContinue.innerHTML=mode==='failed'?'Try again':'Start practice <span>↗</span>';return false;
+  }
+  questionIndex=0;correctAnswers=0;
+  if(courseStages[activeStage].kind==='matching')startMatchingGame();else renderQuestion();
+  return true;
 }
 let selectedTerm=-1,matchedPairs=new Set();
 function startMatchingGame(){
@@ -395,7 +413,7 @@ function finishStage(){
   updateProgressStats();
 }
 lessonContinue.addEventListener('click',()=>{
-  if(mode==='intro'){if(courseStages[activeStage].kind==='matching'){startMatchingGame();return}renderQuestion();return}
+  if(mode==='intro'){beginLevelAttempt();return}
   if(mode==='matching')return;
   if(mode==='game-complete'){finishMatchingGame();return}
   if(mode==='question')return;
@@ -404,7 +422,7 @@ lessonContinue.addEventListener('click',()=>{
     else finishStage();
     return;
   }
-  if(mode==='failed'){openStage(activeStage);return}
+  if(mode==='failed'){beginLevelAttempt();return}
   if(mode==='passed'){lessonDialog.close();renderPath()}
 });
 document.querySelector('#lessonClose').addEventListener('click',()=>lessonDialog.close());

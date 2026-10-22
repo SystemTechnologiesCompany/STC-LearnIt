@@ -117,7 +117,7 @@ function closeStudyAssistant(){
   assistantLauncher.setAttribute('aria-expanded','false');
   assistantCloseTimer=window.setTimeout(()=>{assistantPanel.hidden=true;assistantLauncher.focus()},340);
 }
-function addChatMessage(text,role='assistant',label='STC AI STUDY BUDDY'){
+function addChatMessage(text,role='assistant',label='SEWINGO AI'){
   const row=document.createElement('div');
   row.className=`chat-row ${role==='user'?'user-row':'assistant-row'}`;
   const avatar=document.createElement('div');
@@ -161,8 +161,8 @@ function askStudyBuddy(prompt){
       if(typeof data?.answer!=='string'||!data.answer.trim())throw new Error('Empty assistant reply');
       assistantHistory.push({role:'user',content:question},{role:'assistant',content:data.answer});
       if(assistantHistory.length>12)assistantHistory.splice(0,assistantHistory.length-12);
-      typing.remove();addChatMessage(data.answer,'assistant','STC AI STUDY BUDDY');
-    }catch(error){typing.remove();addChatMessage(await getAssistantError(error),'assistant','STC AI STUDY BUDDY');}
+      typing.remove();addChatMessage(data.answer,'assistant','SEWINGO AI');
+    }catch(error){typing.remove();addChatMessage(await getAssistantError(error),'assistant','SEWINGO AI');}
   })();
 }
 document.querySelector('#assistantForm').addEventListener('submit',event=>{event.preventDefault();askStudyBuddy(assistantInput.value)});
