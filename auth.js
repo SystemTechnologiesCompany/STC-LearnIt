@@ -75,7 +75,7 @@
     nameInput.placeholder = french ? 'Votre nom' : 'Your name';
     document.querySelector('#emailInput').closest('label').firstChild.textContent = french ? 'Adresse Gmail' : 'Gmail address';
     document.querySelector('#emailInput').placeholder = french ? 'vous@gmail.com' : 'you@gmail.com';
-    document.querySelector('#googleBtn').innerHTML = '<span class="google-g">G</span> ' + (french ? 'Continuer avec Google' : 'Continue with Google') + ' <span>↗</span>';
+    document.querySelector('#googleBtn .google-button-label').textContent = french ? 'Continuer avec Google' : 'Continue with Google';
     document.querySelector('#authNote').textContent = next === 'signup'
       ? (french ? 'Nous enverrons un lien de confirmation à votre Gmail avant d’activer votre compte.' : 'We’ll send a confirmation link to your Gmail before your account is activated.')
       : (french ? 'Utilisez l’adresse Gmail avec laquelle vous avez créé votre compte.' : 'Use the Gmail address you registered with.');

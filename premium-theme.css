@@ -351,3 +351,15 @@
 :root[data-premium-theme="sakura"] .assistant-launch-icon .logo-glyph,
 :root[data-premium-theme="sakura"] .assistant-avatar .logo-glyph,
 :root[data-premium-theme="sakura"] .assistant-row .chat-avatar .logo-glyph{filter:brightness(0) saturate(100%) invert(73%) sepia(24%) saturate(1080%) hue-rotate(285deg) brightness(104%) contrast(103%) drop-shadow(0 0 4px rgba(255,143,196,.6))}
+
+/* Google sign-in mark and theme-matched button glow */
+.google-logo{display:block;flex:0 0 22px;width:22px;height:22px;max-width:none;object-fit:contain;visibility:visible;opacity:1;filter:none}
+.google-button-label{flex:1;text-align:left}
+.google-button{position:relative;box-shadow:0 0 0 1px rgba(66,133,244,.18),0 0 16px rgba(66,133,244,.13);transition:transform .24s ease,border-color .24s ease,box-shadow .3s ease}
+.google-button:hover{transform:translateY(-1px);border-color:rgba(91,151,226,.75);box-shadow:0 0 0 1px rgba(66,133,244,.34),0 0 23px rgba(66,133,244,.28)}
+:root:not([data-premium-theme]) .google-button{border-color:rgba(144,183,91,.38);box-shadow:0 0 0 1px rgba(143,181,88,.18),0 0 18px rgba(143,181,88,.19)}
+:root:not([data-premium-theme]) .google-button:hover{border-color:#a8cd72;box-shadow:0 0 0 1px rgba(168,205,114,.4),0 0 25px rgba(143,181,88,.34)}
+:root[data-premium-theme="galaxy"] .google-button{border-color:rgba(128,176,248,.36);box-shadow:0 0 0 1px rgba(91,151,226,.2),0 0 20px rgba(76,139,228,.22)}
+:root[data-premium-theme="galaxy"] .google-button:hover{border-color:#a8d1ff;box-shadow:0 0 0 1px rgba(142,191,255,.42),0 0 27px rgba(80,145,236,.42)}
+:root[data-premium-theme="sakura"] .google-button{border-color:rgba(244,157,197,.34);box-shadow:0 0 0 1px rgba(231,120,173,.18),0 0 20px rgba(218,91,150,.2)}
+:root[data-premium-theme="sakura"] .google-button:hover{border-color:#ffb5d4;box-shadow:0 0 0 1px rgba(255,181,212,.42),0 0 27px rgba(218,91,150,.4)}
