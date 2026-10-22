@@ -258,7 +258,7 @@
     'Every point': 'Chaque point', 'takes you ': 'vous rapproche ', 'higher.': 'du sommet.',
     'Earn XP by learning, practicing and passing exams. Climb the leaderboard and claim your place among Algeria’s top learners.': 'Gagnez des XP en apprenant, en vous entraînant et en réussissant vos examens. Grimpez dans le classement et rejoignez les meilleurs étudiants d’Algérie.',
     'Earn XP ': 'Gagner des XP ', 'THE STC LEARNIT RANKS': 'LE CLASSEMENT STC LEARNIT',
-    'All time': 'Depuis toujours', 'This week': 'Cette semaine', '1st place': '1re place', '2nd place': '2e place', '3rd place': '3e place',
+    'All time': 'Depuis toujours', 'This week': 'Cette semaine', 'Tournament': 'Tournoi', 'Complete a course step and earn at least 10 XP to appear here.': 'Terminez une étape de cours et gagnez au moins 10 XP pour apparaître ici.', '1st place': '1re place', '2nd place': '2e place', '3rd place': '3e place',
     'Top learners': 'Meilleurs étudiants', 'Sorted by total experience points': 'Triés par total de points d’expérience',
     'RANK': 'RANG', 'STUDENT': 'ÉTUDIANT', 'FACULTY': 'FACULTÉ', 'XP EARNED': 'XP GAGNÉS', 'ALL TIME': 'TOUJOURS',
     'The race starts with your first lesson.': 'La course commence avec votre première leçon.',

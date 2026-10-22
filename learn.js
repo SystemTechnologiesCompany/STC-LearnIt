@@ -157,12 +157,26 @@ function initializeProgressSync(){
 }
 window.addEventListener('online',()=>{if(activeUserId&&cloudSyncReady)scheduleCloudSync()});
 window.addEventListener('stc:language-change',()=>setSyncStatus(document.querySelector('#progressSyncStatus')?.dataset.state||'local'));
+async function recordTournamentStep(stage){
+  if(!progressClient||!activeUserId||!cloudSyncReady)return;
+  const userId=activeUserId,snapshot=normalizeProgress(progress);
+  try{
+    const {error:syncError}=await progressClient.rpc('merge_learning_progress',{
+      p_completed:snapshot.completed,p_xp:snapshot.xp,p_streak:snapshot.streak,
+      p_last_active:snapshot.lastActive||null,p_today_xp:snapshot.todayXP,p_goal_date:snapshot.goalDate||null
+    });
+    if(syncError)throw syncError;
+    if(activeUserId!==userId)return;
+    const {error}=await progressClient.rpc('record_tournament_step',{p_stage_id:stage.id,p_xp:stage.xp});
+    if(error)throw error;
+  }catch(error){console.error('STC Learnit tournament score:',error)}
+}
 function addProgressForStage(stage){
-  if(progress.completed.includes(stage.id))return;
+  if(progress.completed.includes(stage.id)){recordTournamentStep(stage);return}
   const today=todayKey();
   if(progress.goalDate!==today){progress.goalDate=today;progress.todayXP=0}
   if(progress.lastActive!==today){const yesterday=new Date();yesterday.setDate(yesterday.getDate()-1);const yesterdayKey=`${yesterday.getFullYear()}-${String(yesterday.getMonth()+1).padStart(2,'0')}-${String(yesterday.getDate()).padStart(2,'0')}`;progress.streak=progress.lastActive===yesterdayKey?progress.streak+1:1;progress.lastActive=today}
-  progress.completed.push(stage.id);progress.xp+=stage.xp;progress.todayXP+=stage.xp;saveProgress();
+  progress.completed.push(stage.id);progress.xp+=stage.xp;progress.todayXP+=stage.xp;saveProgress();recordTournamentStep(stage);
 }
 function updateProgressStats(){
   if(progress.goalDate!==todayKey()){progress.goalDate=todayKey();progress.todayXP=0;saveProgress()}
