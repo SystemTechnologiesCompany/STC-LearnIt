@@ -109,13 +109,14 @@ function mergeProgress(first,second){
   return{completed,xp:Math.max(catalogXp,left.xp,right.xp),streak:mergedStreak,lastActive:latestActivity.lastActive,todayXP:goal.todayXP,goalDate:goal.goalDate,energy:energyOwner.energy,energyUpdatedAt:energyOwner.energyUpdatedAt};
 }
 let progress=readProgress();
-let activeUserId=null,sessionResolved=false,cloudSyncReady=false,energyAccountReady=true,authGeneration=0,cloudSyncTimer=0,cloudSyncQueue=Promise.resolve();
+let activeUserId=null,sessionResolved=false,cloudSyncReady=false,energyAccountReady=true,energySyncError='',authGeneration=0,cloudSyncTimer=0,cloudSyncQueue=Promise.resolve();
 function statusText(state){
   const french=document.documentElement.dataset.language==='fr';
   const labels={checking:['Checking your account…','Vérification du compte…'],local:['Saved on this device','Enregistré sur cet appareil'],syncing:['Syncing progress…','Synchronisation de la progression…'],synced:['Progress synced to your account','Progression synchronisée avec votre compte'],error:['Sync unavailable. Progress is saved on this device.','Synchronisation indisponible. Progression enregistrée sur cet appareil.']};
   return labels[state]?.[french?1:0]||labels.local[french?1:0];
 }
 function setSyncStatus(state){const node=document.querySelector('#progressSyncText');if(node)node.textContent=statusText(state);const badge=document.querySelector('#progressSyncStatus');if(badge)badge.dataset.state=state}
+function rememberEnergySyncError(error){energySyncError=String(error?.message||error||'').trim().slice(0,240)}
 function writeLocalProgress(){const key=activeUserId?accountStorageKey(activeUserId):sessionResolved?guestStorageKey:storageKey;try{localStorage.setItem(key,JSON.stringify(progress))}catch{}}
 let chosen={faculty:subjectGroups[2].faculty,subject:'Earth Science and Universe'};
 const levelOptions=['Licence · Year 1','Licence · Year 2','Licence · Year 3','Master · Year 1','Master · Year 2'];
@@ -164,7 +165,7 @@ async function spendEnergy(){
   if(activeUserId&&!energyAccountReady){setEnergyNotice('setup');return false}
   if(activeUserId&&cloudSyncReady&&progressClient){
     const {data,error}=await progressClient.rpc('spend_learning_energy');
-    if(error){console.error('STC Learnit energy sync:',error);energyAccountReady=false;setEnergyNotice('setup');return false}
+    if(error){console.error('STC Learnit energy sync:',error);rememberEnergySyncError(error);energyAccountReady=false;setEnergyNotice('setup');return false}
     const row=Array.isArray(data)?data[0]:data;
     if(row){progress.energy=Number(row.energy);progress.energyUpdatedAt=row.energy_updated_at||new Date().toISOString();writeLocalProgress()}
     updateEnergyView();if(!row?.spent){setEnergyNotice('low');return false}return true;
@@ -210,6 +211,7 @@ async function applyLearningSession(session){
   if(userId===activeUserId&&sessionResolved&&(userId===null||cloudSyncReady||loadingUserId===userId))return;
   const generation=++authGeneration;sessionResolved=true;activeUserId=userId;cloudSyncReady=false;energyAccountReady=!userId;loadingUserId=userId;
   if(!userId){
+    energySyncError='';
     const owner=(()=>{try{return localStorage.getItem(legacyOwnerKey)}catch{return null}})();
     const guest=readProgress(guestStorageKey),legacy=!owner?readProgress(storageKey):emptyProgress();
     progress=mergeProgress(guest,legacy);loadingUserId=null;setSyncStatus('local');updateProgressStats();renderPath();return;
@@ -226,12 +228,13 @@ async function applyLearningSession(session){
     if(generation!==authGeneration)return;
     progress=mergeProgress(localCandidate,data?normalizeProgress(data):emptyProgress());
     cloudSyncReady=true;loadingUserId=null;
-    try{await refreshCloudEnergy();energyAccountReady=true}catch(error){console.error('STC Learnit energy load:',error);energyAccountReady=false}
+    try{await refreshCloudEnergy();energyAccountReady=true;energySyncError=''}catch(error){console.error('STC Learnit energy load:',error);rememberEnergySyncError(error);energyAccountReady=false}
     if(generation!==authGeneration)return;
     writeLocalProgress();updateProgressStats();renderPath();scheduleCloudSync();
   }catch(error){
     if(generation!==authGeneration)return;
     console.error('STC Learnit progress load:',error);
+    rememberEnergySyncError(error);
     progress=localCandidate;cloudSyncReady=true;energyAccountReady=false;loadingUserId=null;
     writeLocalProgress();setSyncStatus('error');updateProgressStats();renderPath();
   }
@@ -352,13 +355,14 @@ async function beginLevelAttempt(){
   energySpendPending=true;lessonContinue.disabled=true;lessonContinue.textContent=energyLanguage()?'Démarrage…':'Starting…';
   let hasEnergy=false,noticeKind='low';
   try{hasEnergy=await spendEnergy();if(activeUserId&&!energyAccountReady)noticeKind='setup'}
-  catch(error){console.error('STC Learnit energy spend:',error);noticeKind='setup';setEnergyNotice('setup')}
+  catch(error){console.error('STC Learnit energy spend:',error);rememberEnergySyncError(error);noticeKind='setup';setEnergyNotice('setup')}
   finally{energySpendPending=false;lessonContinue.disabled=false}
   if(!hasEnergy){
     const french=energyLanguage();
     notice.textContent=noticeKind==='setup'
-      ?(french?'La synchronisation de l’énergie est indisponible. Réessayez après avoir vérifié la configuration Supabase.':'Energy sync is unavailable. Please try again after checking the Supabase setup.')
+      ?(french?'La synchronisation de l’énergie est indisponible. Vérifiez le script learning-energy.sql dans Supabase.':'Energy sync is unavailable. Check the learning-energy.sql setup in Supabase.')
       :(french?'Il vous faut au moins 10 énergies pour commencer. Une énergie revient toutes les 5 minutes.':'You need at least 10 energy to start. One energy returns every 5 minutes.');
+    if(noticeKind==='setup'&&energySyncError)notice.textContent+=` (${energySyncError})`;
     notice.hidden=false;lessonContinue.innerHTML=mode==='failed'?'Try again':'Start practice <span>↗</span>';return false;
   }
   questionIndex=0;correctAnswers=0;

@@ -36,11 +36,11 @@ begin
   where lp.user_id = v_user
   for update;
 
-  v_ticks := pg_catalog.floor(pg_catalog.greatest(
+  v_ticks := pg_catalog.floor(greatest(
     pg_catalog.date_part('epoch', v_now - v_updated_at), 0
   ) / 300)::integer;
   if v_ticks > 0 then
-    v_energy := pg_catalog.least(20, v_energy + v_ticks);
+    v_energy := least(20, v_energy + v_ticks);
     if v_energy >= 20 then
       v_updated_at := v_now;
     else
