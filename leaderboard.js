@@ -40,6 +40,26 @@
   function initials(name) { return safeText(name, '?').trim().split(/\s+/).slice(0, 2).map(part => part.charAt(0)).join('').toUpperCase() || '?'; }
   function formatXp(value) { return `${Number(value || 0).toLocaleString(lang === 'fr' ? 'fr-FR' : 'en-US')} ${t('xp')}`; }
 
+  function paintAvatar(avatar, person, displayName) {
+    avatar.classList.remove('has-photo');
+    avatar.replaceChildren();
+    avatar.textContent = initials(displayName);
+    if (!person.avatar_url || !/^https:\/\//i.test(person.avatar_url)) return;
+    const image = document.createElement('img');
+    image.alt = `${displayName} profile picture`;
+    image.loading = 'lazy';
+    image.referrerPolicy = 'no-referrer';
+    image.addEventListener('error', () => {
+      avatar.classList.remove('has-photo');
+      image.remove();
+      avatar.textContent = initials(displayName);
+    }, { once: true });
+    avatar.classList.add('has-photo');
+    avatar.textContent = '';
+    avatar.appendChild(image);
+    image.src = person.avatar_url;
+  }
+
   function paintPodium(entries) {
     for (const rank of [1, 2, 3]) {
       const card = places[rank];
@@ -49,9 +69,9 @@
       const name = card.querySelector('.podium-name');
       const score = card.querySelector('.podium-xp');
       if (!person) {
-        avatar.textContent = String(rank);
-        avatar.style.backgroundImage = '';
         avatar.classList.remove('has-photo');
+        avatar.replaceChildren();
+        avatar.textContent = String(rank);
         name.textContent = t('place')[rank - 1];
         score.textContent = '— XP';
         card.classList.add('is-empty');
@@ -61,14 +81,7 @@
       name.textContent = displayName;
       name.title = displayName;
       score.textContent = formatXp(person.xp);
-      avatar.textContent = initials(displayName);
-      avatar.style.backgroundImage = '';
-      avatar.classList.remove('has-photo');
-      if (person.avatar_url && /^https:\/\//i.test(person.avatar_url)) {
-        avatar.textContent = '';
-        avatar.style.backgroundImage = `url("${person.avatar_url.replace(/["\\)]/g, '')}")`;
-        avatar.classList.add('has-photo');
-      }
+      paintAvatar(avatar, person, displayName);
       card.classList.remove('is-empty');
     }
   }
@@ -85,14 +98,9 @@
       student.className = 'leader-person';
       const avatar = document.createElement('span');
       avatar.className = 'leader-avatar';
-      avatar.textContent = initials(person.display_name || person.username);
-      if (person.avatar_url && /^https:\/\//i.test(person.avatar_url)) {
-        avatar.textContent = '';
-        avatar.style.backgroundImage = `url("${person.avatar_url.replace(/["\\)]/g, '')}")`;
-        avatar.classList.add('has-photo');
-      }
       const name = document.createElement('span');
       name.textContent = safeText(person.display_name, person.username || 'STC Learner');
+      paintAvatar(avatar, person, name.textContent);
       student.append(avatar, name);
       const faculty = document.createElement('span');
       faculty.className = 'leader-faculty';
