@@ -141,6 +141,8 @@ function refreshLocalEnergy(){
 function updateEnergyView(){
   refreshLocalEnergy();
   const energyCount=document.querySelector('#energyCount'),energyTimer=document.querySelector('#energyTimer');
+  const unlimited=document.documentElement.dataset.membership==='stc';
+  if(unlimited){if(energyCount)energyCount.textContent='∞';if(energyTimer)energyTimer.textContent=energyLanguage()?'Illimitée':'Unlimited';return}
   if(energyCount)energyCount.textContent=progress.energy;
   if(!energyTimer)return;
   if(progress.energy>=20)energyTimer.textContent=energyLanguage()?'Pleine':'Full';
@@ -346,7 +348,7 @@ function openStage(index){
   document.querySelector('#lessonBody').hidden=false;
   document.querySelector('#lessonEnergyNotice').hidden=true;
   document.querySelector('#lessonProgressFill').style.width='0%';
-  const xpTag=document.querySelector('.lesson-xp');xpTag.innerHTML=`<img src="assets/icons/xp.svg" alt=""> +${stage.xp} XP · ${energyLanguage()?'⚡ −3 énergie':'⚡ −3 energy'}`;
+  const xpTag=document.querySelector('.lesson-xp');const unlimited=document.documentElement.dataset.membership==='stc';xpTag.innerHTML=`<img src="assets/icons/xp.svg" alt=""> +${stage.xp} XP · ${unlimited?(energyLanguage()?'⚡ Énergie illimitée':'⚡ Unlimited energy'):(energyLanguage()?'⚡ −3 énergie':'⚡ −3 energy')}`;
   lessonContinue.disabled=false;lessonContinue.innerHTML=stage.kind==='matching'?'Start matching <span>↗</span>':'Start practice <span>↗</span>';
   if(!lessonDialog.open)lessonDialog.showModal();
 }

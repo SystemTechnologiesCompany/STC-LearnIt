@@ -18,6 +18,7 @@ declare
   v_now timestamptz := pg_catalog.clock_timestamp();
   v_ticks integer;
   v_spent boolean;
+  v_unlimited boolean;
 begin
   if v_user is null then
     raise exception 'Sign in to sync energy.' using errcode = '28000';
@@ -35,6 +36,22 @@ begin
   from public.learning_progress lp
   where lp.user_id = v_user
   for update;
+
+  select exists (
+    select 1
+    from public.premium_subscriptions ps
+    where ps.user_id = v_user
+      and ps.plan = 'stc'
+      and ps.expires_at > v_now
+  ) into v_unlimited;
+
+  if v_unlimited then
+    update public.learning_progress lp
+    set energy = 20, energy_updated_at = v_now
+    where lp.user_id = v_user;
+    return query select 20, v_now, true;
+    return;
+  end if;
 
   v_ticks := pg_catalog.floor(greatest(
     pg_catalog.date_part('epoch', v_now - v_updated_at), 0

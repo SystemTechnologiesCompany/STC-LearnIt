@@ -105,7 +105,7 @@ begin
         end,
         expires_at = greatest(current_subscription.expires_at, pg_catalog.now()) + interval '1 month',
         updated_at = pg_catalog.now()
-  returning expires_at into v_expiry;
+  returning current_subscription.expires_at into v_expiry;
 
   insert into public.premium_code_attempts(user_id, succeeded) values (v_user, true);
   return query select true, v_plan, v_expiry, null::text;

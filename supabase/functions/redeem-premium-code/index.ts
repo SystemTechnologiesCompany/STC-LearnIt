@@ -50,7 +50,8 @@ Deno.serve(async request => {
       body: JSON.stringify({ p_code_hash: codeHash }),
     });
     if (!redeemResponse.ok) {
-      console.error('Premium redemption RPC returned HTTP', redeemResponse.status);
+      const rpcError = await redeemResponse.text();
+      console.error('Premium redemption RPC returned HTTP', redeemResponse.status, rpcError.slice(0, 1200));
       return json({ error: 'Code redemption is temporarily unavailable.', reason: 'SERVICE_UNAVAILABLE' }, 503);
     }
 
