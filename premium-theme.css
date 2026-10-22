@@ -93,3 +93,50 @@
 :root[data-premium-theme="galaxy"] .plans-modal{background:radial-gradient(ellipse at 15% 0%,rgba(58,117,206,.25),transparent 44%),radial-gradient(ellipse at 100% 100%,rgba(54,112,195,.2),transparent 43%),linear-gradient(145deg,#070c17,#0c1930 53%,#07101f)}
 @keyframes galaxy-button-drift{0%{background-position:0% 0%,100% 100%,-100% center,0% center}100%{background-position:100% 100%,0% 0%,220% center,100% center}}
 @media(prefers-reduced-motion:reduce){:root[data-premium-theme="galaxy"] :is(.btn-dark,.auth-submit,.assistant-launcher,.assistant-send,.leader-follow,.follow-button,.save-profile,.profile-search-effect #filter-icon,.plan-choose,.plans-redeem,.premium-plans-button,.lesson-modal-actions .btn:not(.btn-quiet),.animated-button){animation:none!important;transition:none!important}}
+
+/* Learning library text contrast and legibility. */
+:root[data-premium-theme="galaxy"] .library-heading .eyebrow,
+:root[data-premium-theme="galaxy"] .subject-faculty h3{color:#f4f2ec;font-size:9px;font-weight:800;letter-spacing:.045em;line-height:1.5}
+:root[data-premium-theme="galaxy"] .subject-option-text strong{color:#f6f4ef;font-size:10px;font-weight:700;line-height:1.4}
+:root[data-premium-theme="galaxy"] .subject-option-text small{color:#c5d0df;font-size:8px;font-weight:700;letter-spacing:.035em;line-height:1.4}
+:root[data-premium-theme="galaxy"] .subject-option-arrow{color:#9bc9ff}
+:root[data-premium-theme="galaxy"] .library-note,
+:root[data-premium-theme="galaxy"] .path-footer-note,
+:root[data-premium-theme="galaxy"] .node-copy small,
+:root[data-premium-theme="galaxy"] .node-label,
+:root[data-premium-theme="galaxy"] .node-meta,
+:root[data-premium-theme="galaxy"] .course-progress-top,
+:root[data-premium-theme="galaxy"] .progress-meta,
+:root[data-premium-theme="galaxy"] .daily-goal>small,
+:root[data-premium-theme="galaxy"] .goal-top>span,
+:root[data-premium-theme="galaxy"] .coming-note,
+:root[data-premium-theme="galaxy"] .level-up-banner small{color:#c3cede}
+:root[data-premium-theme="galaxy"] .library-note{font-size:9px;line-height:1.65}
+:root[data-premium-theme="galaxy"] .library-count small{color:#d2deed;font-size:8px;font-weight:700}
+:root[data-premium-theme="galaxy"] .course-kicker,
+:root[data-premium-theme="galaxy"] .lesson-type,
+:root[data-premium-theme="galaxy"] .lesson-xp,
+:root[data-premium-theme="galaxy"] .unit-tag,
+:root[data-premium-theme="galaxy"] .unit-xp{color:#a9ceff}
+:root[data-premium-theme="galaxy"] .lesson-body,
+:root[data-premium-theme="galaxy"] .path-course-copy p,
+:root[data-premium-theme="galaxy"] .path-coming p,
+:root[data-premium-theme="galaxy"] .learn-welcome-copy>p{color:#c0ccdc;font-size:12px;line-height:1.75}
+:root[data-premium-theme="galaxy"] .lesson-quiz>p,
+:root[data-premium-theme="galaxy"] .lesson-game>p{color:#f4f2ec}
+:root[data-premium-theme="galaxy"] .subject-option.is-active{background:linear-gradient(120deg,#1a3559,#11233d);border-color:rgba(139,190,255,.54);box-shadow:inset 0 1px 0 rgba(214,235,255,.08),0 5px 16px rgba(0,0,0,.22)}
+:root[data-premium-theme="galaxy"] .goal-top strong{color:#f4f2ec}
+:root[data-premium-theme="galaxy"] .goal-top strong b{color:#a8d1ff}
+:root[data-premium-theme="galaxy"] .goal-mark{color:rgba(112,174,244,.22)}
+:root[data-premium-theme="galaxy"] :is(.coming-note span,.library-note span){color:#9bc9ff}
+:root[data-premium-theme="galaxy"] .level-up-banner{background:linear-gradient(110deg,rgba(28,60,101,.85),rgba(12,27,47,.8));border-color:rgba(137,188,255,.3)}
+:root[data-premium-theme="galaxy"] .level-up-banner strong{color:#c5ddff}
+:root[data-premium-theme="galaxy"] .unit-section+.unit-section{border-color:rgba(149,189,239,.18)}
+:root[data-premium-theme="galaxy"] .map-line{background:repeating-linear-gradient(to bottom,#4f78ad 0 5px,transparent 5px 10px)}
+@media(max-width:680px){
+  :root[data-premium-theme="galaxy"] .subject-faculty h3{font-size:8px}
+  :root[data-premium-theme="galaxy"] .subject-option-text strong{font-size:9px}
+  :root[data-premium-theme="galaxy"] .subject-option-text small{font-size:7px}
+  :root[data-premium-theme="galaxy"] .node-copy small,:root[data-premium-theme="galaxy"] .node-meta{font-size:8px}
+  :root[data-premium-theme="galaxy"] .library-note{font-size:8px}
+}
