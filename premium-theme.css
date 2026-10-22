@@ -141,3 +141,7 @@
   :root[data-premium-theme="galaxy"] .node-copy small,:root[data-premium-theme="galaxy"] .node-meta{font-size:8px}
   :root[data-premium-theme="galaxy"] .library-note{font-size:8px}
 }
+.streak-fire{display:inline-block;width:16px;height:16px;object-fit:contain;vertical-align:middle;filter:brightness(0) saturate(100%) invert(43%) sepia(90%) saturate(2450%) hue-rotate(337deg) brightness(101%) contrast(103%)}
+.mini-streak.streak-fire{width:19px;height:19px}
+.path-footer .streak-fire{width:13px;height:13px}
+:root[data-premium-theme="galaxy"] .streak-fire{filter:brightness(0) saturate(100%) invert(79%) sepia(14%) saturate(1304%) hue-rotate(179deg) brightness(103%) contrast(101%) drop-shadow(0 0 5px rgba(120,181,255,.72))}
