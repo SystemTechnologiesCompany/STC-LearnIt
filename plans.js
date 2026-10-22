@@ -1,4 +1,6 @@
 (() => {
+  // Fill these public payment instructions only after Algérie Poste confirms your account may receive them.
+  const manualBaridi = { recipientName: '', ccp: '', rip: '00799999004030227986', supportContact: '' };
   const copy = {
     en: {
       eyebrow: 'STC LEARNIT MEMBERSHIP', title: 'Choose your way to grow.',
@@ -12,12 +14,18 @@
       codeSuccess: plan => `${plan} plan activated until`,
       premiumLabel: 'Premium plans', premiumPrimary: 'Premium', premiumSubscribed: 'Your plan', premiumHover: 'View plans',
       currentPlan: plan => `Your ${plan} plan`, daysLeft: days => `${days} day${days === 1 ? '' : 's'} left`, lessThanDay: 'Less than a day left', ended: 'Your plan has ended', expired: 'Plan end date unavailable',
-      choose: 'Choose plan', soon: 'Payment setup is coming soon. Plans are not available for purchase yet.',
+      choose: 'Choose plan', soon: 'Manual BaridiMob payments are verified by STC before a plan is activated.',
       paymentTitle: plan => `Choose payment method for ${plan}`,
-      paymentSetup: 'Payment processing is not connected yet. Checkout will be enabled after STC completes merchant setup.',
-      paymentBaridi: 'BaridiMob / BaridPay', paymentBaridiDetail: 'Pay through the official BaridPay merchant QR flow.',
+      paymentSetup: 'Choose BaridiMob for manual transfer instructions. STC activates the plan after confirming payment.',
+      paymentBaridi: 'BaridiMob manual transfer', paymentBaridiDetail: 'Transfer the plan amount to the STC BaridiMob RIP shown below.',
       paymentVisa: 'Visa', paymentVisaDetail: 'Secure card checkout through an approved bank or payment gateway.',
       setupRequired: 'SETUP REQUIRED',
+      manualTitle: 'Pay manually with BaridiMob', manualAmount: price => `Amount to transfer: ${price}`,
+      manualRecipient: 'Account holder', manualCcp: 'CCP account', manualRip: 'RIP', manualContact: 'After the transfer, send its transaction reference to',
+      manualReceiptNotice: 'Send your payment receipt to this email, or contact us here to buy an activation code:',
+      manualVerify: 'STC will verify the transfer in its account history. After confirmation, STC will provide a plan activation code. Never share your BaridiMob password, PIN, or OTP.',
+      manualMissing: 'Manual payment details are not set up yet. Contact STC before sending money.',
+      visaUnavailable: 'Visa payments are coming soon. We’re sorry for the inconvenience.',
       badge: 'BEST VALUE', energyTitle: 'Out of energy?', energyBody: 'Your energy is used for lessons and Sewingo AI messages. Take a look at the membership plans.'
     },
     fr: {
@@ -32,12 +40,18 @@
       codeSuccess: plan => `Offre ${plan} activée jusqu’au`,
       premiumLabel: 'Offres Premium', premiumPrimary: 'Premium', premiumSubscribed: 'Votre offre', premiumHover: 'Voir les offres',
       currentPlan: plan => `Votre offre ${plan}`, daysLeft: days => `Encore ${days} jour${days === 1 ? '' : 's'}`, lessThanDay: 'Moins d’un jour restant', ended: 'Votre offre a expiré', expired: 'Date de fin indisponible',
-      choose: 'Choisir l’offre', soon: 'Le paiement sera bientôt disponible. Les offres ne sont pas encore achetables.',
+      choose: 'Choisir l’offre', soon: 'Les paiements BaridiMob manuels sont vérifiés par STC avant l’activation de l’offre.',
       paymentTitle: plan => `Choisissez un moyen de paiement pour ${plan}`,
-      paymentSetup: 'Le paiement n’est pas encore connecté. Le paiement sera activé après la configuration du compte marchand STC.',
-      paymentBaridi: 'BaridiMob / BaridPay', paymentBaridiDetail: 'Paiement par le QR marchand officiel BaridPay.',
+      paymentSetup: 'Choisissez BaridiMob pour les instructions de transfert manuel. STC active l’offre après confirmation du paiement.',
+      paymentBaridi: 'Virement manuel BaridiMob', paymentBaridiDetail: 'Transférez le montant de l’offre vers le RIP BaridiMob STC affiché ci-dessous.',
       paymentVisa: 'Visa', paymentVisaDetail: 'Paiement sécurisé par carte via une banque ou une passerelle agréée.',
       setupRequired: 'CONFIGURATION REQUISE',
+      manualTitle: 'Payer manuellement avec BaridiMob', manualAmount: price => `Montant à transférer : ${price}`,
+      manualRecipient: 'Titulaire du compte', manualCcp: 'Compte CCP', manualRip: 'RIP', manualContact: 'Après le transfert, envoyez sa référence de transaction à',
+      manualReceiptNotice: 'Envoyez votre reçu de paiement à cette adresse ou contactez-nous ici pour acheter un code d’activation :',
+      manualVerify: 'STC vérifiera le virement dans son historique. Après confirmation, STC fournira un code d’activation. Ne partagez jamais votre mot de passe BaridiMob, votre code PIN ou votre OTP.',
+      manualMissing: 'Les informations de paiement manuel ne sont pas encore configurées. Contactez STC avant d’envoyer de l’argent.',
+      visaUnavailable: 'Le paiement par Visa arrive bientôt. Nous vous prions de nous excuser pour ce désagrément.',
       badge: 'MEILLEUR CHOIX', energyTitle: 'Plus d’énergie ?', energyBody: 'L’énergie est utilisée pour les leçons et les messages à Sewingo AI. Découvrez les offres.'
     }
   };
@@ -62,10 +76,15 @@
       <section class="payment-methods" hidden aria-live="polite">
         <div class="payment-methods-heading"><h3 class="payment-methods-title"></h3><span class="payment-setup-badge"></span></div>
         <div class="payment-method-list">
-          <button class="payment-method" type="button" data-payment-method="baridi" aria-pressed="false"><span class="payment-method-mark payment-method-mark--baridi" aria-hidden="true">B</span><span class="payment-method-copy"><strong class="payment-method-baridi"></strong><small class="payment-method-baridi-detail"></small></span><span class="payment-method-arrow" aria-hidden="true">↗</span></button>
-          <button class="payment-method" type="button" data-payment-method="visa" aria-pressed="false"><span class="payment-method-mark payment-method-mark--visa" aria-hidden="true">V</span><span class="payment-method-copy"><strong class="payment-method-visa"></strong><small class="payment-method-visa-detail"></small></span><span class="payment-method-arrow" aria-hidden="true">↗</span></button>
+          <button class="payment-method" type="button" data-payment-method="baridi" aria-pressed="false"><img class="payment-method-logo payment-method-logo--baridi" src="baridimob.png" alt="" aria-hidden="true"><span class="payment-method-copy"><strong class="payment-method-baridi"></strong><small class="payment-method-baridi-detail"></small></span><span class="payment-method-arrow" aria-hidden="true">↗</span></button>
+          <button class="payment-method" type="button" data-payment-method="visa" aria-pressed="false"><img class="payment-method-logo payment-method-logo--visa" src="Visa.svg" alt="" aria-hidden="true"><span class="payment-method-copy"><strong class="payment-method-visa"></strong><small class="payment-method-visa-detail"></small></span><span class="payment-method-arrow" aria-hidden="true">↗</span></button>
         </div>
         <p class="payment-setup-message"></p>
+      </section>
+      <section class="manual-payment-instructions" hidden aria-live="polite">
+        <h3 class="manual-payment-title"></h3><strong class="manual-payment-amount"></strong>
+        <dl class="manual-payment-details"></dl>
+        <p class="manual-payment-contact"></p><p class="manual-payment-verification"></p>
       </section>
       <form class="plans-code-form" novalidate>
         <label for="plansCode"></label>
@@ -97,6 +116,7 @@
     }
     q('.plans-eyebrow span').textContent = t.eyebrow;
     q('.payment-methods').hidden = true;
+    q('.manual-payment-instructions').hidden = true;
     q('.payment-methods-title').textContent = '';
     q('.payment-setup-badge').textContent = t.setupRequired;
     q('.payment-method-baridi').textContent = t.paymentBaridi;
@@ -121,6 +141,7 @@
         q('.plans-status').hidden = true;
         q('.payment-methods-title').textContent = t.paymentTitle(name);
         q('.payment-methods').hidden = false;
+        q('.payment-methods').dataset.plan = i === 0 ? 'pro' : 'stc';
         q('.payment-methods').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
       };
     });
@@ -136,6 +157,45 @@
       option.classList.toggle('is-selected', selected);
       option.setAttribute('aria-pressed', String(selected));
     });
+    const t = copy[french() ? 'fr' : 'en'];
+    const manualPanel = q('.manual-payment-instructions');
+    manualPanel.hidden = false;
+    if (button.dataset.paymentMethod === 'visa') {
+      q('.manual-payment-title').textContent = t.paymentVisa;
+      q('.manual-payment-amount').textContent = '';
+      q('.manual-payment-details').replaceChildren();
+      q('.manual-payment-contact').textContent = t.visaUnavailable;
+      q('.manual-payment-verification').textContent = '';
+    } else {
+      const plan = q('.payment-methods').dataset.plan === 'stc' ? 'stc' : 'pro';
+      const price = plan === 'stc' ? t.stcPrice : t.proPrice;
+      q('.manual-payment-title').textContent = t.manualTitle;
+      q('.manual-payment-amount').textContent = t.manualAmount(price);
+      const details = [
+        [t.manualRecipient, manualBaridi.recipientName],
+        [t.manualCcp, manualBaridi.ccp],
+        [t.manualRip, manualBaridi.rip]
+      ].filter(([, value]) => value);
+      const configured = Boolean(manualBaridi.ccp || manualBaridi.rip);
+      q('.manual-payment-details').replaceChildren(...(configured ? details : []).flatMap(([label, value]) => {
+        const term = document.createElement('dt'); term.textContent = label;
+        const description = document.createElement('dd'); description.textContent = value;
+        return [term, description];
+      }));
+      const contact = q('.manual-payment-contact');
+      if (configured) {
+        const notice = document.createElement('span');
+        notice.textContent = `${t.manualReceiptNotice} `;
+        const email = document.createElement('a');
+        email.href = 'mailto:systemstechnologiescompany@gmail.com';
+        email.textContent = 'systemstechnologiescompany@gmail.com';
+        contact.replaceChildren(notice, email);
+      } else {
+        contact.textContent = t.manualMissing;
+      }
+      q('.manual-payment-verification').textContent = configured ? t.manualVerify : '';
+    }
+    manualPanel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   }));
   q('.plans-code-form').addEventListener('submit', async event => {
     event.preventDefault();

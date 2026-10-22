@@ -192,6 +192,8 @@
 :root[data-premium-theme="sakura"] :is(.welcome-badge b,#streakCount,#xpCount,.course-xp strong,.node-copy strong){color:#fff5fa!important}
 :root[data-premium-theme="sakura"] :is(.energy-message,.node-copy small,.node-meta,.library-count small){color:#e4cbd8!important}
 :root[data-premium-theme="sakura"] #energyTimer,:root[data-premium-theme="sakura"] .course-xp{color:#ffb5d4!important}
+:root[data-premium-theme="sakura"] .infinite-energy-icon{display:block;width:24px;height:24px;object-fit:contain;filter:brightness(0) saturate(100%) invert(75%) sepia(29%) saturate(1312%) hue-rotate(286deg) brightness(105%) contrast(105%) drop-shadow(0 0 4px rgba(255,139,194,.95)) drop-shadow(0 0 10px rgba(236,88,160,.76));animation:sakura-infinity-glow 2.4s ease-in-out infinite}
+@keyframes sakura-infinity-glow{0%,100%{filter:brightness(0) saturate(100%) invert(75%) sepia(29%) saturate(1312%) hue-rotate(286deg) brightness(105%) contrast(105%) drop-shadow(0 0 4px rgba(255,139,194,.82)) drop-shadow(0 0 8px rgba(236,88,160,.58))}50%{filter:brightness(0) saturate(100%) invert(75%) sepia(29%) saturate(1312%) hue-rotate(286deg) brightness(115%) contrast(108%) drop-shadow(0 0 6px rgba(255,159,207,1)) drop-shadow(0 0 14px rgba(236,88,160,.88))}}
 :root[data-premium-theme="sakura"] .course-xp{background:#382033!important;border:1px solid var(--sakura-border)}
 :root[data-premium-theme="sakura"] :is(.progress-track,.course-progress-track,.goal-track,.lesson-progress,.level-progress){background:#392338}
 :root[data-premium-theme="sakura"] :is(.progress-track span,.course-progress-track span,.goal-track span,.lesson-progress span,.level-progress span){background:linear-gradient(90deg,#d95691,#ffb5d4);box-shadow:0 0 12px rgba(241,119,174,.48)}
@@ -260,7 +262,7 @@
 :root[data-premium-theme="sakura"] .sakura-petals span{position:absolute;top:-8vh;left:var(--petal-x);font-size:var(--petal-size);line-height:1;opacity:0;color:#ffc1dc;text-shadow:0 0 12px rgba(255,170,207,.55);animation:sakura-fall var(--petal-duration) linear var(--petal-delay) infinite;will-change:transform,opacity}
 @keyframes sakura-fall{0%{transform:translate3d(0,-5vh,0) rotate(0deg);opacity:0}8%{opacity:.76}82%{opacity:.62}100%{transform:translate3d(7vw,112vh,0) rotate(440deg);opacity:0}}
 @keyframes sakura-button-drift{0%{background-position:0% 0%,100% 100%,-100% center,0% center}100%{background-position:100% 100%,0% 0%,220% center,100% center}}
-@media(prefers-reduced-motion:reduce){:root[data-premium-theme="sakura"] .sakura-petals span,:root[data-premium-theme="sakura"] :is(.btn-dark,.auth-submit,.assistant-launcher,.assistant-send,.leader-follow,.follow-button,.save-profile,.plan-choose,.plans-redeem,.premium-plans-button,.animated-button){animation:none!important}}
+@media(prefers-reduced-motion:reduce){:root[data-premium-theme="sakura"] .sakura-petals span,:root[data-premium-theme="sakura"] .infinite-energy-icon,:root[data-premium-theme="sakura"] :is(.btn-dark,.auth-submit,.assistant-launcher,.assistant-send,.leader-follow,.follow-button,.save-profile,.plan-choose,.plans-redeem,.premium-plans-button,.animated-button){animation:none!important}}
 
 /* Premium theme changes cross-fade their colors and surfaces. */
 :root.theme-transitioning,:root.theme-transitioning body,:root.theme-transitioning :is(header,main,section,article,aside,footer,button,a,input,textarea,select,dialog){transition:background-color .62s cubic-bezier(.22,.75,.25,1),color .62s cubic-bezier(.22,.75,.25,1),border-color .62s cubic-bezier(.22,.75,.25,1),box-shadow .62s cubic-bezier(.22,.75,.25,1),fill .62s cubic-bezier(.22,.75,.25,1),stroke .62s cubic-bezier(.22,.75,.25,1)!important}
@@ -288,3 +290,64 @@
 :root[data-premium-theme="sakura"] .payment-method.is-selected{border-color:#f3a2c6;background:rgba(132,53,91,.5);box-shadow:0 0 0 3px rgba(240,133,180,.13),0 8px 22px rgba(0,0,0,.24)}
 :root[data-premium-theme="sakura"] .payment-method-copy small,:root[data-premium-theme="sakura"] .payment-setup-message{color:#dfc5d2}
 :root[data-premium-theme="sakura"] .payment-method-arrow{color:#ffb5d4}
+
+/* Keep the animated profile fields transparent in premium themes; global themed input styles
+   should not turn their floating-label layer into a filled rectangle. */
+:root[data-premium-theme="galaxy"] .profile-page .inputbox input,
+:root[data-premium-theme="sakura"] .profile-page .inputbox input{background:transparent!important;border:0!important;box-shadow:none!important}
+:root[data-premium-theme="galaxy"] .profile-page .inputbox i{height:2px!important;background:#263b59}
+:root[data-premium-theme="sakura"] .profile-page .inputbox i{height:2px!important;background:#42283c}
+:root[data-premium-theme="galaxy"] .profile-page .inputbox:focus-within i{height:2px!important;background:linear-gradient(90deg,#4b8de5,#a8d1ff)}
+:root[data-premium-theme="sakura"] .profile-page .inputbox:focus-within i{height:2px!important;background:linear-gradient(90deg,#d95691,#ffb5d4)}
+
+/* Landing page learning-progress preview */
+:root[data-premium-theme="galaxy"] .level-section{background:radial-gradient(ellipse at 78% 8%,rgba(48,104,194,.2),transparent 40%),linear-gradient(145deg,#0c1729,#070d19 78%);border-color:rgba(117,157,219,.2)}
+:root[data-premium-theme="galaxy"] .level-section:after{border-color:rgba(144,190,255,.12)}
+:root[data-premium-theme="galaxy"] .level-section .light{color:#a9caff}
+:root[data-premium-theme="galaxy"] .level-section .light .eyebrow-icon{color:#9bc9ff}
+:root[data-premium-theme="galaxy"] .level-copy h2,:root[data-premium-theme="galaxy"] .level-step strong{color:#edf4ff}
+:root[data-premium-theme="galaxy"] .level-copy h2 span{color:#8dbaff}
+:root[data-premium-theme="galaxy"] .level-copy p{color:#b4c3d9}
+:root[data-premium-theme="galaxy"] .level-steps{background:linear-gradient(145deg,rgba(20,39,67,.94),rgba(11,22,39,.96));border-color:rgba(126,169,232,.3);box-shadow:0 16px 40px rgba(0,0,0,.24),inset 0 1px 0 rgba(210,229,255,.05)}
+:root[data-premium-theme="galaxy"] .level-step{border-color:rgba(197,219,250,.12)}
+:root[data-premium-theme="galaxy"] .level-step small{color:#aebed5}
+:root[data-premium-theme="galaxy"] .level-step>b{color:#a8d1ff}
+:root[data-premium-theme="galaxy"] .level-step.active>b{color:#9bc9ff}
+:root[data-premium-theme="galaxy"] .level-step.future>b{color:#8798b0}
+:root[data-premium-theme="galaxy"] .level-step>span{background:#243a59;color:#d7e8ff}
+:root[data-premium-theme="galaxy"] .level-step.done>span{background:linear-gradient(145deg,#9bc9ff,#5792eb);color:#07152a;box-shadow:0 0 15px rgba(91,151,226,.28)}
+:root[data-premium-theme="galaxy"] .level-step.active>span{border-color:#a8d1ff;color:#d9eaff;box-shadow:0 0 0 4px rgba(119,177,255,.16)}
+:root[data-premium-theme="galaxy"] .level-step.future>span{background:#1a2a41;color:#91a6c3}
+:root[data-premium-theme="galaxy"] .level-stamp{background:linear-gradient(145deg,#e4f1ff,#8dbaff);color:#17365e;box-shadow:0 0 24px rgba(106,166,246,.38)}
+:root[data-premium-theme="galaxy"] .level-section .btn-light{background:linear-gradient(110deg,#8dbaff,#5792eb);color:#07152a;box-shadow:0 8px 25px rgba(65,127,216,.25)}
+:root[data-premium-theme="galaxy"] .level-section .btn-light span{color:#17365e}
+
+:root[data-premium-theme="sakura"] .level-section{background:radial-gradient(ellipse at 78% 8%,rgba(188,69,126,.2),transparent 40%),linear-gradient(145deg,#211321,#100910 78%);border-color:rgba(244,143,189,.2)}
+:root[data-premium-theme="sakura"] .level-section:after{border-color:rgba(255,181,212,.12)}
+:root[data-premium-theme="sakura"] .level-section .light{color:#f2b4d0}
+:root[data-premium-theme="sakura"] .level-section .light .eyebrow-icon{color:#ffb5d4}
+:root[data-premium-theme="sakura"] .level-copy h2,:root[data-premium-theme="sakura"] .level-step strong{color:#fff5fa}
+:root[data-premium-theme="sakura"] .level-copy h2 span{color:#ff9fc8}
+:root[data-premium-theme="sakura"] .level-copy p{color:#dec8d5}
+:root[data-premium-theme="sakura"] .level-steps{background:linear-gradient(145deg,rgba(61,35,56,.94),rgba(34,19,34,.96));border-color:rgba(238,159,195,.3);box-shadow:0 16px 40px rgba(0,0,0,.25),inset 0 1px 0 rgba(255,225,239,.05)}
+:root[data-premium-theme="sakura"] .level-step{border-color:rgba(255,224,239,.12)}
+:root[data-premium-theme="sakura"] .level-step small{color:#dfc5d2}
+:root[data-premium-theme="sakura"] .level-step>b{color:#ffb5d4}
+:root[data-premium-theme="sakura"] .level-step.active>b{color:#ffc0da}
+:root[data-premium-theme="sakura"] .level-step.future>b{color:#b89bac}
+:root[data-premium-theme="sakura"] .level-step>span{background:#523149;color:#ffe6f0}
+:root[data-premium-theme="sakura"] .level-step.done>span{background:linear-gradient(145deg,#ffc3dc,#e778ad);color:#421c32;box-shadow:0 0 15px rgba(231,120,173,.3)}
+:root[data-premium-theme="sakura"] .level-step.active>span{border-color:#ffb5d4;color:#ffe3ef;box-shadow:0 0 0 4px rgba(255,181,212,.15)}
+:root[data-premium-theme="sakura"] .level-step.future>span{background:#38263a;color:#d1b7c8}
+:root[data-premium-theme="sakura"] .level-stamp{background:linear-gradient(145deg,#fff0f6,#ec9dc1);color:#51243e;box-shadow:0 0 24px rgba(232,104,161,.35)}
+:root[data-premium-theme="sakura"] .level-section .btn-light{background:linear-gradient(110deg,#ffc3dc,#e778ad);color:#421c32;box-shadow:0 8px 25px rgba(207,76,137,.24)}
+:root[data-premium-theme="sakura"] .level-section .btn-light span{color:#612b49}
+
+/* Recolor the STC head mark pink throughout the Sakura experience. */
+:root[data-premium-theme="sakura"] .logo-glyph{filter:brightness(0) saturate(100%) invert(73%) sepia(24%) saturate(1080%) hue-rotate(285deg) brightness(104%) contrast(103%) drop-shadow(0 0 4px rgba(255,143,196,.62))}
+:root[data-premium-theme="sakura"] .brand-mark>.logo-glyph{filter:brightness(0) saturate(100%) invert(73%) sepia(24%) saturate(1080%) hue-rotate(285deg) brightness(104%) contrast(103%) drop-shadow(0 0 4px rgba(255,143,196,.62))}
+:root[data-premium-theme="sakura"] .cta-star .logo-glyph{filter:brightness(0) saturate(100%) invert(73%) sepia(24%) saturate(1080%) hue-rotate(285deg) brightness(104%) contrast(103%) drop-shadow(0 0 7px rgba(255,143,196,.72))}
+:root[data-premium-theme="sakura"] .chat-avatar .logo-glyph,
+:root[data-premium-theme="sakura"] .assistant-launch-icon .logo-glyph,
+:root[data-premium-theme="sakura"] .assistant-avatar .logo-glyph,
+:root[data-premium-theme="sakura"] .assistant-row .chat-avatar .logo-glyph{filter:brightness(0) saturate(100%) invert(73%) sepia(24%) saturate(1080%) hue-rotate(285deg) brightness(104%) contrast(103%) drop-shadow(0 0 4px rgba(255,143,196,.6))}
