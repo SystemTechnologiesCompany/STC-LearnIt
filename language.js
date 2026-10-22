@@ -284,6 +284,10 @@
     'Engineering design basics': 'Bases de la conception en ingénierie', 'Energy, Earth and resources': 'Énergie, Terre et ressources',
     'years': 'années', 'min': 'min', 'pairs': 'paires',
     'Every path starts with lessons, then unlocks a game, a checkpoint and a final exam.': 'Chaque parcours commence par des leçons, puis débloque un jeu, une évaluation et un examen final.',
+    'Each level attempt costs 10 energy. One energy returns every 5 minutes.': 'Chaque tentative de niveau coûte 10 énergies. Une énergie revient toutes les 5 minutes.', '/ 20 energy': '/ 20 énergie',
+    'Each level attempt uses 10 energy, whether you pass or not. Energy returns at one point every five minutes.': 'Chaque tentative coûte 10 énergies, que vous réussissiez ou non. Une énergie revient toutes les cinq minutes.',
+    'Foundations': 'Fondations', 'Core skills': 'Compétences fondamentales', 'Applied understanding': 'Compréhension appliquée', 'Advanced connections': 'Liens avancés', 'Mastery': 'Maîtrise',
+    '5 units · 20 levels each': '5 unités · 20 niveaux chacune', 'All 100 levels complete': 'Les 100 niveaux sont terminés', 'Full': 'Pleine',
     'LESSONS · GAME · EXAM': 'LEÇONS · JEU · EXAMEN', 'PRACTICE GAME': 'JEU D’ENTRAÎNEMENT',
     'YOUR LEARNING PATH · Faculty of Hydrocarbons, Renewable Energy, Earth & Universe Sciences': 'VOTRE PARCOURS · Faculté des hydrocarbures, des énergies renouvelables, des sciences de la Terre et de l’Univers',
     'YOUR LEARNING PATH · Faculty of Medicine': 'VOTRE PARCOURS · Faculté de médecine',
@@ -503,7 +507,7 @@
     for (const node of nodes) {
       // Authentication updates this label from the live Supabase session.
       // Keep the language observer from restoring its original static text.
-      if (node.parentElement?.closest('#loginBtn')) continue;
+      if (node.parentElement?.closest('#loginBtn,#energyCount,#energyTimer,#energyMessage')) continue;
       if (!originalText.has(node)) originalText.set(node, node.nodeValue);
       const source = originalText.get(node);
       const key = source.trim();
@@ -522,6 +526,22 @@
         if (!translated && levelLabel) translated = `NIVEAU ${levelLabel[1]}`;
         const levelProgress = key.match(/^Level (\d+)$/);
         if (!translated && levelProgress) translated = `Niveau ${levelProgress[1]}`;
+        const currentLevelProgress = key.match(/^Current level (\d+)$/);
+        if (!translated && currentLevelProgress) translated = `Niveau actuel ${currentLevelProgress[1]}`;
+        const levelOutOfHundred = key.match(/^LEVEL (\d+) \/ 100$/);
+        if (!translated && levelOutOfHundred) translated = `NIVEAU ${levelOutOfHundred[1]} / 100`;
+        const unitLevels = key.match(/^UNIT (\d+) · 20 LEVELS$/);
+        if (!translated && unitLevels) translated = `UNITÉ ${unitLevels[1]} · 20 NIVEAUX`;
+        const unitTitle = key.match(/^(Foundations|Core skills|Applied understanding|Advanced connections|Mastery) · (.+)$/);
+        if (!translated && unitTitle) { const difficulty = unitTitle[1]; translated = `${translationLookup.get(difficulty) || difficulty} · ${translationLookup.get(unitTitle[2]) || unitTitle[2]}`; }
+        const levelsTotal = key.match(/^(\d+) \/ 100 LEVELS$/);
+        if (!translated && levelsTotal) translated = `${levelsTotal[1]} / 100 NIVEAUX`;
+        const levelChallenge = key.match(/^LEVEL (\d+) · (FOUNDATIONS|CORE SKILLS|APPLIED UNDERSTANDING|ADVANCED CONNECTIONS|MASTERY)$/);
+        if (!translated && levelChallenge) { const difficulty = levelChallenge[2].toLowerCase().replace(/^\w/, char => char.toUpperCase()); translated = `NIVEAU ${levelChallenge[1]} · ${translationLookup.get(difficulty) || levelChallenge[2]}`; }
+        const numberedLevelType = key.match(/^LEVEL (\d+) · (LESSON \d+|PRACTICE GAME|UNIT CHECKPOINT|UNIT \d+ FINAL EXAM)$/);
+        if (!translated && numberedLevelType) { const kind = numberedLevelType[2]; const kindFr = kind.startsWith('LESSON') ? kind.replace('LESSON','LEÇON') : kind === 'PRACTICE GAME' ? 'JEU D’ENTRAÎNEMENT' : kind === 'UNIT CHECKPOINT' ? 'ÉVALUATION D’UNITÉ' : kind.replace('UNIT','UNITÉ').replace('FINAL EXAM','EXAMEN FINAL'); translated = `NIVEAU ${numberedLevelType[1]} · ${kindFr}`; }
+        const levelSummary = key.match(/^Level (\d+) of 100 · (\d+) questions · (\d+)% to pass\.$/);
+        if (!translated && levelSummary) translated = `Niveau ${levelSummary[1]} sur 100 · ${levelSummary[2]} questions · ${levelSummary[3]} % pour réussir.`;
         const xpProgress = key.match(/^(\d+) \/ 100 XP to next level$/);
         if (!translated && xpProgress) translated = `${xpProgress[1]} / 100 XP avant le niveau suivant`;
         const success = key.match(/^You got (\d+) of (\d+) right\. (You earned (\d+) XP\.|Review complete—no extra XP this time\.) Keep your momentum going\.$/);

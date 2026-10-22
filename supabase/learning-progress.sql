@@ -50,7 +50,7 @@ begin
   if current_user_id is null then
     raise exception 'Sign in to sync learning progress.' using errcode = '28000';
   end if;
-  if coalesce(cardinality(p_completed), 0) > 1000
+  if coalesce(cardinality(p_completed), 0) > 10000
      or coalesce(p_xp, 0) < 0
      or coalesce(p_streak, 0) < 0
      or coalesce(p_today_xp, 0) < 0 then

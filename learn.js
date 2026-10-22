@@ -38,7 +38,50 @@ const subjectBlueprints={
 };
 function categoryFor(subject){if(subject==='Geology'||subject==='Earth Science and Universe')return'Geology';if(subject==='Medicine')return'Medicine';if(subject==='Computer and Information Technology')return subject;if(subject==='Mathematics')return'Mathematics';if(subject==='Physics')return'Physics';if(subject==='Chemistry')return'Chemistry';if(subject==='Law')return'Law';if(subject==='Economics')return'Economics';if(['Arabic Language and Literature','French Language and Literature','English Language and Literature'].includes(subject))return'Languages';if(['Biological Sciences','Agricultural Sciences'].includes(subject))return'Biological Sciences';if(['Political Sciences','Sociology and Demography','Humanities','Information and Communication','Psychology and Educational Sciences'].includes(subject))return'Social Sciences';if(['Renewable Energy','Hydrocarbon Production','Drilling and Oil Mechanics'].includes(subject))return'Energy and Earth';if(['Commercial Sciences','Management Sciences'].includes(subject))return'Economics';if(subject==='Technology')return'Engineering';return'Engineering'}
 function makeCourseStages(subject){if(subject==='Earth Science and Universe')subject='Geology';if(subject==='Geology'){return[...geologyStages.slice(0,3),{id:'geology-matching-game',type:'PRACTICE GAME',title:'Earth science concept match',summary:'Match each key idea to its meaning.',duration:'3 pairs',xp:20,kind:'matching',pairs:[{term:'Earth layers',definition:'Crust, mantle and core arranged from the surface inward.'},{term:'Mineral',definition:'A natural solid with a consistent composition and crystal structure.'},{term:'Tectonic plates',definition:'Pieces of Earth’s outer shell that move slowly.'}],intro:'Match each key idea to the correct meaning. You have learned all the concepts in the lessons above, so use those ideas to clear the board.'},...geologyStages.slice(3)]}if(subject==='Electronics and Telecommunication')subject='Computer and Information Technology';if(['Process Engineering','Mechanical Engineering','Civil and Hydraulic Engineering','Electrical Engineering','Physical and Sporting Activities'].includes(subject))subject='Engineering';const blueprint=subjectBlueprints[categoryFor(subject)]||subjectBlueprints.Engineering;const slug=subject.toLowerCase().replace(/[^a-z0-9]+/g,'-');const lessons=blueprint.lessons.map((item,i)=>({id:`${slug}-lesson-${i+1}`,type:`LESSON 0${i+1}`,title:item[0],summary:item[1].split('.')[0]+'.',duration:`${5+i} min`,xp:20,intro:item[1],questions:[{q:item[2],options:[item[3],`Not ${item[3]}`,'None of these'],answer:0,why:item[4]},{q:`Which idea best matches “${item[0]}”?`,options:[item[3],`Not ${item[3]}`,'None of these'],answer:0,why:item[4]}]}));const matching={id:`${slug}-matching-game`,type:'PRACTICE GAME',title:`${subject} concept match`,summary:'Match each key idea to its meaning.',duration:'3 pairs',xp:20,kind:'matching',pairs:blueprint.lessons.map(item=>({term:item[0],definition:item[4]})),intro:'Match each key idea to the correct meaning. You have learned all the concepts in the lessons above, so use those ideas to clear the board.'};const questions=blueprint.lessons.map(item=>({q:item[2],options:[item[3],`Not ${item[3]}`,'None of these'],answer:0,why:item[4]}));const checkpoint={id:`${slug}-unit-checkpoint`,type:'UNIT CHECKPOINT',title:`${subject} checkpoint`,summary:'Review the three lessons.',duration:'3 questions',xp:30,intro:'You need at least 2 correct answers to pass this checkpoint.',pass:2,questions};const examQuestions=lessons.flatMap(lesson=>lesson.questions).slice(0,5);const exam={id:`${slug}-final-exam`,type:'FINAL EXAM',title:`${subject} level exam`,summary:'Pass to complete this level.',duration:'5 questions',xp:50,intro:'Your level finale! Get at least 4 out of 5 correct. You can retry at any time.',pass:4,questions:examQuestions};return [...lessons,matching,checkpoint,exam]}
-let courseStages=makeCourseStages('Geology');
+function makeLevelPath(subject){
+  const seeds=makeCourseStages(subject);
+  const lessonSeeds=seeds.filter(stage=>stage.type.startsWith('LESSON'));
+  const baseQuestions=lessonSeeds.flatMap(stage=>stage.questions||[]);
+  const conceptQuestions=lessonSeeds.map((topic,index)=>({q:`Which topic is described by “${topic.summary}”`,options:lessonSeeds.map(item=>item.title),answer:index,why:topic.intro}));
+  const questions=[...baseQuestions,...conceptQuestions];
+  const matchingPairs=lessonSeeds.flatMap(topic=>[{term:topic.title,definition:topic.summary},{term:`${topic.title} · explanation`,definition:topic.intro}]);
+  const matchingSeed=seeds.find(stage=>stage.kind==='matching');
+  const checkpointSeed=seeds.find(stage=>stage.type.includes('CHECKPOINT'));
+  const examSeed=seeds.find(stage=>stage.type.includes('EXAM'));
+  const slug=(subject==='Earth Science and Universe'?'geology':subject.toLowerCase()).replace(/[^a-z0-9]+/g,'-');
+  const unitLevels=['Foundations','Core skills','Applied understanding','Advanced connections','Mastery'];
+  const unitTitles=Array.from({length:5},(_,unit)=>`${unitLevels[unit]} · ${subjectBlueprints[categoryFor(subject)].unit}`);
+  const path=[];
+  for(let unit=0;unit<5;unit++){
+    for(let level=1;level<=20;level++){
+      const globalLevel=unit*20+level;
+      const seed=unit===0&&level<=3?lessonSeeds[level-1]:unit===0&&level===5?matchingSeed:unit===0&&level===19?checkpointSeed:unit===0&&level===20?examSeed:null;
+      if(seed){path.push({...seed,pairs:seed.kind==='matching'?matchingPairs.slice(0,3):seed.pairs,type:`LEVEL ${String(level).padStart(2,'0')} · ${seed.type}`,title:level===20?`Unit ${unit+1} mastery exam`:seed.title,summary:level===20?`Final exam for ${unitTitles[unit]}.`:seed.summary,unit:unit+1,unitTitle:unitTitles[unit],level,globalLevel,difficulty:unit+1});continue}
+      if(level===20){
+        const examQuestions=Array.from({length:Math.min(questions.length,6+unit)},(_,i)=>questions[(globalLevel+i)%questions.length]);
+        const pass=Math.ceil(examQuestions.length*(.7+unit*.04));
+        path.push({id:`${slug}-unit-${unit+1}-final-exam`,unit:unit+1,unitTitle:unitTitles[unit],level,globalLevel,difficulty:unit+1,type:`LEVEL 20 · UNIT ${unit+1} FINAL EXAM`,title:`Unit ${unit+1} mastery exam`,summary:`Prove your understanding of ${subject} to unlock the next unit.`,duration:`${examQuestions.length} questions`,xp:50+unit*10,intro:`This exam brings together the skills from ${unitTitles[unit]}. You need ${pass} correct answers to pass.`,pass,questions:examQuestions});
+        continue;
+      }
+      if(level%5===0){
+        const pairCount=Math.min(matchingPairs.length,3+unit+Math.floor((level-5)/5));
+        const pairs=matchingPairs.slice(0,pairCount);
+        path.push({id:`${slug}-unit-${unit+1}-level-${String(level).padStart(2,'0')}-game`,unit:unit+1,unitTitle:unitTitles[unit],level,globalLevel,difficulty:unit+1,type:`LEVEL ${String(level).padStart(2,'0')} · PRACTICE GAME`,title:`Unit ${unit+1} concept challenge`,summary:`Match the key ideas from ${unitTitles[unit]}.`,duration:`${pairs.length} pairs`,xp:25+unit*5,kind:'matching',pairs,intro:`Use what you have learned in ${unitTitles[unit]} to match every idea. This round gets more demanding as you advance.`});
+        continue;
+      }
+      const count=Math.min(questions.length,2+unit+Math.ceil((level-1)/4));
+      const levelQuestions=Array.from({length:count},(_,i)=>{
+        const source=questions[(globalLevel+i)%questions.length];
+        return unit===0&&level<5?source:{...source,q:`${unitLevels[unit]} · ${source.q}`};
+      });
+      const pass=Math.ceil(count*(.6+unit*.05+Math.floor((level-1)/5)*.02));
+      const topic=lessonSeeds[(globalLevel-1)%lessonSeeds.length];
+      path.push({id:`${slug}-unit-${unit+1}-level-${String(level).padStart(2,'0')}`,unit:unit+1,unitTitle:unitTitles[unit],level,globalLevel,difficulty:unit+1,type:`LEVEL ${String(level).padStart(2,'0')} · ${unitLevels[unit].toUpperCase()}`,title:`${unitLevels[unit]}: ${topic.title}`,summary:`Level ${globalLevel} of 100 · ${count} questions · ${Math.round(pass/count*100)}% to pass.`,duration:`${count} questions`,xp:20+unit*5+Math.floor(level/4)*2,intro:`${topic.intro}\n\n${unitTitles[unit]} · Level ${level} of 20. Answer at least ${pass} of ${count} questions to pass.`,pass:Math.min(pass,count),questions:levelQuestions});
+    }
+  }
+  return path;
+}
+let courseStages=makeLevelPath('Geology');
 
 const storageKey='stc-learn-practice-v1';
 const guestStorageKey=`${storageKey}:guest`;
@@ -48,11 +91,11 @@ const config=window.STC_SUPABASE_CONFIG||{};
 const progressClient=/^https:\/\/[a-z0-9-]+\.supabase\.co$/i.test(config.url||'')&&typeof config.publishableKey==='string'&&config.publishableKey.startsWith('sb_publishable_')&&window.supabase?.createClient
   ?window.supabase.createClient(config.url,config.publishableKey,{auth:{autoRefreshToken:true,persistSession:true,detectSessionInUrl:true}})
   :null;
-const emptyProgress=()=>({completed:[],xp:0,streak:0,lastActive:'',todayXP:0,goalDate:''});
-const normalizeProgress=saved=>({completed:Array.isArray(saved?.completed)?[...new Set(saved.completed.filter(id=>typeof id==='string'))]:[],xp:Number.isFinite(Number(saved?.xp))?Math.max(0,Number(saved.xp)):0,streak:Number.isFinite(Number(saved?.streak))?Math.max(0,Number(saved.streak)):0,lastActive:typeof(saved?.lastActive??saved?.last_active)==='string'?(saved.lastActive??saved.last_active):'',todayXP:Number.isFinite(Number(saved?.todayXP??saved?.today_xp))?Math.max(0,Number(saved.todayXP??saved.today_xp)):0,goalDate:typeof(saved?.goalDate??saved?.goal_date)==='string'?(saved.goalDate??saved.goal_date):''});
+const emptyProgress=()=>({completed:[],xp:0,streak:0,lastActive:'',todayXP:0,goalDate:'',energy:20,energyUpdatedAt:new Date().toISOString()});
+const normalizeProgress=saved=>({completed:Array.isArray(saved?.completed)?[...new Set(saved.completed.filter(id=>typeof id==='string'))]:[],xp:Number.isFinite(Number(saved?.xp))?Math.max(0,Number(saved.xp)):0,streak:Number.isFinite(Number(saved?.streak))?Math.max(0,Number(saved.streak)):0,lastActive:typeof(saved?.lastActive??saved?.last_active)==='string'?(saved.lastActive??saved.last_active):'',todayXP:Number.isFinite(Number(saved?.todayXP??saved?.today_xp))?Math.max(0,Number(saved.todayXP??saved.today_xp)):0,goalDate:typeof(saved?.goalDate??saved?.goal_date)==='string'?(saved.goalDate??saved.goal_date):'',energy:Number.isFinite(Number(saved?.energy))?Math.max(0,Math.min(20,Number(saved.energy))):20,energyUpdatedAt:typeof(saved?.energyUpdatedAt??saved?.energy_updated_at)==='string'?(saved.energyUpdatedAt??saved.energy_updated_at):new Date().toISOString()});
 function readProgress(key=storageKey){try{return normalizeProgress(JSON.parse(localStorage.getItem(key)||'{}'))}catch{return emptyProgress()}}
 const stageXpById=new Map();
-subjectGroups.forEach(group=>group.subjects.forEach(subject=>makeCourseStages(subject).forEach(stage=>stageXpById.set(stage.id,stage.xp))));
+subjectGroups.forEach(group=>group.subjects.forEach(subject=>makeLevelPath(subject).forEach(stage=>stageXpById.set(stage.id,stage.xp))));
 function mergeProgress(first,second){
   const left=normalizeProgress(first),right=normalizeProgress(second),completed=[...new Set([...left.completed,...right.completed])];
   const catalogXp=completed.reduce((sum,id)=>sum+(stageXpById.get(id)||0),0);
@@ -62,10 +105,11 @@ function mergeProgress(first,second){
   const activeDayGap=latestActivity.lastActive&&earlierActivity.lastActive?(Date.parse(`${latestActivity.lastActive}T00:00:00Z`)-Date.parse(`${earlierActivity.lastActive}T00:00:00Z`))/86400000:0;
   const mergedStreak=activityOrder===0?Math.max(left.streak,right.streak):activeDayGap===1?Math.max(latestActivity.streak,earlierActivity.streak+1):latestActivity.streak;
   const goalOrder=left.goalDate.localeCompare(right.goalDate),goal=goalOrder>0?left:goalOrder<0?right:{...right,todayXP:Math.max(left.todayXP,right.todayXP)};
-  return{completed,xp:Math.max(catalogXp,left.xp,right.xp),streak:mergedStreak,lastActive:latestActivity.lastActive,todayXP:goal.todayXP,goalDate:goal.goalDate};
+  const energyOwner=left.energyUpdatedAt.localeCompare(right.energyUpdatedAt)>0?left:right;
+  return{completed,xp:Math.max(catalogXp,left.xp,right.xp),streak:mergedStreak,lastActive:latestActivity.lastActive,todayXP:goal.todayXP,goalDate:goal.goalDate,energy:energyOwner.energy,energyUpdatedAt:energyOwner.energyUpdatedAt};
 }
 let progress=readProgress();
-let activeUserId=null,sessionResolved=false,cloudSyncReady=false,authGeneration=0,cloudSyncTimer=0,cloudSyncQueue=Promise.resolve();
+let activeUserId=null,sessionResolved=false,cloudSyncReady=false,energyAccountReady=true,authGeneration=0,cloudSyncTimer=0,cloudSyncQueue=Promise.resolve();
 function statusText(state){
   const french=document.documentElement.dataset.language==='fr';
   const labels={checking:['Checking your account…','Vérification du compte…'],local:['Saved on this device','Enregistré sur cet appareil'],syncing:['Syncing progress…','Synchronisation de la progression…'],synced:['Progress synced to your account','Progression synchronisée avec votre compte'],error:['Sync unavailable. Progress is saved on this device.','Synchronisation indisponible. Progression enregistrée sur cet appareil.']};
@@ -80,12 +124,55 @@ const initialParams=new URLSearchParams(window.location.search);
 const initialFaculty=initialParams.get('faculty'),initialSubject=initialParams.get('subject'),initialGroup=subjectGroups.find(group=>group.faculty===initialFaculty&&group.subjects.includes(initialSubject));
 if(initialGroup){chosen={faculty:initialGroup.faculty,subject:initialSubject}}
 if(levelOptions.includes(initialParams.get('level')))selectedLevel=initialParams.get('level');
-let activeStage=-1,questionIndex=0,correctAnswers=0,mode='intro';
+let activeStage=-1,questionIndex=0,correctAnswers=0,mode='intro',energySpendPending=false;
 const subjectList=document.querySelector('#subjectList');
 const pathContent=document.querySelector('#pathContent');
 const lessonDialog=document.querySelector('#lessonDialog');
 const lessonContinue=document.querySelector('#lessonContinue');
 function todayKey(){const date=new Date();return `${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,'0')}-${String(date.getDate()).padStart(2,'0')}`}
+let energyNoticeTimer=0;
+function energyLanguage(){return document.documentElement.dataset.language==='fr'||(()=>{try{return localStorage.getItem('stc-learnit-language')==='fr'}catch{return false}})()}
+function refreshLocalEnergy(){
+  const now=Date.now(),last=Date.parse(progress.energyUpdatedAt)||now,ticks=Math.floor(Math.max(0,now-last)/300000);
+  if(ticks){progress.energy=Math.min(20,progress.energy+ticks);progress.energyUpdatedAt=progress.energy===20?new Date(now).toISOString():new Date(last+ticks*300000).toISOString();writeLocalProgress()}
+}
+function updateEnergyView(){
+  refreshLocalEnergy();
+  const energyCount=document.querySelector('#energyCount'),energyTimer=document.querySelector('#energyTimer');
+  if(energyCount)energyCount.textContent=progress.energy;
+  if(!energyTimer)return;
+  if(progress.energy>=20)energyTimer.textContent=energyLanguage()?'Pleine':'Full';
+  else{const left=Math.max(0,300000-(Date.now()-(Date.parse(progress.energyUpdatedAt)||Date.now()))),minutes=Math.floor(left/60000),seconds=Math.floor((left%60000)/1000);energyTimer.textContent=energyLanguage()?`+1 dans ${minutes}:${String(seconds).padStart(2,'0')}`:`+1 in ${minutes}:${String(seconds).padStart(2,'0')}`}
+}
+function setEnergyNotice(kind){
+  const node=document.querySelector('#energyMessage');if(!node)return;
+  const messages={
+    low:['You need 10 energy to start a level. One energy returns every 5 minutes.','Il faut 10 énergies pour commencer un niveau. Une énergie revient toutes les 5 minutes.'],
+    setup:['Energy sync needs the Supabase setup in supabase/learning-energy.sql.','La synchronisation de l’énergie nécessite le script Supabase supabase/learning-energy.sql.'],
+    normal:['Each level attempt costs 10 energy. One energy returns every 5 minutes.','Chaque tentative de niveau coûte 10 énergies. Une énergie revient toutes les 5 minutes.']
+  };
+  node.textContent=messages[kind][energyLanguage()?1:0];
+  clearTimeout(energyNoticeTimer);if(kind!=='normal')energyNoticeTimer=setTimeout(()=>setEnergyNotice('normal'),6500);
+}
+async function refreshCloudEnergy(){
+  if(!progressClient||!activeUserId)return;
+  const {data,error}=await progressClient.rpc('get_learning_energy');if(error)throw error;
+  const row=Array.isArray(data)?data[0]:data;if(!row)return;
+  progress.energy=Number(row.energy);progress.energyUpdatedAt=row.energy_updated_at||new Date().toISOString();writeLocalProgress();updateEnergyView();
+}
+async function spendEnergy(){
+  if(activeUserId&&!energyAccountReady){setEnergyNotice('setup');return false}
+  if(activeUserId&&cloudSyncReady&&progressClient){
+    const {data,error}=await progressClient.rpc('spend_learning_energy');
+    if(error){console.error('STC Learnit energy sync:',error);setEnergyNotice('setup');return false}
+    const row=Array.isArray(data)?data[0]:data;
+    if(row){progress.energy=Number(row.energy);progress.energyUpdatedAt=row.energy_updated_at||new Date().toISOString();writeLocalProgress()}
+    updateEnergyView();if(!row?.spent){setEnergyNotice('low');return false}return true;
+  }
+  refreshLocalEnergy();if(progress.energy<10){updateEnergyView();setEnergyNotice('low');return false}
+  if(progress.energy>=20)progress.energyUpdatedAt=new Date().toISOString();
+  progress.energy-=10;writeLocalProgress();updateEnergyView();return true;
+}
 function scheduleCloudSync(){
   if(!progressClient||!activeUserId||!cloudSyncReady)return;
   clearTimeout(cloudSyncTimer);setSyncStatus('syncing');
@@ -121,7 +208,7 @@ let loadingUserId=null;
 async function applyLearningSession(session){
   const userId=session?.user?.id||null;
   if(userId===activeUserId&&sessionResolved&&(userId===null||cloudSyncReady||loadingUserId===userId))return;
-  const generation=++authGeneration;sessionResolved=true;activeUserId=userId;cloudSyncReady=false;loadingUserId=userId;
+  const generation=++authGeneration;sessionResolved=true;activeUserId=userId;cloudSyncReady=false;energyAccountReady=!userId;loadingUserId=userId;
   if(!userId){
     const owner=(()=>{try{return localStorage.getItem(legacyOwnerKey)}catch{return null}})();
     const guest=readProgress(guestStorageKey),legacy=!owner?readProgress(storageKey):emptyProgress();
@@ -139,11 +226,13 @@ async function applyLearningSession(session){
     if(generation!==authGeneration)return;
     progress=mergeProgress(localCandidate,data?normalizeProgress(data):emptyProgress());
     cloudSyncReady=true;loadingUserId=null;
+    try{await refreshCloudEnergy();energyAccountReady=true}catch(error){console.error('STC Learnit energy load:',error);energyAccountReady=false}
+    if(generation!==authGeneration)return;
     writeLocalProgress();updateProgressStats();renderPath();scheduleCloudSync();
   }catch(error){
     if(generation!==authGeneration)return;
     console.error('STC Learnit progress load:',error);
-    progress=localCandidate;cloudSyncReady=true;loadingUserId=null;
+    progress=localCandidate;cloudSyncReady=true;energyAccountReady=false;loadingUserId=null;
     writeLocalProgress();setSyncStatus('error');updateProgressStats();renderPath();
   }
 }
@@ -186,6 +275,7 @@ function updateProgressStats(){
   document.querySelector('#goalProgress').textContent=Math.min(progress.todayXP,30);
   document.querySelector('#goalFill').style.width=`${Math.min(progress.todayXP/30*100,100)}%`;
   document.querySelector('#goalMessage').textContent=progress.todayXP>=30?'Daily goal complete — great work!':'A little practice goes a long way.';
+  updateEnergyView();
   return{level,levelXp};
 }
 function renderSubjects(){
@@ -205,7 +295,7 @@ function renderSubjects(){
   });
 }
 function selectSubject(faculty,subject){chosen={faculty,subject};renderSubjects();renderPath()}
-function renderPath(){
+function renderOldPath(){
   courseStages=makeCourseStages(chosen.subject);
   const {level,levelXp}=updateProgressStats();
   const completedCount=courseStages.filter(stage=>progress.completed.includes(stage.id)).length,percent=Math.round(completedCount/courseStages.length*100);
@@ -219,7 +309,31 @@ function renderPath(){
   pathContent.innerHTML=`<div class="path-course-head"><div class="path-course-icon"><img src="assets/icons/${chosen.subject==='Geology'||chosen.subject==='Earth Science and Universe'?'earth-energy.svg':'book-open.svg'}" alt=""></div><div class="path-course-copy"><span class="course-kicker">YOUR LEARNING PATH · ${chosen.faculty}</span><h2>${chosen.subject} <span class="level-pill">LEVEL ${level}</span></h2><p>${selectedLevel}</p></div><div class="course-xp"><img src="assets/icons/xp.svg" alt=""><strong>${progress.xp}</strong><small>XP</small></div></div><div class="course-progress-box"><div class="course-progress-top"><span>YOUR PROGRESS</span><strong>${completedCount} / ${courseStages.length} STEPS</strong></div><div class="course-progress-track"><span style="width:${percent}%"></span></div><div class="level-progress"><span>Level ${level}</span><span>${levelXp} / 100 XP to next level</span></div></div><div class="unit-heading"><div><span class="unit-tag">UNIT 1</span><h3>${unit}</h3></div><span class="unit-xp">✦ 160 XP available</span></div><div class="path-track">${nodes}</div>${completedExam?`<div class="level-up-banner"><span>✦</span><div><strong>Level complete!</strong><small>You passed the ${chosen.subject} final exam. Keep learning to build your skills and earn XP.</small></div></div>`:''}<div class="path-footer-note">Complete the lessons to unlock the matching game, checkpoint and final exam. Your progress is saved automatically.</div>`;
   pathContent.querySelectorAll('[data-stage]').forEach(button=>button.addEventListener('click',()=>openStage(Number(button.dataset.stage))));
 }
-function openStage(index){
+function renderPath(){
+  courseStages=makeLevelPath(chosen.subject);updateProgressStats();
+  const completedCount=courseStages.filter(stage=>progress.completed.includes(stage.id)).length;
+  const firstOpen=courseStages.findIndex((stage,index)=>!progress.completed.includes(stage.id)&&(index===0||progress.completed.includes(courseStages[index-1].id)));
+  const currentLevel=firstOpen<0?100:firstOpen+1,percent=Math.round(completedCount/100*100);
+  const escape=value=>String(value).replace(/[&<>"']/g,char=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
+  const sections=Array.from({length:5},(_,unitIndex)=>{
+    const unitStages=courseStages.filter(stage=>stage.unit===unitIndex+1);
+    const unitDone=unitStages.filter(stage=>progress.completed.includes(stage.id)).length;
+    const nodes=unitStages.map(stage=>{
+      const index=stage.globalLevel-1,complete=progress.completed.includes(stage.id),unlocked=index===0||progress.completed.includes(courseStages[index-1].id);
+      const icon=complete?'✓':stage.type.includes('EXAM')||stage.type.includes('CHECKPOINT')?'★':String(stage.level).padStart(2,'0');
+      const energyLabel=energyLanguage()?'⚡ −10 énergie':'⚡ −10 energy';
+      return `<button type="button" class="path-node ${complete?'is-complete':''} ${unlocked&&!complete?'is-current':''} ${unlocked?'':'is-locked'}" data-stage="${index}" ${unlocked?'':'disabled'} aria-label="${escape(stage.title)} · ${energyLabel}"><span class="node-rail"><span class="node-circle">${icon}</span></span><span class="node-copy"><span class="node-label">${escape(stage.type)}</span><strong>${escape(stage.title)}</strong><small>${escape(stage.summary)}</small></span><span class="node-meta">${complete?'✓ DONE':unlocked?'⚡ 10':'🔒'}</span></button>`;
+    }).join('');
+    return `<section class="unit-section"><div class="unit-heading"><div><span class="unit-tag">UNIT ${unitIndex+1} · 20 LEVELS</span><h3>${escape(unitStages[0]?.unitTitle||'')}</h3></div><span class="unit-xp">${unitDone} / 20</span></div><div class="path-track">${nodes}</div></section>`;
+  }).join('');
+  const unit=subjectBlueprints[categoryFor(chosen.subject)].unit;
+  pathContent.innerHTML=`<div class="path-course-head"><div class="path-course-icon"><img src="assets/icons/${chosen.subject==='Geology'||chosen.subject==='Earth Science and Universe'?'earth-energy.svg':'book-open.svg'}" alt=""></div><div class="path-course-copy"><span class="course-kicker">YOUR LEARNING PATH · ${escape(chosen.faculty)}</span><h2>${escape(chosen.subject)} <span class="level-pill">LEVEL ${currentLevel} / 100</span></h2><p>${escape(selectedLevel)} · ${escape(unit)}</p></div><div class="course-xp"><img src="assets/icons/xp.svg" alt=""><strong>${progress.xp}</strong><small>XP</small></div></div><div class="course-progress-box"><div class="course-progress-top"><span>YOUR PROGRESS</span><strong>${completedCount} / 100 LEVELS</strong></div><div class="course-progress-track"><span style="width:${percent}%"></span></div><div class="level-progress"><span>${currentLevel === 100 && completedCount === 100?'All 100 levels complete':`Current level ${currentLevel}`}</span><span>5 units · 20 levels each</span></div></div>${sections}<div class="path-footer-note">Each level attempt uses 10 energy, whether you pass or not. Energy returns at one point every five minutes.</div>`;
+  pathContent.querySelectorAll('[data-stage]').forEach(button=>button.addEventListener('click',()=>openStage(Number(button.dataset.stage))));
+}
+async function openStage(index){
+  if(index<0||index>=courseStages.length||energySpendPending)return;
+  energySpendPending=true;let hasEnergy=false;try{hasEnergy=await spendEnergy()}catch(error){console.error('STC Learnit energy spend:',error);setEnergyNotice('setup')}finally{energySpendPending=false}
+  if(!hasEnergy)return;
   activeStage=index;questionIndex=0;correctAnswers=0;mode='intro';
   const stage=courseStages[index];
   document.querySelector('#lessonType').textContent=stage.type;
@@ -229,7 +343,7 @@ function openStage(index){
   document.querySelector('#lessonGame').hidden=true;
   document.querySelector('#lessonBody').hidden=false;
   document.querySelector('#lessonProgressFill').style.width='0%';
-  const xpTag=document.querySelector('.lesson-xp');xpTag.innerHTML=`<img src="assets/icons/xp.svg" alt=""> +${stage.xp} XP`;
+  const xpTag=document.querySelector('.lesson-xp');xpTag.innerHTML=`<img src="assets/icons/xp.svg" alt=""> +${stage.xp} XP · ${energyLanguage()?'⚡ −10 énergie':'⚡ −10 energy'}`;
   lessonContinue.disabled=false;lessonContinue.innerHTML=stage.kind==='matching'?'Start matching <span>↗</span>':'Start practice <span>↗</span>';
   if(!lessonDialog.open)lessonDialog.showModal();
 }
@@ -297,4 +411,5 @@ document.querySelector('#lessonClose').addEventListener('click',()=>lessonDialog
 document.querySelector('#lessonBack').addEventListener('click',()=>lessonDialog.close());
 document.querySelector('#learnMenuToggle').addEventListener('click',()=>document.querySelector('.main-nav').classList.toggle('open'));
 document.querySelectorAll('.main-nav a').forEach(link=>link.addEventListener('click',()=>document.querySelector('.main-nav').classList.remove('open')));
+window.addEventListener('stc:language-change',()=>{updateEnergyView();setEnergyNotice('normal')});window.setInterval(updateEnergyView,1000);
 updateProgressStats();renderSubjects();renderPath();initializeProgressSync();
