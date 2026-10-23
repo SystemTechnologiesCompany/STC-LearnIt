@@ -128,7 +128,13 @@ function addChatMessage(text,role='assistant',label='SEWINGO AI'){
     mark.className='logo-glyph';mark.src='logo%20only%20head.png';mark.alt='';
     avatar.appendChild(mark);
   }
-  const bubble=document.createElement('div');bubble.className='chat-bubble';bubble.textContent=text;
+  const bubble=document.createElement('div');bubble.className='chat-bubble';
+  if(role==='assistant'){
+    for(const part of text.split(/(\*\*[^*]+\*\*)/g)){
+      if(part.startsWith('**')&&part.endsWith('**')){const strong=document.createElement('strong');strong.textContent=part.slice(2,-2);bubble.appendChild(strong)}
+      else bubble.appendChild(document.createTextNode(part));
+    }
+  }else bubble.textContent=text;
   if(role==='assistant'){
     const meta=document.createElement('small');meta.textContent=label;bubble.appendChild(meta);
   }

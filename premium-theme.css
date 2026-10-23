@@ -366,6 +366,12 @@
 @keyframes pro-plan-gradient{to{background-position:260% 50%}}
 @media(prefers-reduced-motion:reduce){.plans-modal .pro-plan-word{animation:none!important}}
 
+/* Keep typed Sewingo messages readable against the Sakura and Galaxy composer surfaces. */
+:root[data-premium-theme="sakura"] .assistant-composer input{color:#fff5fa!important;-webkit-text-fill-color:#fff5fa;caret-color:#ffb5d4}
+:root[data-premium-theme="sakura"] .assistant-composer input::placeholder{color:#c9adbc;opacity:1}
+:root[data-premium-theme="galaxy"] .assistant-composer input{color:#f4f7ff!important;-webkit-text-fill-color:#f4f7ff;caret-color:#a8d1ff}
+:root[data-premium-theme="galaxy"] .assistant-composer input::placeholder{color:#aabbd3;opacity:1}
+
 /* Google sign-in mark and theme-matched button glow */
 .google-logo{display:block;flex:0 0 22px;width:22px;height:22px;max-width:none;object-fit:contain;visibility:visible;opacity:1;filter:none}
 .google-button-label{flex:1;text-align:left}
