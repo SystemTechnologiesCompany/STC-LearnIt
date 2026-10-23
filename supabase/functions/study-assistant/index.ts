@@ -32,7 +32,7 @@ Deno.serve(async (request: Request) => {
   if (!geminiKey) return json({ error: 'AI service is not configured.' }, 503);
   const groqKey = Deno.env.get('GROQ_API_KEY');
 
-  let body: { messages?: unknown; language?: unknown; studyContext?: unknown };
+  let body: { messages?: unknown; language?: unknown; studyContext?: unknown; page?: unknown };
   try {
     body = await request.json();
   } catch {
@@ -90,6 +90,8 @@ Deno.serve(async (request: Request) => {
   const faculty = contextValue(studyContext.faculty);
   const subject = contextValue(studyContext.subject);
   const level = contextValue(studyContext.level);
+  const page = contextValue(body.page);
+  const pageLine = page ? `The student is currently viewing the ${page} page.` : '';
   const contextLine = faculty || subject || level
     ? `The student's selected study context is${faculty ? ` faculty ${faculty}` : ''}${subject ? `, subject or department ${subject}` : ''}${level ? `, study level ${level}` : ''}. Use this to tailor examples when relevant, but answer other academic questions too.`
     : '';
@@ -99,6 +101,8 @@ Deno.serve(async (request: Request) => {
     'Support any academic subject, including medicine and life sciences, mathematics, physics, chemistry, computing, engineering, earth and energy sciences, economics, management, languages, law, political science, humanities, social sciences, psychology, and sports sciences.',
     'Give clear university-level explanations, worked examples, hints, practice questions, short quizzes, exam revision plans, and study strategies. Adapt to the student’s requested level and language.',
     'STC is building learning paths across faculties; do not claim that a particular course, lesson, exam, university record, or study material is available unless it was provided in the conversation.',
+    'You also know how to use the STC Learnit website. Give accurate, numbered steps when asked where to find a feature. To change the public account name: open My profile in the top navigation, scroll to the Edit your profile form, change the Your name field, then press Save changes. The Username field controls the unique @handle and must be available. To change the username, use the same form’s Username field and Save changes. To change the profile photo, use the pencil icon on the avatar on My profile. To choose or update a faculty, use the faculty field in the profile edit form. To start studying, open Learn & practice, choose a subject from Your study paths, and select the available next level; lessons include learning and practice, followed by games and exams as the path unlocks. The leaderboard is in Leaderboard; its tabs change the ranking period, and Follow buttons follow students. Profile search is on My profile and uses a Learnit ID. The language menu is the translation icon in the header (EN/FR); the adjacent switch changes the appearance theme. Premium plans are opened with the Premium button. Sewingo AI opens from the floating button at the lower right on every page. If a student asks for site help, answer directly with the relevant steps, not general study advice. Do not invent buttons or steps; if uncertain, say what is known and where to look.',
+    pageLine,
     contextLine,
     `By default, answer in ${language}. If the student asks for Arabic, reply in clear Arabic and continue in Arabic for the rest of the conversation until they ask to switch languages. Also follow a request to switch to another language. Arabic support applies to chat replies only; the website interface language is separate. Keep replies concise: usually 1–3 short sentences, or up to 3 brief bullets when needed.`,
     'Answer the exact question first. Do not add a long greeting, self-introduction, list of services, repeated summary, unnecessary encouragement, quiz, or unrelated topic unless the student asks. Explain only what is needed; expand when asked.',

@@ -2,6 +2,14 @@
   const storageKey = 'stc-learnit-language';
   const translations = {
     'Premium plans': 'Offres Premium',
+    'Need a study buddy?': 'Besoin d’aide pour étudier ?', 'Ask Sewingo AI': 'Demandez à Sewingo AI',
+    'AI study assistant': 'Assistant d’étude IA', 'Ask for study help or help using STC Learnit.': 'Demandez de l’aide pour vos études ou pour utiliser STC Learnit.',
+    'Ask Sewingo AI…': 'Demandez à Sewingo AI…',
+    'Change my name': 'Changer mon nom', 'Start a lesson': 'Commencer une leçon', 'Find my subject': 'Trouver ma matière',
+    'Hi! I’m Sewingo AI, the STC founder’s right hand.': 'Salut ! Je suis Sewingo AI, le bras droit du fondateur de STC.',
+    'Ask me about your studies or how to use STC Learnit. I can guide you step by step.': 'Posez-moi vos questions sur vos études ou sur l’utilisation de STC Learnit. Je peux vous guider étape par étape.',
+    'AI responses can make mistakes. Verify important information.': 'Les réponses de l’IA peuvent contenir des erreurs. Vérifiez les informations importantes.',
+    'Close study assistant': 'Fermer l’assistant d’étude', 'Send message': 'Envoyer le message',
     'STUDENT ACCOUNT': 'COMPTE ÉTUDIANT',
     'Sign in to manage your profile.': 'Connectez-vous pour gérer votre profil.',
     'Your profile, Learnit ID, followers and classmates are connected to your student account.': 'Votre profil, votre identifiant Learnit, vos abonnés et vos camarades sont liés à votre compte étudiant.',
