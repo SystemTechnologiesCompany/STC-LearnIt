@@ -352,6 +352,20 @@
 :root[data-premium-theme="sakura"] .assistant-avatar .logo-glyph,
 :root[data-premium-theme="sakura"] .assistant-row .chat-avatar .logo-glyph{filter:brightness(0) saturate(100%) invert(73%) sepia(24%) saturate(1080%) hue-rotate(285deg) brightness(104%) contrast(103%) drop-shadow(0 0 4px rgba(255,143,196,.6))}
 
+/* Plan labels and a dedicated Sakura finish for the Pro offer. */
+.plans-modal .plan-card--pro{border-color:rgba(255,147,196,.56);background:radial-gradient(ellipse at 8% 0%,rgba(255,123,184,.2),transparent 53%),linear-gradient(145deg,#402138 0%,#2c182c 54%,#211422 100%);box-shadow:0 16px 40px rgba(0,0,0,.32),0 0 28px rgba(220,83,149,.16),inset 0 1px 0 rgba(255,226,241,.13)}
+.plans-modal .plan-card--pro::before{background:radial-gradient(ellipse at 5% 0%,rgba(255,133,190,.26),transparent 61%);opacity:1}
+.plans-modal .plan-card--pro::after{background:linear-gradient(90deg,transparent,rgba(255,191,218,.14),transparent)}
+.plans-modal .plan-card--pro .plan-name{color:#fff3fa;text-shadow:0 0 18px rgba(255,157,202,.34)}
+.plans-modal .pro-plan-word{display:inline-block;font-weight:1000;-webkit-text-stroke:.3px #f17bb0;background:linear-gradient(105deg,#ffe5f1 0%,#ff8fc2 22%,#d83f91 45%,#ffb4d5 67%,#c52d7d 84%,#ffe5f1 100%);background-size:260% 100%;background-clip:text;-webkit-background-clip:text;color:transparent;text-shadow:none;animation:pro-plan-gradient 4.6s linear infinite}
+.plans-modal .plan-card--pro .plan-price{color:#fff5fa;text-shadow:0 0 15px rgba(255,183,216,.16)}
+.plans-modal .plan-card--pro ul{color:#f7e7ef}
+.plans-modal .plan-card--pro li:before{border-color:rgba(255,171,208,.44);background:rgba(208,69,132,.25);color:#ffd4e7}
+.plans-modal .plan-card--pro .plan-choose{border-color:rgba(255,171,208,.74);background:linear-gradient(110deg,#d65c9a,#a64079 52%,#e179ad);background-size:180% 100%;color:#fff;box-shadow:0 6px 22px rgba(207,76,137,.32)}
+.plans-modal .plan-card--pro .plan-choose:hover{background-position:100% 0;box-shadow:0 9px 28px rgba(224,91,157,.44)}
+@keyframes pro-plan-gradient{to{background-position:260% 50%}}
+@media(prefers-reduced-motion:reduce){.plans-modal .pro-plan-word{animation:none!important}}
+
 /* Google sign-in mark and theme-matched button glow */
 .google-logo{display:block;flex:0 0 22px;width:22px;height:22px;max-width:none;object-fit:contain;visibility:visible;opacity:1;filter:none}
 .google-button-label{flex:1;text-align:left}

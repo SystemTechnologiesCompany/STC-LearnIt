@@ -1,5 +1,6 @@
 -- Run once in Supabase SQL Editor to enable account-synced learning energy.
--- Energy starts at 20; starting a level spends 3, and 1 energy regenerates every 5 minutes.
+-- Energy starts at 20; starting a level spends 3. Basic regenerates every 5 minutes,
+-- Pro every 2 minutes 30 seconds, and STC has unlimited energy.
 
 alter table public.learning_progress
   add column if not exists energy integer not null default 20 check (energy between 0 and 20),
@@ -19,6 +20,8 @@ declare
   v_ticks integer;
   v_spent boolean;
   v_unlimited boolean;
+  v_pro boolean;
+  v_regen_seconds integer := 300;
 begin
   if v_user is null then
     raise exception 'Sign in to sync energy.' using errcode = '28000';
@@ -45,6 +48,14 @@ begin
       and ps.expires_at > v_now
   ) into v_unlimited;
 
+  select exists (
+    select 1
+    from public.premium_subscriptions ps
+    where ps.user_id = v_user
+      and ps.plan = 'pro'
+      and ps.expires_at > v_now
+  ) into v_pro;
+
   if v_unlimited then
     update public.learning_progress lp
     set energy = 20, energy_updated_at = v_now
@@ -53,15 +64,19 @@ begin
     return;
   end if;
 
+  if v_pro then
+    v_regen_seconds := 150;
+  end if;
+
   v_ticks := pg_catalog.floor(greatest(
     pg_catalog.date_part('epoch', v_now - v_updated_at), 0
-  ) / 300)::integer;
+  ) / v_regen_seconds)::integer;
   if v_ticks > 0 then
     v_energy := least(20, v_energy + v_ticks);
     if v_energy >= 20 then
       v_updated_at := v_now;
     else
-      v_updated_at := v_updated_at + (v_ticks * interval '5 minutes');
+      v_updated_at := v_updated_at + (v_ticks * v_regen_seconds * interval '1 second');
     end if;
   end if;
 

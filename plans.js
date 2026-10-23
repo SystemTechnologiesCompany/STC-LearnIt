@@ -5,9 +5,9 @@
     en: {
       eyebrow: 'STC LEARNIT MEMBERSHIP', title: 'Choose your way to grow.',
       subtitle: 'More energy, focused learning and direct support when you need it.', close: 'Close plans',
-      pro: 'PRO', stc: 'STC', proPrice: '250 DA', stcPrice: '700 DA',
-      proFeatures: ['50 Energy', 'No Ads', 'Direct Support'],
-      stcFeatures: ['Unlimited AI', 'Unlimited Energy', 'No Ads', 'Admin Support'],
+      pro: 'PRO', stc: 'STC', planWord: 'Plan', proPrice: '250 DA', stcPrice: '700 DA',
+      proFeatures: ['50 Energy', 'Half the energy wait time', 'Sakura theme unlocked', 'No Ads', 'Direct Support'],
+      stcFeatures: ['Unlimited AI', 'Unlimited Energy', 'All themes unlocked', 'No Ads', 'Admin Support'],
       codePrompt: 'Have a one-month activation code?', codePlaceholder: 'ENTER YOUR PLAN CODE', redeem: 'Redeem code', redeeming: 'Checking code…',
       codeInvalid: 'That code is invalid, expired, or has already been used.', codeLimit: 'Too many attempts. Please wait a few minutes and try again.',
       codeSignIn: 'Sign in before redeeming a plan code.', codeService: 'Code redemption is temporarily unavailable. Please try again later.',
@@ -26,14 +26,14 @@
       manualVerify: 'STC will verify the transfer in its account history. After confirmation, STC will provide a plan activation code. Never share your BaridiMob password, PIN, or OTP.',
       manualMissing: 'Manual payment details are not set up yet. Contact STC before sending money.',
       visaUnavailable: 'Visa payments are coming soon. We’re sorry for the inconvenience.',
-      badge: 'BEST VALUE', energyTitle: 'Out of energy?', energyBody: 'Your energy is used for lessons and Sewingo AI messages. Take a look at the membership plans.'
+      badge: 'BEST VALUE', proBadge: 'BEST FOR STARTERS', energyTitle: 'Out of energy?', energyBody: 'Your energy is used for lessons and Sewingo AI messages. Take a look at the membership plans.'
     },
     fr: {
       eyebrow: 'ABONNEMENTS STC LEARNIT', title: 'Choisissez votre façon de progresser.',
       subtitle: 'Plus d’énergie, un apprentissage ciblé et une aide directe quand vous en avez besoin.', close: 'Fermer les offres',
-      pro: 'PRO', stc: 'STC', proPrice: '250 DA', stcPrice: '700 DA',
-      proFeatures: ['50 énergies', 'Sans publicité', 'Assistance directe'],
-      stcFeatures: ['IA illimitée', 'Énergie illimitée', 'Sans publicité', 'Assistance des administrateurs'],
+      pro: 'PRO', stc: 'STC', planWord: 'Offre', proPrice: '250 DA', stcPrice: '700 DA',
+      proFeatures: ['50 énergies', 'Temps de récupération de l’énergie réduit de moitié', 'Thème Sakura débloqué', 'Sans publicité', 'Assistance directe'],
+      stcFeatures: ['IA illimitée', 'Énergie illimitée', 'Tous les thèmes débloqués', 'Sans publicité', 'Assistance des administrateurs'],
       codePrompt: 'Vous avez un code d’activation valable un mois ?', codePlaceholder: 'SAISISSEZ VOTRE CODE', redeem: 'Activer le code', redeeming: 'Vérification du code…',
       codeInvalid: 'Ce code est invalide, expiré ou déjà utilisé.', codeLimit: 'Trop de tentatives. Attendez quelques minutes avant de réessayer.',
       codeSignIn: 'Connectez-vous avant d’activer un code.', codeService: 'L’activation des codes est temporairement indisponible. Réessayez plus tard.',
@@ -52,7 +52,7 @@
       manualVerify: 'STC vérifiera le virement dans son historique. Après confirmation, STC fournira un code d’activation. Ne partagez jamais votre mot de passe BaridiMob, votre code PIN ou votre OTP.',
       manualMissing: 'Les informations de paiement manuel ne sont pas encore configurées. Contactez STC avant d’envoyer de l’argent.',
       visaUnavailable: 'Le paiement par Visa arrive bientôt. Nous vous prions de nous excuser pour ce désagrément.',
-      badge: 'MEILLEUR CHOIX', energyTitle: 'Plus d’énergie ?', energyBody: 'L’énergie est utilisée pour les leçons et les messages à Sewingo AI. Découvrez les offres.'
+      badge: 'MEILLEUR CHOIX', proBadge: 'IDÉAL POUR DÉBUTER', energyTitle: 'Plus d’énergie ?', energyBody: 'L’énergie est utilisée pour les leçons et les messages à Sewingo AI. Découvrez les offres.'
     }
   };
   const french = () => document.documentElement.dataset.language === 'fr';
@@ -70,8 +70,8 @@
       <h2 id="plansTitle"></h2><p class="plans-subtitle"></p>
       <div class="plans-current-plan" hidden><span class="current-plan-label"></span><strong class="current-plan-time"></strong></div>
       <div class="plans-grid">
-        <article class="plan-card plan-card--pro"><div class="plan-card-top"><span class="plan-name"></span><strong class="plan-price"></strong></div><ul></ul><button type="button" class="plan-choose"></button></article>
-        <article class="plan-card plan-card--stc"><span class="plan-badge"></span><div class="plan-card-top"><span class="plan-name"></span><strong class="plan-price"></strong></div><ul></ul><button type="button" class="plan-choose"></button></article>
+        <article class="plan-card plan-card--pro"><div class="plan-sakura-petals" aria-hidden="true"></div><span class="plan-badge plan-badge--pro"></span><div class="plan-card-top"><span class="plan-name"></span><strong class="plan-price"></strong></div><ul></ul><button type="button" class="plan-choose"></button></article>
+        <article class="plan-card plan-card--stc"><div class="plan-galaxy" aria-hidden="true"><img class="plan-stc-head" src="logo%20only%20head.png" alt=""><i class="plan-galaxy-meteor"></i><i class="plan-galaxy-meteor"></i><i class="plan-galaxy-meteor"></i><i class="plan-galaxy-meteor"></i><i class="plan-galaxy-meteor"></i><i class="plan-galaxy-meteor"></i><i class="plan-galaxy-meteor"></i></div><span class="plan-badge"></span><div class="plan-card-top"><span class="plan-name"></span><strong class="plan-price"></strong></div><ul></ul><button type="button" class="plan-choose"></button></article>
       </div>
       <section class="payment-methods" hidden aria-live="polite">
         <div class="payment-methods-heading"><h3 class="payment-methods-title"></h3><span class="payment-setup-badge"></span></div>
@@ -95,6 +95,16 @@
     </section>`;
   document.body.appendChild(dialog);
   const q = selector => dialog.querySelector(selector);
+  const proPetals = q('.plan-sakura-petals');
+  for (let i = 0; i < 8; i++) {
+    const petal = document.createElement('span');
+    petal.textContent = i % 3 === 0 ? '🌸' : '✿';
+    petal.style.setProperty('--plan-petal-x', `${8 + (i * 29) % 88}%`);
+    petal.style.setProperty('--plan-petal-delay', `${(i % 5) * -1.7}s`);
+    petal.style.setProperty('--plan-petal-duration', `${7 + (i % 4) * 2}s`);
+    petal.style.setProperty('--plan-petal-size', `${11 + (i % 3) * 4}px`);
+    proPetals.appendChild(petal);
+  }
   function render() {
     const t = copy[french() ? 'fr' : 'en'];
     document.querySelectorAll('.premium-plans-button').forEach(button => {
@@ -127,11 +137,12 @@
     q('#plansTitle').textContent = t.title;
     q('.plans-subtitle').textContent = t.subtitle;
     q('.plans-close').setAttribute('aria-label', t.close);
-    q('.plan-badge').textContent = t.badge;
+    q('.plan-card--pro .plan-badge').textContent = t.proBadge;
+    q('.plan-card--stc .plan-badge').textContent = t.badge;
     const cards = [...dialog.querySelectorAll('.plan-card')];
     [[t.pro, t.proPrice, t.proFeatures], [t.stc, t.stcPrice, t.stcFeatures]].forEach(([name, price, features], i) => {
       const card = cards[i];
-      card.querySelector('.plan-name').textContent = name;
+      card.querySelector('.plan-name').innerHTML = i === 1 ? `<span class="stc-plan-word">STC</span><span class="plan-word-suffix">${t.planWord}</span>` : `<span class="pro-plan-word">PRO</span><span class="plan-word-suffix">${t.planWord}</span>`;
       card.querySelector('.plan-price').textContent = price;
       card.querySelector('ul').replaceChildren(...features.map(feature => {
         const item = document.createElement('li'); item.textContent = feature; return item;

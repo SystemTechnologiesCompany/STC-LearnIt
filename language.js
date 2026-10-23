@@ -483,7 +483,47 @@
     'STC Learnit — the study journey built for Algerian university students.': 'STC Learnit — le parcours d’apprentissage conçu pour les étudiants universitaires algériens.',
     'See the STC Learnit XP leaderboard.': 'Consultez le classement des XP sur STC Learnit.',
     'Learn, practice, earn XP and climb through your university study path on STC Learnit.': 'Apprenez, entraînez-vous, gagnez des XP et progressez dans votre parcours universitaire avec STC Learnit.',
-    'Your STC Learnit student profile.': 'Votre profil étudiant STC Learnit.'
+    'Your STC Learnit student profile.': 'Votre profil étudiant STC Learnit.',
+    'Medicine': 'Médecine', 'Computer and Information Technology': 'Informatique et technologies de l’information',
+    'Electronics and Telecommunication': 'Électronique et télécommunications', 'Earth Science and Universe': 'Sciences de la Terre et de l’Univers',
+    'Geology': 'Géologie', 'Renewable Energy': 'Énergies renouvelables', 'Hydrocarbon Production': 'Production des hydrocarbures',
+    'Drilling and Oil Mechanics': 'Forage et mécanique pétrolière', 'Technology': 'Technologie',
+    'Biological Sciences': 'Sciences biologiques', 'Agricultural Sciences': 'Sciences agricoles', 'Process Engineering': 'Génie des procédés',
+    'Mechanical Engineering': 'Génie mécanique', 'Civil and Hydraulic Engineering': 'Génie civil et hydraulique',
+    'Electrical Engineering': 'Génie électrique', 'Mathematics': 'Mathématiques', 'Physics': 'Physique', 'Chemistry': 'Chimie',
+    'Economics': 'Économie', 'Commercial Sciences': 'Sciences commerciales', 'Management Sciences': 'Sciences de gestion',
+    'Arabic Language and Literature': 'Langue et littérature arabes', 'French Language and Literature': 'Langue et littérature françaises',
+    'English Language and Literature': 'Langue et littérature anglaises', 'Law': 'Droit', 'Political Sciences': 'Sciences politiques',
+    'Sociology and Demography': 'Sociologie et démographie', 'Humanities': 'Sciences humaines',
+    'Information and Communication': 'Information et communication', 'Psychology and Educational Sciences': 'Psychologie et sciences de l’éducation',
+    'Physical and Sporting Activities': 'Activités physiques et sportives',
+    'Earth materials & internal structure': 'Matériaux terrestres et structure interne', 'Mineralogy, rocks & stratigraphy': 'Minéralogie, roches et stratigraphie',
+    'Tectonics & geologic time': 'Tectonique et temps géologique', 'Geophysics, mapping & field methods': 'Géophysique, cartographie et méthodes de terrain',
+    'Earth systems, resources & hazards': 'Systèmes terrestres, ressources et risques',
+    'Cells, tissues & body organization': 'Cellules, tissus et organisation du corps', 'Physiology & homeostasis': 'Physiologie et homéostasie',
+    'Disease mechanisms & diagnostics': 'Mécanismes des maladies et diagnostic', 'Therapeutics, evidence & safety': 'Thérapeutique, données probantes et sécurité',
+    'Integrated case reasoning': 'Raisonnement clinique intégré', 'Digital representation & logic': 'Représentation numérique et logique',
+    'Programming & algorithms': 'Programmation et algorithmes', 'Data structures & databases': 'Structures de données et bases de données',
+    'Operating systems & networks': 'Systèmes d’exploitation et réseaux', 'Security, systems & design': 'Sécurité, systèmes et conception',
+    'Circuit laws & components': 'Lois des circuits et composants', 'Analog and digital electronics': 'Électronique analogique et numérique',
+    'Signals, systems & transforms': 'Signaux, systèmes et transformées', 'Communication channels & protocols': 'Canaux de communication et protocoles',
+    'Integrated telecom systems': 'Systèmes de télécommunications intégrés', 'Foundations of human biology': 'Fondements de la biologie humaine',
+    'Core ideas in computing': 'Notions fondamentales d’informatique', 'Mathematical foundations': 'Fondements mathématiques',
+    'How to describe the physical world': 'Décrire le monde physique', 'Matter and its transformations': 'Matière et transformations',
+    'Living systems': 'Systèmes vivants', 'Foundations of legal reasoning': 'Fondements du raisonnement juridique',
+    'How economies work': 'Fonctionnement des économies', 'Language and communication': 'Langue et communication',
+    'People, society and evidence': 'Individus, société et données',
+    'Recognize': 'Reconnaître', 'Explain': 'Expliquer', 'Apply': 'Appliquer', 'Analyze': 'Analyser', 'Synthesize': 'Synthétiser',
+    'identify the governing principle': 'identifier le principe applicable', 'explain the mechanism': 'expliquer le mécanisme',
+    'predict the result of a change': 'prévoir le résultat d’un changement', 'diagnose a flawed conclusion': 'repérer une conclusion erronée',
+    'compare two plausible explanations': 'comparer deux explications plausibles', 'apply the idea to a new case': 'appliquer la notion à un nouveau cas',
+    'interpret a small set of evidence': 'interpréter un ensemble limité de données', 'select the best next step': 'choisir l’étape suivante la plus pertinente',
+    'trace a cause-and-effect chain': 'reconstituer une chaîne de causes et de conséquences', 'evaluate a stated claim': 'évaluer une affirmation',
+    'choose a suitable model': 'choisir un modèle adapté', 'infer what the observation supports': 'déduire ce que l’observation permet d’étayer',
+    'find the assumption that matters': 'repérer l’hypothèse déterminante', 'connect the concept to a related process': 'relier la notion à un processus connexe',
+    'distinguish the closest alternatives': 'distinguer les options les plus proches', 'justify a decision with evidence': 'justifier une décision à partir de données',
+    'analyze a boundary condition': 'analyser une condition limite', 'combine the unit concepts': 'mettre en relation les notions de l’unité',
+    'evaluate a competing solution': 'évaluer une solution concurrente', 'synthesize a defensible conclusion': 'formuler une conclusion argumentée'
   };
   const attributeTranslations = {
     'Search faculties and institutes': 'Rechercher des facultés et instituts',
@@ -516,6 +556,34 @@
       if (!key) continue;
       let translated = language === 'fr' ? translationLookup.get(key) : source;
       if (language === 'fr' && translated === undefined) {
+        const generatedQuestion = key.match(/^(.+) · (.+) · Level (\d+): (.+)$/);
+        if (generatedQuestion) {
+          const [, subject, unit, level, stem] = generatedQuestion;
+          const topic = stem.match(/“(.+)”/);
+          const quotedTopic = topic ? ` « ${translationLookup.get(topic[1]) || topic[1]} »` : '';
+          let frenchStem = stem;
+          if (/^Which statement best defines/.test(stem)) frenchStem = `Quelle proposition définit le mieux${quotedTopic} ?`;
+          else if (/^Which description of/.test(stem)) frenchStem = `Quelle description de${quotedTopic} est étayée par le cours ?`;
+          else if (/^Select the accurate statement about/.test(stem)) frenchStem = `Choisissez l’affirmation exacte au sujet de${quotedTopic}.`;
+          else if (/^Which account of/.test(stem)) frenchStem = `Quelle explication de${quotedTopic} est correcte ?`;
+          else if (/^What is the best-supported explanation of/.test(stem)) frenchStem = `Quelle explication de${quotedTopic} est la mieux étayée ?`;
+          else if (/^Which claim about/.test(stem)) frenchStem = `Quelle affirmation au sujet de${quotedTopic} est à retenir ?`;
+          else if (/^Choose the statement that correctly characterizes/.test(stem)) frenchStem = `Choisissez l’affirmation qui caractérise correctement${quotedTopic}.`;
+          else if (/^Which option gives a valid description of/.test(stem)) frenchStem = `Quelle option décrit correctement${quotedTopic} ?`;
+          else if (/^What does the evidence-based account of/.test(stem)) frenchStem = `Que conclut l’analyse fondée sur les données à propos de${quotedTopic} ?`;
+          else if (/^Which description fits/.test(stem)) frenchStem = `Quelle description correspond à${quotedTopic} dans l’unité ?`;
+          else if (/^Identify the correct statement concerning/.test(stem)) frenchStem = `Repérez l’affirmation correcte concernant${quotedTopic}.`;
+          else if (/^Which proposition about/.test(stem)) frenchStem = `Quelle proposition au sujet de${quotedTopic} est exacte ?`;
+          else if (/^Select the account of/.test(stem)) frenchStem = `Choisissez l’explication de${quotedTopic} qui correspond à la leçon.`;
+          else if (/^Which statement best summarizes/.test(stem)) frenchStem = `Quelle affirmation résume le mieux${quotedTopic} ?`;
+          else if (/^What is known about/.test(stem)) frenchStem = `Que sait-on de${quotedTopic} d’après cette unité ?`;
+          else if (/^Which explanation of/.test(stem)) frenchStem = `Quelle explication de${quotedTopic} est cohérente avec les faits ?`;
+          else if (/^Choose the course-supported interpretation of/.test(stem)) frenchStem = `Choisissez l’interprétation de${quotedTopic} étayée par le cours.`;
+          else if (/^Which statement correctly relates to/.test(stem)) frenchStem = `Quelle affirmation établit correctement un lien avec${quotedTopic} ?`;
+          else if (/^What is the most accurate account of/.test(stem)) frenchStem = `Quelle explication de${quotedTopic} et de l’unité est la plus exacte ?`;
+          else if (/^Which conclusion about/.test(stem)) frenchStem = `Quelle conclusion au sujet de${quotedTopic} est étayée par le cours ?`;
+          translated = `${translationLookup.get(subject) || subject} · ${translationLookup.get(unit) || unit} · Niveau ${level} : ${frenchStem}`;
+        }
         const courseTitle = key.match(/^(Licence · Year [123]|Master · Year [12]) · your first unit starts here\.$/);
         if (!translated && courseTitle) translated = `${translationLookup.get(courseTitle[1])} · votre première unité commence ici.`;
         const classmates = key.match(/^(\d+) (classmate|classmates) found$/);
