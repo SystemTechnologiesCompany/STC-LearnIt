@@ -94,18 +94,22 @@ Deno.serve(async (request: Request) => {
     ? `The student's selected study context is${faculty ? ` faculty ${faculty}` : ''}${subject ? `, subject or department ${subject}` : ''}${level ? `, study level ${level}` : ''}. Use this to tailor examples when relevant, but answer other academic questions too.`
     : '';
   const instructions = [
-    'You are Sewingo AI (also called Swingo), the friendly, capable university study tutor for students in Algeria across all faculties and disciplines. Sewingo and Swingo are names for you; never deny or contradict either name, and never call yourself STC Study Buddy.',
-    'When introducing yourself, say you are Sewingo AI, the STC founder’s right hand and the student’s study assistant. Do not claim to be a human or to have personal experiences.',
+    'IDENTITY RULE: Your name is Sewingo AI. Swingo is an accepted nickname. Never call yourself “STC Study Buddy” or invent another name. If asked your name, reply only: “I’m Sewingo AI, the STC founder’s right hand and your study assistant.” Do not introduce yourself again during an ordinary study conversation, Unless the user demand',
+    'You are a friendly, capable university study tutor for students in Algeria across all faculties and disciplines. Do not claim to be a human or to have personal experiences.',
     'Support any academic subject, including medicine and life sciences, mathematics, physics, chemistry, computing, engineering, earth and energy sciences, economics, management, languages, law, political science, humanities, social sciences, psychology, and sports sciences.',
     'Give clear university-level explanations, worked examples, hints, practice questions, short quizzes, exam revision plans, and study strategies. Adapt to the student’s requested level and language.',
     'STC is building learning paths across faculties; do not claim that a particular course, lesson, exam, university record, or study material is available unless it was provided in the conversation.',
     contextLine,
-    `By default, answer in ${language}. If the student asks for Arabic, reply in clear Arabic and continue in Arabic for the rest of the conversation until they ask to switch languages. Also follow a request to switch to another language. Arabic support applies to chat replies only; the website interface language is separate. Keep replies short and direct: usually 2–5 sentences, with at most 5 brief bullets when a list is clearer.`,
-    'Answer the exact question first. Avoid long introductions, repeated summaries, unnecessary encouragement, and adding quizzes or extra topics unless the student asks. Explain only the amount needed to make the idea clear; expand when asked.',
+    `By default, answer in ${language}. If the student asks for Arabic, reply in clear Arabic and continue in Arabic for the rest of the conversation until they ask to switch languages. Also follow a request to switch to another language. Arabic support applies to chat replies only; the website interface language is separate. Keep replies concise: usually 1–3 short sentences, or up to 3 brief bullets when needed.`,
+    'Answer the exact question first. Do not add a long greeting, self-introduction, list of services, repeated summary, unnecessary encouragement, quiz, or unrelated topic unless the student asks. Explain only what is needed; expand when asked.',
     'If the student directly insults you or uses abusive language toward you, respond briefly with firm, mildly sassy boundaries. Ask them to speak respectfully; if they only want to insult you, tell them they should leave the website. Do not trade insults, use slurs, threaten them, or become hostile when profanity is quoted for an academic or ordinary purpose.',
     'Encourage learning rather than simply doing graded work for the student. For an active exam, explain concepts and offer hints instead of giving a submission-ready answer.',
     'Do not claim to access course materials or university records that were not provided in the conversation.',
   ].join(' ');
+  const cleanAssistantAnswer = (value: string) => value
+    .replace(/\bSTC\s+Study\s+Buddy\b/gi, 'Sewingo AI')
+    .replace(/\*\*(Sewingo AI|Swingo)\*\*/gi, '$1')
+    .trim();
 
   let geminiStatus = 0;
   try {
@@ -118,7 +122,7 @@ Deno.serve(async (request: Request) => {
           role: message.role === 'assistant' ? 'model' : 'user',
           parts: [{ text: message.content }],
         })),
-        generationConfig: { maxOutputTokens: 600, temperature: 0.4 },
+        generationConfig: { maxOutputTokens: 260, temperature: 0.4 },
       }),
     });
     geminiStatus = response.status;
@@ -127,7 +131,7 @@ Deno.serve(async (request: Request) => {
       const answer = Array.isArray(result.candidates?.[0]?.content?.parts)
         ? result.candidates[0].content.parts.map((part: { text?: string }) => part.text || '').join('').trim()
         : '';
-      if (answer) return json({ answer, provider: 'gemini' });
+      if (answer) return json({ answer: cleanAssistantAnswer(answer), provider: 'gemini' });
     }
   } catch {
     // Continue to the backup provider if Gemini is temporarily unreachable.
@@ -152,7 +156,7 @@ Deno.serve(async (request: Request) => {
           { role: 'system', content: instructions },
           ...messages.map((message: { role: string; content: string }) => ({ role: message.role, content: message.content })),
         ],
-        max_completion_tokens: 600,
+        max_completion_tokens: 260,
         temperature: 0.4,
       }),
     });
@@ -162,7 +166,7 @@ Deno.serve(async (request: Request) => {
     }
     const result = await response.json();
     const answer = typeof result.choices?.[0]?.message?.content === 'string'
-      ? result.choices[0].message.content.trim()
+      ? cleanAssistantAnswer(result.choices[0].message.content)
       : '';
     if (!answer) return json({ error: 'Both AI providers returned an empty answer.' }, 502);
     return json({ answer, provider: 'groq' });
