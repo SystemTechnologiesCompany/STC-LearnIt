@@ -1,16 +1,23 @@
--- STC Learnit one-time activation codes and one-month memberships.
+-- STC Learnit one-time activation codes. Codes default to one-month memberships;
+-- individual codes can set a different duration_days value.
 -- Run once in the Supabase SQL Editor before deploying redeem-premium-code.
 
 create table if not exists public.premium_codes (
   id uuid primary key default gen_random_uuid(),
   code_hash text not null unique check (code_hash ~ '^[0-9a-f]{64}$'),
   plan text not null check (plan in ('pro', 'stc')),
+  duration_days smallint not null default 30 check (duration_days between 1 and 365),
   active boolean not null default true,
   valid_until timestamptz,
   redeemed_by uuid references auth.users(id) on delete set null,
   redeemed_at timestamptz,
   created_at timestamptz not null default now()
 );
+
+-- Add the duration field to projects that already ran an older version of this file.
+alter table public.premium_codes
+  add column if not exists duration_days smallint not null default 30
+  check (duration_days between 1 and 365);
 
 create table if not exists public.premium_subscriptions (
   user_id uuid primary key references auth.users(id) on delete cascade,
@@ -53,6 +60,7 @@ declare
   v_user uuid := auth.uid();
   v_code_id uuid;
   v_plan text;
+  v_duration_days integer;
   v_expiry timestamptz;
   v_attempts integer;
 begin
@@ -76,7 +84,7 @@ begin
     return;
   end if;
 
-  select c.id, c.plan into v_code_id, v_plan
+  select c.id, c.plan, c.duration_days into v_code_id, v_plan, v_duration_days
   from public.premium_codes c
   where c.code_hash = p_code_hash
     and c.active
@@ -95,7 +103,7 @@ begin
   where id = v_code_id;
 
   insert into public.premium_subscriptions as current_subscription(user_id, plan, starts_at, expires_at, updated_at)
-  values (v_user, v_plan, pg_catalog.now(), pg_catalog.now() + interval '1 month', pg_catalog.now())
+  values (v_user, v_plan, pg_catalog.now(), pg_catalog.now() + interval '1 day' * v_duration_days, pg_catalog.now())
   on conflict (user_id) do update
     set plan = excluded.plan,
         starts_at = case
@@ -103,7 +111,8 @@ begin
             then current_subscription.starts_at
           else pg_catalog.now()
         end,
-        expires_at = greatest(current_subscription.expires_at, pg_catalog.now()) + interval '1 month',
+        expires_at = greatest(current_subscription.expires_at, pg_catalog.now())
+          + (excluded.expires_at - excluded.starts_at),
         updated_at = pg_catalog.now()
   returning current_subscription.expires_at into v_expiry;
 
