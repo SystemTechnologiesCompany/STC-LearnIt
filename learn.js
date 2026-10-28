@@ -589,6 +589,21 @@ function shuffledCopy(items){
   for(let i=shuffled.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[shuffled[i],shuffled[j]]=[shuffled[j],shuffled[i]]}
   return shuffled;
 }
+function diversifyAnswerPositions(questions,previousPosition=-1){
+  let last=previousPosition,positions=[];
+  while(positions.length<questions.length){
+    const cycle=shuffledCopy([0,1,2,3]);
+    if(cycle[0]===last)cycle.push(cycle.shift());
+    positions.push(...cycle);last=cycle[3];
+  }
+  const placed=questions.map((question,index)=>{
+    const target=positions[index]%question.options.length,correct=question.options[question.answer];
+    const distractors=shuffledCopy(question.options.filter((_,optionIndex)=>optionIndex!==question.answer));
+    distractors.splice(target,0,correct);
+    return {...question,options:distractors,answer:target};
+  });
+  return{questions:placed,lastPosition:positions[questions.length-1]??previousPosition};
+}
 function balancedDistractors(correct,candidates,count=3){
   const clean=[...new Set(candidates.filter(item=>typeof item==='string'&&item.trim()&&item.trim()!==correct.trim()))];
   const words=value=>value.trim().split(/\s+/).length;
@@ -644,9 +659,11 @@ const frenchUnitArcs={
   'Psychology and Educational Sciences':['Développement et apprentissage','Cognition, émotions et comportement','Éducation et évaluation','Méthodes et statistiques','Applications et pratique fondée sur les preuves'],
   'Physical and Sporting Activities':['Anatomie et mouvement','Biomécanique et physiologie','Entraînement et adaptation','Pédagogie et psychologie du sport','Conception de programmes et sécurité']
 };
-function makeProgressiveQuestion(subject,topic,companion,allTopics,mode,challenge){
+function makeProgressiveQuestion(subject,topic,companion,allTopics,mode,challenge,variation=challenge,focus='',task=''){
   const french=energyLanguage();
   const concept=topic[2]||topic[0],companionConcept=companion[2]||companion[0],claim=topic[1],companionClaim=companion[1];
+  const unitContext=topic[0].split(': ')[0];
+  const topicAngle=topic[0].includes(' · ')?topic[0].split(' · ').at(-1):'';
   const causalOptions=french?{
     correct:`Les données ne démontrent pas que ${concept} cause ${companionConcept}.`,
     wrong:[`Les données démontrent que ${concept} cause ${companionConcept}.`,`Les données montrent que ${companionConcept} réfute ${concept}.`,`Les données démontrent que ${concept} et ${companionConcept} ont une cause commune.`]
@@ -659,11 +676,13 @@ function makeProgressiveQuestion(subject,topic,companion,allTopics,mode,challeng
   const otherConcepts=[...new Set(otherTopics.map(item=>item[2]).filter(name=>name!==concept&&name!==companionConcept))];
   let q,correct,wrong,why;
   if(mode===0){
-    q=french?`Une observation indique : « ${claim} » Quelle notion décrit le mieux ce résultat ?`:`An observation states: “${claim}” Which concept best describes this result?`;
+    const forms=french?[`Quelle notion est illustrée par « ${claim} », sachant qu’un autre résultat indique « ${companionClaim} » ?`,`En vous appuyant sur « ${claim} » et en la distinguant de « ${companionClaim} », quel concept est pertinent ?`,`Quel concept interprète « ${claim} » face à ce résultat distinct : « ${companionClaim} » ?`,`Associez « ${claim} » à la notion qu’elle décrit, et non au fait « ${companionClaim} ».`]:[`Which concept is illustrated by “${claim},” given the separate finding “${companionClaim}”?`,`Based on “${claim},” and distinguishing it from “${companionClaim},” which concept fits?`,`Which concept explains “${claim}” alongside this distinct finding: “${companionClaim}”?`,`Match “${claim}” to the idea it describes, rather than the separate fact “${companionClaim}.”`];
+    q=forms[variation%forms.length];
     correct=concept;wrong=otherConcepts;
     why=french?`Cette observation illustre ${concept} : ${claim}`:`This observation illustrates ${concept}: ${claim}`;
   }else if(mode===1){
-    q=french?`Dans une situation nouvelle liée à « ${concept} », quel principe permet le mieux de prévoir le résultat ?`:`In a new situation involving “${concept},” which principle best predicts the outcome?`;
+    const forms=french?[`Une observation distincte indique « ${companionClaim} ». Dans un nouveau cas de « ${concept} », quelle règle prévoirait le résultat ?`,`En tenant compte du contraste avec « ${companionClaim} », quel principe s’applique à « ${concept} » ?`,`Pour un changement lié à « ${concept} », quelle règle utiliser, sachant que « ${companionClaim} » décrit un autre phénomène ?`,`Quelle règle permet de prévoir un résultat lié à « ${concept} » sans confondre les faits : « ${companionClaim} » ?`]:[`A separate finding states “${companionClaim}.” In a new case involving “${concept},” which rule predicts the outcome?`,`Given the contrast with “${companionClaim},” which principle applies to “${concept}”?`,`Which rule predicts a change involving “${concept},” when “${companionClaim}” describes a different process?`,`Which rule predicts an outcome for “${concept}” while keeping this fact distinct: “${companionClaim}”?`];
+    q=forms[variation%forms.length];
     correct=claim;wrong=[companionClaim,...otherFacts].filter((fact,index,array)=>fact!==claim&&array.indexOf(fact)===index).slice(0,3);
     why=french?`La prédiction s’appuie sur la règle propre à ${concept} : ${claim}`:`The prediction uses the rule specific to ${concept}: ${claim}`;
   }else if(mode===2){
@@ -678,10 +697,11 @@ function makeProgressiveQuestion(subject,topic,companion,allTopics,mode,challeng
       `Two findings concern “${concept}” and “${companionConcept}.” The first is ${claim}; the second is ${companionClaim} Which interpretation is justified?`,
       `Researchers report ${claim} A separate team reports ${companionClaim} Which claim stays within the evidence?`
     ];
-    q=questionForms[challenge%questionForms.length];correct=causalOptions.correct;wrong=causalOptions.wrong;
+    q=questionForms[variation%questionForms.length];correct=causalOptions.correct;wrong=causalOptions.wrong;
     why=french?`Les deux faits sont donnés, mais aucune preuve de causalité n’est fournie.`:`Both facts are stated, but no evidence of causation is provided.`;
   }else if(mode===3){
-    q=french?`Comparez « ${concept} » et « ${companionConcept} ». Quel résultat appuie le plus directement le premier concept ?`:`Compare “${concept}” with “${companionConcept}.” Which finding most directly supports the first concept?`;
+    const forms=french?[`Comparez « ${concept} » et « ${companionConcept} ». Sachant que « ${companionClaim} » concerne le second, quel résultat soutient le premier ?`,`Quel fait distingue le mieux « ${concept} » de « ${companionConcept} », sachant que « ${companionClaim} » décrit le second ?`,`En contraste avec « ${companionClaim} », quel résultat correspond à « ${concept} » ?`,`Quelle preuve concerne « ${concept} » plutôt que le fait distinct « ${companionClaim} » ?`]:[`Compare “${concept}” with “${companionConcept}.” Given that “${companionClaim}” concerns the second, which finding supports the first?`,`Which fact best distinguishes “${concept}” from “${companionConcept},” given that “${companionClaim}” describes the second?`,`In contrast with “${companionClaim},” which finding corresponds to “${concept}”?`,`Which evidence concerns “${concept}” rather than the separate finding “${companionClaim}”?`];
+    q=forms[variation%forms.length];
     correct=claim;wrong=[companionClaim,...otherFacts].filter((fact,index,array)=>fact!==claim&&array.indexOf(fact)===index).slice(0,3);
     why=french?`Le résultat distinctif lié à ${concept} est : ${claim}`:`The distinguishing result associated with ${concept} is: ${claim}`;
   }else{
@@ -696,12 +716,13 @@ function makeProgressiveQuestion(subject,topic,companion,allTopics,mode,challeng
       `One study reports ${claim} A second observation is ${companionClaim} Which synthesis is defensible?`,
       `Given these findings — ${claim} ${companionClaim} — which conclusion is careful and supported?`
     ];
-    q=synthesisForms[challenge%synthesisForms.length];correct=causalOptions.correct;wrong=causalOptions.wrong;
+    q=synthesisForms[variation%synthesisForms.length];correct=causalOptions.correct;wrong=causalOptions.wrong;
     why=french?`La synthèse reprend chaque fait et évite d’inventer un lien causal.`:`The synthesis keeps each fact and avoids inventing a causal link.`;
   }
   let uniqueWrong=mode===0?balancedDistractors(correct,otherConcepts):[...new Set(wrong.filter(option=>option&&option!==correct))];
   if(mode===1||mode===3)uniqueWrong=balancedDistractors(correct,[...uniqueWrong,...otherFacts]);
   const options=shuffledCopy([correct,...uniqueWrong.slice(0,3)]),answer=options.indexOf(correct);
+  q=`${french?`Pour ${task}${topicAngle?` (${topicAngle})`:''}, dans l’unité « ${unitContext} », `:`To ${task}${topicAngle?` (${topicAngle})`:''}, in ${unitContext}, `}${q.charAt(0).toLowerCase()}${q.slice(1)}`;
   return {q,options,answer,why,mode,challenge};
 }function makeLevelPath(subject){
   const french=energyLanguage();
@@ -716,6 +737,7 @@ function makeProgressiveQuestion(subject,topic,companion,allTopics,mode,challeng
   const slug=(subject==='Earth Science and Universe'?'geology':subject.toLowerCase()).replace(/[^a-z0-9]+/g,'-');
   const path=[];
   const usedQuestionSlots=new Set();
+  let previousAnswerPosition=-1;
   for(let unit=0;unit<5;unit++){
     const unitTitle=arcs[unit];
     const rawUnitTopics=curriculum[unit].split('|').flatMap(entry=>{
@@ -742,11 +764,11 @@ function makeProgressiveQuestion(subject,topic,companion,allTopics,mode,challeng
       const task=taskSet[Math.min(19,Math.floor((globalLevel-1)/5))];
       const matchingTopics=unitTopics.filter((item,index,all)=>all.findIndex(candidate=>candidate[2]===item[2])===index);
       const pairCount=Math.min(4,matchingTopics.length);
-      const pairOffset=(Math.floor(level/5)-1+unit)%Math.max(1,matchingTopics.length);
+      const pairOffset=((Math.floor(level/5)-1+unit)%Math.max(1,matchingTopics.length)+matchingTopics.length)%Math.max(1,matchingTopics.length);
       const pairs=Array.from({length:pairCount},(_,index)=>matchingTopics[(pairOffset+index)%matchingTopics.length]).map(item=>({term:item[2],definition:item[3]}));
       const mode=Math.min(4,Math.floor((level-1)/4));
       const challenge=(level-1)%4;
-      const levelQuestions=Array.from({length:count},(_,index)=>{
+      const generatedQuestions=Array.from({length:count},(_,index)=>{
         let slot=null;
         for(let attempt=0;attempt<unitTopics.length*unitTopics.length;attempt++){
           const topicAt=(topicIndex+index+attempt)%unitTopics.length;
@@ -762,8 +784,10 @@ function makeProgressiveQuestion(subject,topic,companion,allTopics,mode,challeng
         }
         if(!slot)throw new Error(`Unique question pool exhausted for ${subject}, unit ${unit+1}`);
         usedQuestionSlots.add(slot.key);
-        return makeProgressiveQuestion(subject,slot.questionTopic,slot.companion,unitTopics,mode,challenge);
+        return makeProgressiveQuestion(subject,slot.questionTopic,slot.companion,unitTopics,mode,challenge,globalLevel-1,focus[0],task);
       });
+      const balancedQuestions=diversifyAnswerPositions(generatedQuestions,previousAnswerPosition);
+      const levelQuestions=balancedQuestions.questions;previousAnswerPosition=balancedQuestions.lastPosition;
       const pass=isExam?Math.ceil(count*(.7+unit*.035)):Math.max(1,Math.ceil(count*(.55+unit*.035+Math.floor((level-1)/5)*.012)));
       path.push({
         id:base==='Geology'&&unit===0&&level<=3?geologyStages[level-1].id:unit===0&&level<=3?`${slug}-lesson-${level}`:unit===0&&level===5?`${slug}-matching-game`:unit===0&&level===19?`${slug}-unit-checkpoint`:unit===0&&level===20?`${slug}-final-exam`:level===20?`${slug}-unit-${unit+1}-final-exam`:level%5===0?`${slug}-unit-${unit+1}-level-${String(level).padStart(2,'0')}-game`:`${slug}-unit-${unit+1}-level-${String(level).padStart(2,'0')}`,
@@ -795,7 +819,7 @@ const emptyProgress=()=>({completed:[],xp:0,streak:0,lastActive:'',todayXP:0,goa
 const normalizeProgress=saved=>({completed:Array.isArray(saved?.completed)?[...new Set(saved.completed.filter(id=>typeof id==='string'))]:[],xp:Number.isFinite(Number(saved?.xp))?Math.max(0,Number(saved.xp)):0,streak:Number.isFinite(Number(saved?.streak))?Math.max(0,Number(saved.streak)):0,lastActive:typeof(saved?.lastActive??saved?.last_active)==='string'?(saved.lastActive??saved.last_active):'',todayXP:Number.isFinite(Number(saved?.todayXP??saved?.today_xp))?Math.max(0,Number(saved.todayXP??saved.today_xp)):0,goalDate:typeof(saved?.goalDate??saved?.goal_date)==='string'?(saved.goalDate??saved.goal_date):'',energy:Number.isFinite(Number(saved?.energy))?Math.max(0,Math.min(20,Number(saved.energy))):20,energyUpdatedAt:typeof(saved?.energyUpdatedAt??saved?.energy_updated_at)==='string'?(saved.energyUpdatedAt??saved.energy_updated_at):new Date().toISOString()});
 function readProgress(key=storageKey){try{return normalizeProgress(JSON.parse(localStorage.getItem(key)||'{}'))}catch{return emptyProgress()}}
 const stageXpById=new Map();
-subjectGroups.forEach(group=>group.subjects.forEach(subject=>makeLevelPath(subject).forEach(stage=>stageXpById.set(stage.id,stage.xp))));
+courseStages.forEach(stage=>stageXpById.set(stage.id,stage.xp));
 function mergeProgress(first,second){
   const left=normalizeProgress(first),right=normalizeProgress(second),completed=[...new Set([...left.completed,...right.completed])];
   const catalogXp=completed.reduce((sum,id)=>sum+(stageXpById.get(id)||0),0);
@@ -816,6 +840,7 @@ function statusText(state){
   return labels[state]?.[french?1:0]||labels.local[french?1:0];
 }
 function setSyncStatus(state){const node=document.querySelector('#progressSyncText');if(node)node.textContent=statusText(state);const badge=document.querySelector('#progressSyncStatus');if(badge)badge.dataset.state=state}
+function withTimeout(request,milliseconds,label){let timer;return Promise.race([Promise.resolve(request),new Promise((_,reject)=>{timer=window.setTimeout(()=>reject(new Error(`${label} timed out`)),milliseconds)})]).finally(()=>clearTimeout(timer))}
 function rememberEnergySyncError(error){energySyncError=String(error?.message||error||'').trim().slice(0,240)}
 function writeLocalProgress(){const key=activeUserId?accountStorageKey(activeUserId):sessionResolved?guestStorageKey:storageKey;try{localStorage.setItem(key,JSON.stringify(progress))}catch{}}
 let chosen={faculty:subjectGroups[2].faculty,subject:'Earth Science and Universe'};
@@ -861,7 +886,7 @@ function setEnergyNotice(kind){
 }
 async function refreshCloudEnergy(){
   if(!progressClient||!activeUserId)return;
-  const {data,error}=await progressClient.rpc('get_learning_energy');if(error)throw error;
+  const {data,error}=await withTimeout(progressClient.rpc('get_learning_energy'),10000,'Energy sync');if(error)throw error;
   const row=Array.isArray(data)?data[0]:data;if(!row)return;
   progress.energy=Number(row.energy);progress.energyUpdatedAt=row.energy_updated_at||new Date().toISOString();writeLocalProgress();updateEnergyView();
 }
@@ -927,7 +952,7 @@ async function applyLearningSession(session){
   const legacy=canImportLegacy?mergeProgress(readProgress(storageKey),readProgress(guestStorageKey)):emptyProgress();
   const localCandidate=mergeProgress(cached,legacy);
   try{
-    const {data,error}=await progressClient.from('learning_progress').select('*').eq('user_id',userId).maybeSingle();
+    const {data,error}=await withTimeout(progressClient.from('learning_progress').select('*').eq('user_id',userId).maybeSingle(),12000,'Progress sync');
     if(error)throw error;
     if(generation!==authGeneration)return;
     progress=mergeProgress(localCandidate,data?normalizeProgress(data):emptyProgress());
@@ -946,10 +971,10 @@ async function applyLearningSession(session){
 function initializeProgressSync(){
   if(!progressClient){sessionResolved=true;setSyncStatus('local');updateProgressStats();renderPath();return}
   progressClient.auth.onAuthStateChange((_event,session)=>{window.setTimeout(()=>applyLearningSession(session),0)});
-  progressClient.auth.getSession().then(({data,error})=>{
-    if(error){console.error('STC Learnit account check:',error);sessionResolved=true;setSyncStatus('local');return}
+  withTimeout(progressClient.auth.getSession(),10000,'Account check').then(({data,error})=>{
+    if(error){console.error('STC Learnit account check:',error);sessionResolved=true;setSyncStatus('error');updateProgressStats();renderPath();return}
     applyLearningSession(data.session);
-  }).catch(error=>{console.error('STC Learnit account check:',error);sessionResolved=true;setSyncStatus('local')});
+  }).catch(error=>{console.error('STC Learnit account check:',error);sessionResolved=true;if(!activeUserId){setSyncStatus('error');updateProgressStats();renderPath()}});
 }
 window.addEventListener('online',()=>{if(activeUserId&&cloudSyncReady)scheduleCloudSync()});
 window.addEventListener('stc:language-change',()=>setSyncStatus(document.querySelector('#progressSyncStatus')?.dataset.state||'local'));
@@ -1020,7 +1045,7 @@ function renderOldPath(){
 }
 function renderPath(){
   const french=energyLanguage();
-  courseStages=makeLevelPath(chosen.subject);updateProgressStats();
+  courseStages=makeLevelPath(chosen.subject);courseStages.forEach(stage=>stageXpById.set(stage.id,stage.xp));updateProgressStats();
   const completedCount=courseStages.filter(stage=>progress.completed.includes(stage.id)).length;
   const firstOpen=courseStages.findIndex((stage,index)=>!progress.completed.includes(stage.id)&&(index===0||progress.completed.includes(courseStages[index-1].id)));
   const currentLevel=firstOpen<0?100:firstOpen+1,percent=Math.round(completedCount/100*100);
@@ -1084,13 +1109,20 @@ async function beginLevelAttempt(){
   return true;
 }
 let selectedTerm=-1,matchedPairs=new Set(),lastAnswerIndex=-1;
+const lastMatchingLayoutByStage=new Map();
 function startMatchingGame({preserve=false}={}){
   const stage=courseStages[activeStage];if(!preserve){selectedTerm=-1;matchedPairs=new Set()}mode='matching';
   document.querySelector('#lessonBody').hidden=true;document.querySelector('#lessonQuiz').hidden=true;document.querySelector('#lessonGame').hidden=false;
   document.querySelector('#lessonGame>p').textContent=learningText('Tap a concept, then choose its matching meaning.','Touchez un concept, puis choisissez sa définition.');
   const terms=document.querySelector('#matchTerms'),definitions=document.querySelector('#matchDefinitions');terms.innerHTML='';definitions.innerHTML='';
-  shuffledCopy(stage.pairs.map((pair,index)=>({pair,index}))).forEach(({pair,index})=>{const button=document.createElement('button');button.type='button';button.className=`match-card ${matchedPairs.has(index)?'is-matched':''} ${selectedTerm===index?'is-selected':''}`;button.textContent=pair.term;button.dataset.pair=index;button.disabled=matchedPairs.has(index);button.addEventListener('click',()=>{if(matchedPairs.has(index))return;selectedTerm=index;terms.querySelectorAll('.match-card').forEach(item=>item.classList.toggle('is-selected',Number(item.dataset.pair)===index))});terms.appendChild(button)});
-  shuffledCopy(stage.pairs.map((pair,index)=>({pair,index}))).forEach(({pair,index})=>{const button=document.createElement('button');button.type='button';button.className=`match-card ${matchedPairs.has(index)?'is-matched':''}`;button.textContent=pair.definition;button.dataset.pair=index;button.disabled=matchedPairs.has(index);button.addEventListener('click',()=>checkMatch(index,button));definitions.appendChild(button)});
+  let termOrder=shuffledCopy(stage.pairs.map((pair,index)=>({pair,index}))),definitionOrder=shuffledCopy(stage.pairs.map((pair,index)=>({pair,index}))),layout=termOrder.map(({index})=>definitionOrder.findIndex(item=>item.index===index)).join(',');
+  const previousLayout=lastMatchingLayoutByStage.get(stage.id);
+  for(let attempt=0;attempt<24&&(layout===previousLayout||(stage.pairs.length>1&&layout.split(',').every((position,index)=>Number(position)===index)));attempt++){
+    termOrder=shuffledCopy(stage.pairs.map((pair,index)=>({pair,index})));definitionOrder=shuffledCopy(stage.pairs.map((pair,index)=>({pair,index})));layout=termOrder.map(({index})=>definitionOrder.findIndex(item=>item.index===index)).join(',');
+  }
+  lastMatchingLayoutByStage.set(stage.id,layout);
+  termOrder.forEach(({pair,index})=>{const button=document.createElement('button');button.type='button';button.className=`match-card ${matchedPairs.has(index)?'is-matched':''} ${selectedTerm===index?'is-selected':''}`;button.textContent=pair.term;button.dataset.pair=index;button.disabled=matchedPairs.has(index);button.addEventListener('click',()=>{if(matchedPairs.has(index))return;selectedTerm=index;terms.querySelectorAll('.match-card').forEach(item=>item.classList.toggle('is-selected',Number(item.dataset.pair)===index))});terms.appendChild(button)});
+  definitionOrder.forEach(({pair,index})=>{const button=document.createElement('button');button.type='button';button.className=`match-card ${matchedPairs.has(index)?'is-matched':''}`;button.textContent=pair.definition;button.dataset.pair=index;button.disabled=matchedPairs.has(index);button.addEventListener('click',()=>checkMatch(index,button));definitions.appendChild(button)});
   const feedback=document.querySelector('#matchFeedback');feedback.hidden=!preserve;feedback.className=`answer-feedback ${preserve&&matchedPairs.size?'is-right':''}`;if(preserve&&matchedPairs.size)feedback.textContent=learningText('Nice match!','Bonne association !');
   lessonContinue.disabled=matchedPairs.size!==stage.pairs.length;lessonContinue.textContent=matchedPairs.size===stage.pairs.length?learningText('Finish game','Terminer le jeu'):learningText('Match all pairs','Associez toutes les paires');document.querySelector('#lessonProgressFill').style.width=`${Math.round(matchedPairs.size/stage.pairs.length*100)}%`;
 }
