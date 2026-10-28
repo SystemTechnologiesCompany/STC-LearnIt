@@ -584,6 +584,17 @@ const claimAngles=['core idea','mechanism','condition','consequence','evidence',
 const levelTasksFr=['identifier le principe déterminant','expliquer le mécanisme','prévoir le résultat d’un changement','diagnostiquer une conclusion erronée','comparer deux explications plausibles','appliquer le concept à un cas nouveau','interpréter plusieurs éléments de preuve','choisir une méthode et la justifier','repérer une hypothèse limitante','reconstituer une chaîne de causes et d’effets','évaluer des affirmations concurrentes','estimer l’effet d’un paramètre sur le résultat','choisir une preuve pour tester une hypothèse','expliquer pourquoi une réponse séduisante reste incomplète','combiner deux principes dans un contexte nouveau','repérer une erreur dans un raisonnement','interpréter un cas limite','justifier une décision sous contraintes','relier un modèle aux observations','synthétiser les preuves en une conclusion défendable'];
 const claimAnglesFr=['idée centrale','mécanisme','condition','conséquence','preuve','application','limite','relation'];
 const learningText=(english,french)=>energyLanguage()?french:english;
+function shuffledCopy(items){
+  const shuffled=[...items];
+  for(let i=shuffled.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[shuffled[i],shuffled[j]]=[shuffled[j],shuffled[i]]}
+  return shuffled;
+}
+function balancedDistractors(correct,candidates,count=3){
+  const clean=[...new Set(candidates.filter(item=>typeof item==='string'&&item.trim()&&item.trim()!==correct.trim()))];
+  const words=value=>value.trim().split(/\s+/).length;
+  clean.sort((a,b)=>Math.abs(words(a)-words(correct))-Math.abs(words(b)-words(correct))||Math.abs(a.length-correct.length)-Math.abs(b.length-correct.length));
+  return clean.slice(0,count);
+}
 const frenchFacultyNames={
   'Faculty of Medicine':'Faculté de médecine',
   'Faculty of New Information Technologies & Communication':'Faculté des nouvelles technologies de l’information et de la communication',
@@ -633,55 +644,65 @@ const frenchUnitArcs={
   'Psychology and Educational Sciences':['Développement et apprentissage','Cognition, émotions et comportement','Éducation et évaluation','Méthodes et statistiques','Applications et pratique fondée sur les preuves'],
   'Physical and Sporting Activities':['Anatomie et mouvement','Biomécanique et physiologie','Entraînement et adaptation','Pédagogie et psychologie du sport','Conception de programmes et sécurité']
 };
-function makeProgressiveQuestion(subject,unitTitle,topic,companion,level,globalLevel,variant,allTopics,mode,difficulty,challenge){
-  const french=energyLanguage(),displaySubject=french?(frenchSubjectNames[subject]||subject):subject;
+function makeProgressiveQuestion(subject,topic,companion,allTopics,mode,challenge){
+  const french=energyLanguage();
   const concept=topic[2]||topic[0],companionConcept=companion[2]||companion[0],claim=topic[1],companionClaim=companion[1];
+  const causalOptions=french?{
+    correct:`Les données ne démontrent pas que ${concept} cause ${companionConcept}.`,
+    wrong:[`Les données démontrent que ${concept} cause ${companionConcept}.`,`Les données montrent que ${companionConcept} réfute ${concept}.`,`Les données démontrent que ${concept} et ${companionConcept} ont une cause commune.`]
+  }:{
+    correct:`The evidence does not show that ${concept} causes ${companionConcept}.`,
+    wrong:[`The evidence proves that ${concept} causes ${companionConcept}.`,`The evidence shows that ${companionConcept} disproves ${concept}.`,`The evidence proves that ${concept} and ${companionConcept} share a cause.`]
+  };
   const otherTopics=allTopics.filter(item=>item!==topic&&item!==companion&&item[2]!==concept&&item[2]!==companionConcept);
   const otherFacts=[...new Set(otherTopics.map(item=>item[1]).filter(fact=>fact!==claim&&fact!==companionClaim))];
   const otherConcepts=[...new Set(otherTopics.map(item=>item[2]).filter(name=>name!==concept&&name!==companionConcept))];
-  const extra=otherTopics[(variant+difficulty)%Math.max(1,otherTopics.length)];
-  const extraClaim=extra?.[1]||claim,extraConcept=extra?.[2]||concept;
   let q,correct,wrong,why;
   if(mode===0){
     q=french?`Une observation indique : « ${claim} » Quelle notion décrit le mieux ce résultat ?`:`An observation states: “${claim}” Which concept best describes this result?`;
-    correct=concept;wrong=otherConcepts.slice(0,3);
+    correct=concept;wrong=otherConcepts;
     why=french?`Cette observation illustre ${concept} : ${claim}`:`This observation illustrates ${concept}: ${claim}`;
   }else if(mode===1){
-    q=french?`Dans un cas lié à « ${companionConcept} », on observe que ${companionClaim} Quelle règle faut-il appliquer pour prévoir le comportement de « ${concept} » dans l’aspect « ${topic[0].split(': ').at(-1)} » ?`:`In a case involving “${companionConcept},” the observation is that ${companionClaim} Which rule should be applied to predict the “${topic[0].split(': ').at(-1)}” aspect of “${concept}”?`;
+    q=french?`Dans une situation nouvelle liée à « ${concept} », quel principe permet le mieux de prévoir le résultat ?`:`In a new situation involving “${concept},” which principle best predicts the outcome?`;
     correct=claim;wrong=[companionClaim,...otherFacts].filter((fact,index,array)=>fact!==claim&&array.indexOf(fact)===index).slice(0,3);
     why=french?`La prédiction s’appuie sur la règle propre à ${concept} : ${claim}`:`The prediction uses the rule specific to ${concept}: ${claim}`;
   }else if(mode===2){
-    q=french?`Deux résultats sont rapportés : ${claim} ${companionClaim} Quelle conclusion est justifiée par ces seules informations ?`:`Two findings are reported: ${claim} ${companionClaim} Which conclusion is justified by this information alone?`;
-    correct=french?`Les deux résultats sont compatibles, mais aucun lien causal entre eux n’est établi.`:`Both findings can be retained, but the evidence given does not establish a causal link between them.`;
-    wrong=french?[`${concept} cause nécessairement ${companionConcept}.`,`${companionConcept} réfute nécessairement ${concept}.`,`Le premier résultat prouve que le second est universel.`]:[`${concept} must cause ${companionConcept}.`,`${companionConcept} must disprove ${concept}.`,`The first finding proves the second is universal.`];
+    const questionForms=french?[
+      `Un rapport décrit « ${concept} » : ${claim} Un autre décrit « ${companionConcept} » : ${companionClaim} Quelle conclusion causale est étayée ?`,
+      `Une étude rapporte ${claim} Une seconde observation indique ${companionClaim} Que peut-on établir sur un lien de cause à effet ?`,
+      `Deux résultats portent sur « ${concept} » et « ${companionConcept} ». Le premier est ${claim} ; le second est ${companionClaim} Quelle interprétation reste justifiée ?`,
+      `Les chercheurs relèvent ${claim} Une autre équipe rapporte ${companionClaim} Quelle affirmation respecte les preuves ?`
+    ]:[
+      `One report describes “${concept}”: ${claim} Another describes “${companionConcept}”: ${companionClaim} Which causal conclusion is supported?`,
+      `One study reports ${claim} A second observation is ${companionClaim} What can be established about cause and effect?`,
+      `Two findings concern “${concept}” and “${companionConcept}.” The first is ${claim}; the second is ${companionClaim} Which interpretation is justified?`,
+      `Researchers report ${claim} A separate team reports ${companionClaim} Which claim stays within the evidence?`
+    ];
+    q=questionForms[challenge%questionForms.length];correct=causalOptions.correct;wrong=causalOptions.wrong;
     why=french?`Les deux faits sont donnés, mais aucune preuve de causalité n’est fournie.`:`Both facts are stated, but no evidence of causation is provided.`;
   }else if(mode===3){
-    q=french?`Un rapport compare « ${concept} » (${claim}) à « ${companionConcept} » (${companionClaim}). Quel résultat distingue précisément le premier concept ?`:`A report compares “${concept}” (${claim}) with “${companionConcept}” (${companionClaim}). Which result specifically distinguishes the first concept?`;
+    q=french?`Comparez « ${concept} » et « ${companionConcept} ». Quel résultat appuie le plus directement le premier concept ?`:`Compare “${concept}” with “${companionConcept}.” Which finding most directly supports the first concept?`;
     correct=claim;wrong=[companionClaim,...otherFacts].filter((fact,index,array)=>fact!==claim&&array.indexOf(fact)===index).slice(0,3);
     why=french?`Le résultat distinctif lié à ${concept} est : ${claim}`:`The distinguishing result associated with ${concept} is: ${claim}`;
   }else{
-    q=french?`Un dossier réunit ces deux faits : ${claim} ${companionClaim} Quelle synthèse conserve les deux constats sans ajouter une relation que les données ne prouvent pas ?`:`A case file contains both findings: ${claim} ${companionClaim} Which synthesis preserves both findings without adding a relationship the evidence does not establish?`;
-    correct=french?`${concept} : ${claim} ${companionConcept} : ${companionClaim} Les deux constats sont retenus séparément.`:`${concept}: ${claim} ${companionConcept}: ${companionClaim} Both findings are retained separately.`;
-    wrong=french?[`${concept} cause ${companionConcept}, donc le premier fait suffit à prouver le second.`,`${companionConcept} rend forcément faux le résultat lié à ${concept}.`,`Les deux résultats doivent avoir une cause unique.`]:[`${concept} causes ${companionConcept} so the first finding proves the second.`,`${companionConcept} makes the finding about ${concept} false.`,`The two findings must have a single cause.`];
+    const synthesisForms=french?[
+      `Une enquête établit les faits suivants : ${claim} ${companionClaim} Quelle conclusion synthétise les résultats sans dépasser les preuves ?`,
+      `Un dossier rapproche « ${concept} » et « ${companionConcept} » : ${claim} ${companionClaim} Quel lien peut-on réellement affirmer ?`,
+      `Les résultats d’une étude sont ${claim} Une autre observation donne ${companionClaim} Quelle synthèse est défendable ?`,
+      `À partir des constats suivants — ${claim} ${companionClaim} — quelle conclusion reste prudente et fondée ?`
+    ]:[
+      `An investigation reports: ${claim} ${companionClaim} Which synthesis stays within the evidence?`,
+      `A case compares “${concept}” and “${companionConcept}”: ${claim} ${companionClaim} What link can actually be claimed?`,
+      `One study reports ${claim} A second observation is ${companionClaim} Which synthesis is defensible?`,
+      `Given these findings — ${claim} ${companionClaim} — which conclusion is careful and supported?`
+    ];
+    q=synthesisForms[challenge%synthesisForms.length];correct=causalOptions.correct;wrong=causalOptions.wrong;
     why=french?`La synthèse reprend chaque fait et évite d’inventer un lien causal.`:`The synthesis keeps each fact and avoids inventing a causal link.`;
   }
-  const uniqueWrong=[...new Set(wrong.filter(option=>option&&option!==correct))];
-  for(const fact of [...otherFacts,...otherConcepts]){
-    if(uniqueWrong.length>=3)break;
-    const option=otherFacts.includes(fact)?fact:(french?`Le résultat décrit ${fact}.`:`The finding describes ${fact}.`);
-    if(option!==correct&&!uniqueWrong.includes(option))uniqueWrong.push(option);
-  }
-  while(uniqueWrong.length<3){
-    const option=french?`Une interprétation incompatible avec les données de ${unitTitle} (${uniqueWrong.length+1}).`:`An interpretation inconsistent with the evidence in ${unitTitle} (${uniqueWrong.length+1}).`;
-    if(option!==correct&&!uniqueWrong.includes(option))uniqueWrong.push(option);
-  }
-  const options=[correct,...uniqueWrong.slice(0,3)],answer=(globalLevel+variant+difficulty)%4;
-  [options[0],options[answer]]=[options[answer],options[0]];
-  const challengeEn=[['classify the observation','identify the concept from evidence','interpret the definition','recognize the concept in context'],['predict from a rule','apply the rule to a new case','select a rule for the scenario','transfer the principle to a different context'],['check what the evidence supports','separate observation from inference','evaluate the limits of the findings','avoid an unsupported conclusion'],['compare distinguishing evidence','separate two related concepts','identify the defining result','test which claim fits the evidence'],['combine findings carefully','synthesize the two concepts','build a conclusion from both facts','integrate evidence without overclaiming']];
-  const challengeFr=[['classer l’observation','identifier le concept à partir des preuves','interpréter la définition','reconnaître le concept en contexte'],['prévoir à partir d’une règle','appliquer la règle à un nouveau cas','choisir une règle pour le scénario','transférer le principe à un autre contexte'],['vérifier ce que les preuves permettent d’affirmer','séparer observation et déduction','évaluer les limites des résultats','éviter une conclusion non étayée'],['comparer les preuves distinctives','distinguer deux concepts proches','identifier le résultat déterminant','vérifier quelle affirmation correspond aux preuves'],['combiner les résultats avec rigueur','synthétiser les deux concepts','construire une conclusion à partir des deux faits','intégrer les preuves sans extrapoler']];
-  const task=(french?challengeFr:challengeEn)[mode][challenge%4];
-  const label=french?`Niveau ${globalLevel} · ${displaySubject}`:`Level ${globalLevel} · ${subject}`;
-  return {q:`${label} · ${french?'Consigne':'Task'}: ${task}. ${q}`,options,answer,why,mode,challenge};
+  let uniqueWrong=mode===0?balancedDistractors(correct,otherConcepts):[...new Set(wrong.filter(option=>option&&option!==correct))];
+  if(mode===1||mode===3)uniqueWrong=balancedDistractors(correct,[...uniqueWrong,...otherFacts]);
+  const options=shuffledCopy([correct,...uniqueWrong.slice(0,3)]),answer=options.indexOf(correct);
+  return {q,options,answer,why,mode,challenge};
 }function makeLevelPath(subject){
   const french=energyLanguage();
   const base=subject==='Earth Science and Universe'?'Geology':subject;
@@ -713,14 +734,16 @@ function makeProgressiveQuestion(subject,unitTitle,topic,companion,level,globalL
       const topicIndex=Math.min(unitTopics.length-1,Math.floor((level-1)*unitTopics.length/20));
       const topic=unitTopics[topicIndex];
       const focus=focusSet[Math.min(4,Math.floor((level-1)/4))];
-      const stageFocus=focusSet[Math.min(4,Math.floor((level-1)/4))][0];
-      const title=french?`${String(globalLevel).padStart(3,'0')} · ${focus[0]} : ${topic[0].split(': ').at(-1)} · exercice ${stageFocus.toLowerCase()}`:`${String(globalLevel).padStart(3,'0')} · ${focus[0]} ${topic[0].split(': ').at(-1)} · ${stageFocus} task`;
+      const topicLabel=topic[0].split(': ').at(-1);
+      const title=french?`${String(globalLevel).padStart(3,'0')} · ${focus[0]} : ${topicLabel}`:`${String(globalLevel).padStart(3,'0')} · ${focus[0]}: ${topicLabel}`;
       const isExam=level===20;
       const isGame=!isExam&&level%5===0;
       const count=isExam?Math.min(9,5+unit):Math.min(5,2+Math.floor((level-1)/6)+Math.floor(unit/2));
       const task=taskSet[Math.min(19,Math.floor((globalLevel-1)/5))];
       const matchingTopics=unitTopics.filter((item,index,all)=>all.findIndex(candidate=>candidate[2]===item[2])===index);
-      const pairs=matchingTopics.slice(0,4).map(item=>({term:`${item[2]} · ${task}`,definition:item[3]}));
+      const pairCount=Math.min(4,matchingTopics.length);
+      const pairOffset=(Math.floor(level/5)-1+unit)%Math.max(1,matchingTopics.length);
+      const pairs=Array.from({length:pairCount},(_,index)=>matchingTopics[(pairOffset+index)%matchingTopics.length]).map(item=>({term:item[2],definition:item[3]}));
       const mode=Math.min(4,Math.floor((level-1)/4));
       const challenge=(level-1)%4;
       const levelQuestions=Array.from({length:count},(_,index)=>{
@@ -739,7 +762,7 @@ function makeProgressiveQuestion(subject,unitTitle,topic,companion,level,globalL
         }
         if(!slot)throw new Error(`Unique question pool exhausted for ${subject}, unit ${unit+1}`);
         usedQuestionSlots.add(slot.key);
-        return makeProgressiveQuestion(subject,unitTitle,slot.questionTopic,slot.companion,level,globalLevel,index,unitTopics,mode,globalLevel,challenge);
+        return makeProgressiveQuestion(subject,slot.questionTopic,slot.companion,unitTopics,mode,challenge);
       });
       const pass=isExam?Math.ceil(count*(.7+unit*.035)):Math.max(1,Math.ceil(count*(.55+unit*.035+Math.floor((level-1)/5)*.012)));
       path.push({
@@ -1066,8 +1089,8 @@ function startMatchingGame({preserve=false}={}){
   document.querySelector('#lessonBody').hidden=true;document.querySelector('#lessonQuiz').hidden=true;document.querySelector('#lessonGame').hidden=false;
   document.querySelector('#lessonGame>p').textContent=learningText('Tap a concept, then choose its matching meaning.','Touchez un concept, puis choisissez sa définition.');
   const terms=document.querySelector('#matchTerms'),definitions=document.querySelector('#matchDefinitions');terms.innerHTML='';definitions.innerHTML='';
-  stage.pairs.forEach((pair,index)=>{const button=document.createElement('button');button.type='button';button.className=`match-card ${matchedPairs.has(index)?'is-matched':''} ${selectedTerm===index?'is-selected':''}`;button.textContent=pair.term;button.dataset.pair=index;button.disabled=matchedPairs.has(index);button.addEventListener('click',()=>{if(matchedPairs.has(index))return;selectedTerm=index;terms.querySelectorAll('.match-card').forEach(item=>item.classList.toggle('is-selected',Number(item.dataset.pair)===index))});terms.appendChild(button)});
-  [...stage.pairs].map((pair,index)=>({pair,index})).reverse().forEach(({pair,index})=>{const button=document.createElement('button');button.type='button';button.className=`match-card ${matchedPairs.has(index)?'is-matched':''}`;button.textContent=pair.definition;button.dataset.pair=index;button.disabled=matchedPairs.has(index);button.addEventListener('click',()=>checkMatch(index,button));definitions.appendChild(button)});
+  shuffledCopy(stage.pairs.map((pair,index)=>({pair,index}))).forEach(({pair,index})=>{const button=document.createElement('button');button.type='button';button.className=`match-card ${matchedPairs.has(index)?'is-matched':''} ${selectedTerm===index?'is-selected':''}`;button.textContent=pair.term;button.dataset.pair=index;button.disabled=matchedPairs.has(index);button.addEventListener('click',()=>{if(matchedPairs.has(index))return;selectedTerm=index;terms.querySelectorAll('.match-card').forEach(item=>item.classList.toggle('is-selected',Number(item.dataset.pair)===index))});terms.appendChild(button)});
+  shuffledCopy(stage.pairs.map((pair,index)=>({pair,index}))).forEach(({pair,index})=>{const button=document.createElement('button');button.type='button';button.className=`match-card ${matchedPairs.has(index)?'is-matched':''}`;button.textContent=pair.definition;button.dataset.pair=index;button.disabled=matchedPairs.has(index);button.addEventListener('click',()=>checkMatch(index,button));definitions.appendChild(button)});
   const feedback=document.querySelector('#matchFeedback');feedback.hidden=!preserve;feedback.className=`answer-feedback ${preserve&&matchedPairs.size?'is-right':''}`;if(preserve&&matchedPairs.size)feedback.textContent=learningText('Nice match!','Bonne association !');
   lessonContinue.disabled=matchedPairs.size!==stage.pairs.length;lessonContinue.textContent=matchedPairs.size===stage.pairs.length?learningText('Finish game','Terminer le jeu'):learningText('Match all pairs','Associez toutes les paires');document.querySelector('#lessonProgressFill').style.width=`${Math.round(matchedPairs.size/stage.pairs.length*100)}%`;
 }
