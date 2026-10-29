@@ -53,10 +53,28 @@
     else { const img = document.createElement('img'); img.className = 'logo-glyph'; img.src = 'logo only head.png'; img.alt = ''; avatar.appendChild(img); }
     const bubble = document.createElement('div'); bubble.className = 'chat-bubble';
     if (role === 'assistant') {
-      for (const part of text.split(/(\*\*[^*]+\*\*)/g)) {
-        if (part.startsWith('**') && part.endsWith('**')) { const strong = document.createElement('strong'); strong.textContent = part.slice(2, -2); bubble.appendChild(strong); }
-        else bubble.appendChild(document.createTextNode(part));
-      }
+      const inline = (container, value) => {
+        const tokens = value.split(/(\[[^\]]+\]\(https:\/\/[^\s)]+\)|https:\/\/[^\s)]+|\*\*[^*]+\*\*)/g);
+        tokens.forEach(token => {
+          const markdownLink = token.match(/^\[([^\]]+)\]\((https:\/\/[^\s)]+)\)$/);
+          const bareLink = token.match(/^(https:\/\/[^\s)]+)$/);
+          if (markdownLink || bareLink) {
+            const href = markdownLink?.[2] || bareLink[1];
+            const anchor = document.createElement('a'); anchor.href = href; anchor.target = '_blank'; anchor.rel = 'noopener noreferrer';
+            anchor.textContent = markdownLink?.[1] || href.replace(/[.,;!?]+$/, '');
+            if (!markdownLink) anchor.href = anchor.textContent;
+            container.appendChild(anchor);
+          } else if (token.startsWith('**') && token.endsWith('**')) {
+            const strong = document.createElement('strong'); strong.textContent = token.slice(2, -2); container.appendChild(strong);
+          } else container.appendChild(document.createTextNode(token));
+        });
+      };
+      text.split('\n').forEach((line, index) => {
+        if (index) bubble.appendChild(document.createElement('br'));
+        const bullet = line.match(/^\s*[*•-]\s+(.+)$/);
+        if (bullet) { const span = document.createElement('span'); span.className = 'chat-list-item'; span.textContent = '• '; inline(span, bullet[1]); bubble.appendChild(span); }
+        else inline(bubble, line);
+      });
       const meta = document.createElement('small'); meta.textContent = label; bubble.appendChild(meta);
     } else bubble.textContent = text;
     row.append(avatar, bubble); messages.appendChild(row); messages.scrollTop = messages.scrollHeight;
