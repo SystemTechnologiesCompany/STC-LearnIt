@@ -16,7 +16,9 @@
       currentPlan: plan => `Your ${plan} plan`, daysLeft: days => `${days} day${days === 1 ? '' : 's'} left`, lessThanDay: 'Less than a day left', ended: 'Your plan has ended', expired: 'Plan end date unavailable',
       choose: 'Choose plan', soon: 'Manual BaridiMob payments are verified by STC before a plan is activated.',
       paymentTitle: plan => `Choose payment method for ${plan}`,
-      paymentSetup: 'Choose BaridiMob for manual transfer instructions. STC activates the plan after confirming payment.',
+      paymentSetup: 'Card plans renew monthly until cancelled. BaridiMob purchases are activated manually.',
+      checkoutBusy: 'Opening secure checkout…', billingError: 'Card checkout is unavailable right now. Please try again later.', billingSignIn: 'Sign in to continue to card checkout.',
+      manageBilling: 'Manage card subscription & invoices', billingSuccess: 'Payment submitted. Your plan updates after payment confirmation.', billingCancelled: 'Checkout closed. No plan was activated.',
       paymentBaridi: 'BaridiMob manual transfer', paymentBaridiDetail: 'Transfer the plan amount to the STC BaridiMob RIP shown below.',
       paymentVisa: 'Visa', paymentVisaDetail: 'Secure card checkout through an approved bank or payment gateway.',
       setupRequired: 'SETUP REQUIRED',
@@ -42,7 +44,9 @@
       currentPlan: plan => `Votre offre ${plan}`, daysLeft: days => `Encore ${days} jour${days === 1 ? '' : 's'}`, lessThanDay: 'Moins d’un jour restant', ended: 'Votre offre a expiré', expired: 'Date de fin indisponible',
       choose: 'Choisir l’offre', soon: 'Les paiements BaridiMob manuels sont vérifiés par STC avant l’activation de l’offre.',
       paymentTitle: plan => `Choisissez un moyen de paiement pour ${plan}`,
-      paymentSetup: 'Choisissez BaridiMob pour les instructions de transfert manuel. STC active l’offre après confirmation du paiement.',
+      paymentSetup: 'Les offres par carte se renouvellent chaque mois jusqu’à résiliation. Les achats BaridiMob sont activés manuellement.',
+      checkoutBusy: 'Ouverture du paiement sécurisé…', billingError: 'Le paiement par carte est indisponible pour le moment. Réessayez plus tard.', billingSignIn: 'Connectez-vous pour payer par carte.',
+      manageBilling: 'Gérer mon abonnement par carte et mes factures', billingSuccess: 'Paiement envoyé. Votre offre sera mise à jour après confirmation du paiement.', billingCancelled: 'Paiement fermé. Aucune offre n’a été activée.',
       paymentBaridi: 'Virement manuel BaridiMob', paymentBaridiDetail: 'Transférez le montant de l’offre vers le RIP BaridiMob STC affiché ci-dessous.',
       paymentVisa: 'Visa', paymentVisaDetail: 'Paiement sécurisé par carte via une banque ou une passerelle agréée.',
       setupRequired: 'CONFIGURATION REQUISE',
@@ -56,6 +60,8 @@
     }
   };
   const french = () => document.documentElement.dataset.language === 'fr';
+  const billingLive = window.STC_SUPABASE_CONFIG?.stripeMode === 'live';
+  const billingTest = !billingLive && new URLSearchParams(location.search).get('billing_test') === '1';
   const dialog = document.createElement('dialog');
   dialog.className = 'plans-dialog';
   dialog.setAttribute('aria-labelledby', 'plansTitle');
@@ -69,6 +75,7 @@
       <div class="plans-eyebrow">✦ <span></span></div>
       <h2 id="plansTitle"></h2><p class="plans-subtitle"></p>
       <div class="plans-current-plan" hidden><span class="current-plan-label"></span><strong class="current-plan-time"></strong></div>
+      <button class="plan-choose manage-card-billing" type="button"></button>
       <div class="plans-grid">
         <article class="plan-card plan-card--pro"><div class="plan-sakura-petals" aria-hidden="true"></div><span class="plan-badge plan-badge--pro"></span><div class="plan-card-top"><span class="plan-name"></span><strong class="plan-price"></strong></div><ul></ul><button type="button" class="plan-choose"></button></article>
         <article class="plan-card plan-card--stc"><div class="plan-galaxy" aria-hidden="true"><img class="plan-stc-head" src="logo%20only%20head.png" alt=""><i class="plan-galaxy-meteor"></i><i class="plan-galaxy-meteor"></i><i class="plan-galaxy-meteor"></i><i class="plan-galaxy-meteor"></i><i class="plan-galaxy-meteor"></i><i class="plan-galaxy-meteor"></i><i class="plan-galaxy-meteor"></i></div><span class="plan-badge"></span><div class="plan-card-top"><span class="plan-name"></span><strong class="plan-price"></strong></div><ul></ul><button type="button" class="plan-choose"></button></article>
@@ -134,6 +141,12 @@
     q('.payment-method-visa').textContent = t.paymentVisa;
     q('.payment-method-visa-detail').textContent = t.paymentVisaDetail;
     q('.payment-setup-message').textContent = t.paymentSetup;
+    q('.manage-card-billing').textContent = t.manageBilling;
+    q('.manage-card-billing').hidden = !billingLive && !billingTest;
+    if (billingTest) q('.payment-setup-message').textContent = french()
+      ? 'TEST uniquement : aucun paiement réel et aucune activation Premium. Les offres se renouvellent chaque mois en mode réel.'
+      : 'TEST only: no real payment and no Premium activation. Plans renew monthly in live mode.';
+    q('.payment-setup-badge').hidden = true;
     q('#plansTitle').textContent = t.title;
     q('.plans-subtitle').textContent = t.subtitle;
     q('.plans-close').setAttribute('aria-label', t.close);
@@ -162,7 +175,33 @@
     q('.plans-redeem').textContent = t.redeem;
   }
   q('.plans-close').addEventListener('click', () => dialog.close());
+  let billingBusy = false;
+  async function openBilling(action, button) {
+    if (billingBusy) return;
+    const t = copy[french() ? 'fr' : 'en'];
+    const status = q('.plans-status');
+    if (!billingLive && !billingTest) { status.hidden = false; status.textContent = t.visaUnavailable; return; }
+    const client = window.stcSupabase;
+    billingBusy = true;
+    button.disabled = true;
+    status.hidden = false;
+    status.textContent = t.checkoutBusy;
+    try {
+      const { data: auth, error: authError } = await client.auth.getSession();
+      if (authError || !auth?.session) { status.textContent = t.billingSignIn; return; }
+      const { data, error } = await client.functions.invoke('stripe-billing', { body: {
+        action, plan: q('.payment-methods').dataset.plan, language: french() ? 'fr' : 'en',
+      } });
+      if (error || !data?.url) throw error || new Error('No checkout URL');
+      const target = new URL(data.url);
+      if (target.protocol !== 'https:' || !['checkout.stripe.com', 'billing.stripe.com'].includes(target.hostname)) throw new Error('Invalid redirect');
+      window.location.assign(target.href);
+    } catch { status.textContent = client ? t.billingError : t.billingSignIn; }
+    finally { billingBusy = false; button.disabled = false; }
+  }
+  q('.manage-card-billing').addEventListener('click', event => openBilling('portal', event.currentTarget));
   dialog.querySelectorAll('[data-payment-method]').forEach(button => button.addEventListener('click', () => {
+    if (button.dataset.paymentMethod === 'visa') { q('.manual-payment-instructions').hidden = true; openBilling('checkout', button); return; }
     dialog.querySelectorAll('[data-payment-method]').forEach(option => {
       const selected = option === button;
       option.classList.toggle('is-selected', selected);
@@ -276,4 +315,11 @@
     event.preventDefault(); window.STCPlans.open({ membership: document.documentElement.dataset.membership });
   }));
   render();
+  const billingReturn = new URLSearchParams(window.location.search).get('billing');
+  if (['success', 'cancelled'].includes(billingReturn)) {
+    window.STCPlans.open();
+    q('.plans-status').hidden = false;
+    q('.plans-status').textContent = copy[french() ? 'fr' : 'en'][billingReturn === 'success' ? 'billingSuccess' : 'billingCancelled'];
+    const clean = new URL(window.location.href); clean.searchParams.delete('billing'); history.replaceState(null, '', clean);
+  }
 })();

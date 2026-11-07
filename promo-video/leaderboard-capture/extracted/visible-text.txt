@@ -1,0 +1,104 @@
+[span] Built for curious minds across Algeria
+[a] Kasdi Merbah University
+[a] Follow us on LinkedIn
+[span] STC
+[span] Learn
+[a] Explore faculties
+[a] Learn & practice
+[a] Leaderboard
+[a] My profile
+[span] English
+[span] Français
+[a] My profile
+[div] LEARN TOGETHER. RISE TOGETHER.
+[h1] Every point
+[h1] takes you
+[span] higher.
+[p] Learn, practice and earn XP as you make progress through your university subjects.
+[a] Earn XP
+[span] ⚡ XP
+[div] THE STC LEARNIT RANKS
+[h2] Leaderboard
+[button] All time
+[button] This week
+[button] Tournament
+[div] Tournament ends in 1d 7h 20m · Students with a completed course step and at least 10 XP are ranked.
+[div] Mb25
+[div] 1,304 XP
+[button] Follow
+[div] STC Learnit
+[div] 1,356 XP
+[button] Follow
+[div] Abd Essatar Belkharchouche
+[div] 389 XP
+[button] Follow
+[h3] Top learners
+[p] Sorted by total experience points
+[span] ALL TIME
+[span] RANK
+[span] STUDENT
+[span] FACULTY
+[span] XP EARNED
+[span] FOLLOW
+[span] STC Learnit
+[span] earth
+[span] 1,356 XP
+[button] Follow
+[span] Mb25
+[span] earth
+[span] 1,304 XP
+[button] Follow
+[span] Abd Essatar Belkharchouche
+[span] earth
+[span] 389 XP
+[button] Follow
+[span] STC Learner
+[span] 184 XP
+[button] Follow
+[span] Hamide Mounir berouali
+[span] medicine
+[span] 80 XP
+[button] Follow
+[span] Bensammar baha
+[span] earth
+[span] 60 XP
+[button] Follow
+[h3] Your first lesson starts the climb.
+[p] Complete a course step and earn at least 10 XP to appear here.
+[a] Start learning
+[span] STC The Way To Greatness
+[a] Find your study path ↗
+[span] STC LEARNIT MEMBERSHIP
+[h2] Choose your way to grow.
+[p] More energy, focused learning and direct support when you need it.
+[span] BEST FOR STARTERS
+[span] PRO
+[span] Plan
+[strong] 250 DA
+[li] 50 Energy
+[li] Half the energy wait time
+[li] Sakura theme unlocked
+[li] No Ads
+[li] Direct Support
+[button] Choose plan
+[span] BEST VALUE
+[span] STC
+[span] Plan
+[strong] 700 DA
+[li] Unlimited AI
+[li] Unlimited Energy
+[li] All themes unlocked
+[li] No Ads
+[li] Admin Support
+[button] Choose plan
+[span] SETUP REQUIRED
+[strong] BaridiMob manual transfer
+[small] Transfer the plan amount to the STC BaridiMob RIP shown below.
+[strong] Visa
+[small] Secure card checkout through an approved bank or payment gateway.
+[p] Choose BaridiMob for manual transfer instructions. STC activates the plan after confirming payment.
+[label] Have a plan activation code?
+[button] Redeem code
+[p] Manual BaridiMob payments are verified by STC before a plan is activated.
+[strong] Need a study buddy?
+[small] Ask Sewingo AI

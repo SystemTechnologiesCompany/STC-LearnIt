@@ -54,13 +54,24 @@
   }
   async function refresh(session) {
     if (!session?.user?.id) { apply(null); return; }
-    const { data, error } = await client.from('premium_subscriptions')
+    let { data, error } = await client.from('effective_premium_subscriptions')
       .select('plan,expires_at').eq('user_id', session.user.id).maybeSingle();
+    if (error) ({ data, error } = await client.from('premium_subscriptions')
+      .select('plan,expires_at').eq('user_id', session.user.id).maybeSingle());
     if (error) { console.warn('Could not check STC Learnit membership. Apply premium-codes.sql in Supabase.', error); apply(null); return; }
     apply(data && Date.parse(data.expires_at) > Date.now() ? data.plan : null, session.user.user_metadata?.stc_theme || 'galaxy', data?.expires_at);
   }
 
   client.auth.getSession().then(({ data }) => refresh(data?.session));
+  window.addEventListener('focus', () => client.auth.getSession().then(({ data }) => refresh(data?.session)));
+  if (new URLSearchParams(location.search).get('billing') === 'success') {
+    let attempts = 0;
+    const timer = setInterval(async () => {
+      const { data } = await client.auth.getSession();
+      await refresh(data?.session);
+      if (++attempts >= 10) clearInterval(timer);
+    }, 3000);
+  }
   client.auth.onAuthStateChange((_event, session) => { queueMicrotask(() => refresh(session)); });
   window.addEventListener('stc:membership-change', async event => {
     const { data } = await client.auth.getSession();

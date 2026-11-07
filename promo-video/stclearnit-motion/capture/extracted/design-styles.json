@@ -1,0 +1,401 @@
+{
+  "typography": [
+    {
+      "role": "display",
+      "fontFamily": "Manrope",
+      "fontSize": "79px",
+      "fontWeight": "700",
+      "lineHeight": "82.16px",
+      "letterSpacing": "-5.135px",
+      "color": "#202823",
+      "sampleText": "Study smarterLevel up"
+    },
+    {
+      "role": "heading",
+      "fontFamily": "Manrope",
+      "fontSize": "52px",
+      "fontWeight": "700",
+      "lineHeight": "54.08px",
+      "letterSpacing": "-3.38px",
+      "color": "#FFFFFF",
+      "sampleText": "Every lessongets you closer."
+    },
+    {
+      "role": "heading-2",
+      "fontFamily": "Manrope",
+      "fontSize": "48px",
+      "fontWeight": "700",
+      "lineHeight": "49.92px",
+      "letterSpacing": "-3.12px",
+      "color": "#202823",
+      "sampleText": "Big ambitions.One place to begin."
+    },
+    {
+      "role": "heading-2",
+      "fontFamily": "Manrope",
+      "fontSize": "21px",
+      "fontWeight": "700",
+      "lineHeight": "normal",
+      "letterSpacing": "-1.26px",
+      "color": "#202823",
+      "sampleText": "Geology YEAR 1"
+    },
+    {
+      "role": "heading-3",
+      "fontFamily": "Manrope",
+      "fontSize": "17px",
+      "fontWeight": "700",
+      "lineHeight": "normal",
+      "letterSpacing": "-0.68px",
+      "color": "#202823",
+      "sampleText": "What are you studying?"
+    },
+    {
+      "role": "label",
+      "fontFamily": "DM Sans",
+      "fontSize": "16px",
+      "fontWeight": "400",
+      "lineHeight": "normal",
+      "letterSpacing": "normal",
+      "color": "#202823",
+      "sampleText": "Earth layersLesson complete"
+    },
+    {
+      "role": "heading-3",
+      "fontFamily": "Manrope",
+      "fontSize": "15px",
+      "fontWeight": "700",
+      "lineHeight": "normal",
+      "letterSpacing": "-0.45px",
+      "color": "#202823",
+      "sampleText": "Get the idea, clearly"
+    },
+    {
+      "role": "body",
+      "fontFamily": "DM Sans",
+      "fontSize": "14px",
+      "fontWeight": "400",
+      "lineHeight": "25.2px",
+      "letterSpacing": "normal",
+      "color": "#6F776F",
+      "sampleText": "University subjects made easier to learn, one little win at "
+    },
+    {
+      "role": "link",
+      "fontFamily": "DM Sans",
+      "fontSize": "12px",
+      "fontWeight": "600",
+      "lineHeight": "normal",
+      "letterSpacing": "normal",
+      "color": "#586257",
+      "sampleText": "Explore faculties"
+    },
+    {
+      "role": "body-small",
+      "fontFamily": "DM Sans",
+      "fontSize": "9px",
+      "fontWeight": "400",
+      "lineHeight": "normal",
+      "letterSpacing": "normal",
+      "color": "#8A9087",
+      "sampleText": "Make every study break count"
+    }
+  ],
+  "spacing": {
+    "observed": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15
+    ],
+    "baseUnit": 4
+  },
+  "radius": [
+    "5px",
+    "8px",
+    "10px",
+    "22px",
+    "50%",
+    "99px",
+    "999px"
+  ],
+  "shadows": [
+    {
+      "value": "rgba(255, 255, 255, 0.92) 0px 1px 0px 0px inset, rgba(105, 133, 81, 0.08) 0px -1px 0px 0px inset, rgba(46, 65, 40, 0.043) 0px 5px 16px 0px",
+      "count": 12
+    },
+    {
+      "value": "rgb(218, 225, 214) 0px 0px 0px 1px",
+      "count": 2
+    },
+    {
+      "value": "rgba(255, 255, 255, 0.76) 0px 1px 0px 0px inset, rgba(95, 119, 78, 0.12) 0px -1px 0px 0px inset, rgba(25, 43, 28, 0.2) 0px 22px 52px 0px",
+      "count": 2
+    },
+    {
+      "value": "rgba(10, 20, 12, 0.08) 0px 5px 15px 0px",
+      "count": 2
+    },
+    {
+      "value": "rgba(20, 36, 24, 0.2) 0px 12px 30px 0px, rgba(156, 202, 99, 0.16) 0px 0px 20px 0px",
+      "count": 2
+    }
+  ],
+  "buttons": [
+    {
+      "label": "×",
+      "background": "#FFFFFF",
+      "backgroundImage": "",
+      "backdropFilter": "",
+      "color": "#D5E2CF",
+      "padding": "1px 6px",
+      "borderRadius": "7px",
+      "border": "1px solid rgba(225, 239, 218, 0.2)",
+      "boxShadow": "none",
+      "fontSize": "18px",
+      "fontWeight": "500",
+      "height": "23px"
+    },
+    {
+      "label": "Premium",
+      "background": "transparent",
+      "backgroundImage": "linear-gradient(15deg, rgb(20, 45, 89) 0%, rgb(36, 92, 176) 20%, rgb(65, 135, 237) 40%, rgb(120, 170, 255) 50%, rgb(65, 135, 237) 60%, rgb(36, 92, 176) 80%, rgb(20, 45, 89) 100%)",
+      "backdropFilter": "",
+      "color": "#FFFFFF",
+      "padding": "7.15px 12.1px",
+      "borderRadius": "30px",
+      "border": "1px solid rgba(147, 190, 255, 0.25)",
+      "boxShadow": "rgba(48, 105, 197, 0.25) 0px 5px 18px 0px",
+      "fontSize": "11px",
+      "fontWeight": "800",
+      "height": "38px"
+    },
+    {
+      "label": "button",
+      "background": "#FFFFFF",
+      "backgroundImage": "",
+      "backdropFilter": "",
+      "color": "#536F3A",
+      "padding": "0px",
+      "borderRadius": "10px",
+      "border": "1px solid rgba(112, 139, 88, 0.3)",
+      "boxShadow": "none",
+      "fontSize": "19px",
+      "fontWeight": "700",
+      "height": "36px"
+    },
+    {
+      "label": "Log in",
+      "background": "#8FB75B",
+      "backgroundImage": "linear-gradient(135deg, rgb(168, 211, 108) 0%, rgba(168, 211, 108, 0) 38%)",
+      "backdropFilter": "",
+      "color": "#000000",
+      "padding": "2px",
+      "borderRadius": "13px",
+      "border": "0px none rgb(0, 0, 0)",
+      "boxShadow": "none",
+      "fontSize": "13.3333px",
+      "fontWeight": "400",
+      "height": "39px"
+    },
+    {
+      "label": "Get started",
+      "background": "#EDF5E2",
+      "backgroundImage": "",
+      "backdropFilter": "",
+      "color": "#66883F",
+      "padding": "10px 24px",
+      "borderRadius": "999px",
+      "border": "2px solid rgba(0, 0, 0, 0)",
+      "boxShadow": "rgb(145, 183, 94) 0px 0px 0px 1.5px",
+      "fontSize": "12px",
+      "fontWeight": "700",
+      "height": "42px"
+    },
+    {
+      "label": "Start learning  ↗",
+      "background": "#263A2B",
+      "backgroundImage": "",
+      "backdropFilter": "",
+      "color": "#FFFFFF",
+      "padding": "16px 20px",
+      "borderRadius": "8px",
+      "border": "0px none rgb(255, 255, 255)",
+      "boxShadow": "none",
+      "fontSize": "13px",
+      "fontWeight": "700",
+      "height": "50px"
+    }
+  ],
+  "cards": [
+    {
+      "label": "card",
+      "background": "#FFFFFF",
+      "backgroundImage": "",
+      "backdropFilter": "blur(18px) saturate(1.15)",
+      "color": "#202823",
+      "padding": "22px 24px",
+      "borderRadius": "15px",
+      "border": "1px solid rgba(255, 255, 255, 0.82)",
+      "boxShadow": "rgba(38, 58, 43, 0.16) 0px 33.9654px 65.9769px 0px, rgba(255, 255, 255, 0.9) 0px 1px 0px 0px inset",
+      "fontSize": "16px",
+      "fontWeight": "400",
+      "height": "376px"
+    },
+    {
+      "label": "card",
+      "background": "transparent",
+      "backgroundImage": "",
+      "backdropFilter": "",
+      "color": "#202823",
+      "padding": "0px",
+      "borderRadius": "0px",
+      "border": "0px none rgb(32, 40, 35)",
+      "boxShadow": "none",
+      "fontSize": "16px",
+      "fontWeight": "400",
+      "height": "390px"
+    },
+    {
+      "label": "card",
+      "background": "transparent",
+      "backgroundImage": "linear-gradient(135deg, rgba(242, 249, 231, 0.82), rgba(205, 226, 181, 0.68))",
+      "backdropFilter": "blur(22px) saturate(1.45)",
+      "color": "#202823",
+      "padding": "24px 30px",
+      "borderRadius": "22px",
+      "border": "1px solid rgba(255, 255, 255, 0.27)",
+      "boxShadow": "rgba(10, 20, 12, 0.24) 0px 24px 54px 0px",
+      "fontSize": "16px",
+      "fontWeight": "400",
+      "height": "316px"
+    },
+    {
+      "label": "card",
+      "background": "transparent",
+      "backgroundImage": "",
+      "backdropFilter": "",
+      "color": "#698A43",
+      "padding": "0px",
+      "borderRadius": "0px",
+      "border": "0px none rgb(105, 138, 67)",
+      "boxShadow": "none",
+      "fontSize": "53px",
+      "fontWeight": "400",
+      "height": "130px"
+    }
+  ],
+  "nav": {
+    "label": "navigation",
+    "background": "#F7F8F4",
+    "backgroundImage": "",
+    "backdropFilter": "blur(18px) saturate(1.25)",
+    "color": "#202823",
+    "padding": "0px 119.031px",
+    "borderRadius": "0px",
+    "border": "",
+    "boxShadow": "none",
+    "fontSize": "16px",
+    "fontWeight": "400",
+    "height": "78px"
+  },
+  "chips": [
+    {
+      "label": "YEAR 1",
+      "background": "#EFF5E8",
+      "color": "#638044",
+      "padding": "4px 6px",
+      "borderRadius": "4px",
+      "border": "0px none rgb(99, 128, 68)",
+      "boxShadow": "none",
+      "fontSize": "8px",
+      "fontWeight": "700",
+      "height": "auto"
+    },
+    {
+      "label": "👩🏽‍🎓",
+      "background": "#E5EDDC",
+      "color": "#202823",
+      "padding": "0px",
+      "borderRadius": "50%",
+      "border": "2px solid rgb(247, 248, 244)",
+      "boxShadow": "none",
+      "fontSize": "16px",
+      "fontWeight": "400",
+      "height": "30px"
+    },
+    {
+      "label": "👨🏻‍🎓",
+      "background": "#F7E3D5",
+      "color": "#202823",
+      "padding": "0px",
+      "borderRadius": "50%",
+      "border": "2px solid rgb(247, 248, 244)",
+      "boxShadow": "none",
+      "fontSize": "16px",
+      "fontWeight": "400",
+      "height": "30px"
+    },
+    {
+      "label": "👩🏻‍🎓",
+      "background": "#E4DEF4",
+      "color": "#202823",
+      "padding": "0px",
+      "borderRadius": "50%",
+      "border": "2px solid rgb(247, 248, 244)",
+      "boxShadow": "none",
+      "fontSize": "16px",
+      "fontWeight": "400",
+      "height": "30px"
+    }
+  ],
+  "statCells": [],
+  "tabs": [],
+  "backgrounds": [
+    {
+      "value": "radial-gradient(at 50% 0%, rgba(186, 219, 133, 0.11), rgba(0, 0, 0, 0) 58%), radial-gradient(at 90% 82%, rgba(131, 170, 97, 0.07), rgba(0, 0, 0, 0) 44%)",
+      "area": 2073600
+    },
+    {
+      "value": "radial-gradient(circle at 48% 48%, rgba(169, 214, 99, 0.34) 0px, rgba(169, 214, 99, 0.34) 31%, rgba(126, 177, 74, 0.18) 48%, rgba(112, 162, 92, 0.08) 63%, rgba(0, 0, 0, 0) 73%)",
+      "area": 201102
+    }
+  ],
+  "glass": [
+    {
+      "backdropFilter": "blur(16px) saturate(1.3)",
+      "background": "linear-gradient(145deg, rgba(255, 255, 255, 0.88), rgba(244, 248, 239, 0.72))",
+      "border": "1px solid rgba(255, 255, 255, 0.9)",
+      "borderRadius": "8px",
+      "boxShadow": "rgba(255, 255, 255, 0.92) 0px 1px 0px 0px inset, rgba(105, 133, 81, 0.08) 0px -1px 0px 0px inset, rgba(46, 65, 40, 0.043) 0px 5px 16px 0px",
+      "area": 447220
+    },
+    {
+      "backdropFilter": "blur(22px) saturate(1.45)",
+      "background": "linear-gradient(135deg, rgba(242, 249, 231, 0.82), rgba(205, 226, 181, 0.68))",
+      "border": "1px solid rgba(255, 255, 255, 0.27)",
+      "borderRadius": "22px",
+      "boxShadow": "rgba(10, 20, 12, 0.24) 0px 24px 54px 0px",
+      "area": 221200
+    },
+    {
+      "backdropFilter": "blur(22px) saturate(1.45)",
+      "background": "linear-gradient(135deg, rgba(255, 244, 235, 0.84), rgba(249, 215, 194, 0.7))",
+      "border": "1px solid rgba(255, 255, 255, 0.68)",
+      "borderRadius": "22px",
+      "boxShadow": "rgba(255, 255, 255, 0.76) 0px 1px 0px 0px inset, rgba(95, 119, 78, 0.12) 0px -1px 0px 0px inset, rgba(25, 43, 28, 0.2) 0px 22px 52px 0px",
+      "area": 208904
+    }
+  ]
+}

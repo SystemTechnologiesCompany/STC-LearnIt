@@ -1,0 +1,416 @@
+{
+  "ok": true,
+  "strict": false,
+  "browserSkipped": false,
+  "lint": {
+    "ok": true,
+    "errorCount": 0,
+    "warningCount": 0,
+    "infoCount": 0,
+    "findings": [],
+    "filesScanned": 1
+  },
+  "runtime": {
+    "ok": true,
+    "errorCount": 0,
+    "warningCount": 0,
+    "infoCount": 0,
+    "findings": []
+  },
+  "layout": {
+    "ok": true,
+    "errorCount": 0,
+    "warningCount": 0,
+    "infoCount": 1,
+    "findings": [
+      {
+        "code": "text_occluded",
+        "severity": "info",
+        "time": 25.336,
+        "selector": "div.crown",
+        "message": "Text is hidden beneath an opaque element.",
+        "rect": {
+          "left": 515.2,
+          "top": 850.78,
+          "right": 564.8,
+          "bottom": 915.57,
+          "width": 49.6,
+          "height": 64.79
+        },
+        "containerSelector": "div.place.first > div:nth-of-type(2)",
+        "text": "♛",
+        "fixHint": "Give the text its own zone, raise its stacking order above the covering element, or mark intentional layering with data-layout-allow-occlusion.",
+        "coveredFraction": 0.33,
+        "lifetime": {
+          "start": 0,
+          "end": 35.08
+        },
+        "dataAttributes": {},
+        "sourceFile": "index.html",
+        "bbox": {
+          "x": 515.2,
+          "y": 850.78,
+          "width": 49.6,
+          "height": 64.79
+        },
+        "firstSeen": 25.336,
+        "lastSeen": 25.336,
+        "occurrences": 1,
+        "heldMs": 0,
+        "times": [
+          25.336
+        ]
+      }
+    ],
+    "duration": 35.08,
+    "samples": [
+      1.949,
+      5.847,
+      9.744,
+      13.642,
+      17.54,
+      21.438,
+      25.336,
+      29.233,
+      33.131
+    ],
+    "transitionSamples": [],
+    "transitionSamplesDropped": 0,
+    "tolerance": 2,
+    "totalIssueCount": 1,
+    "truncated": false
+  },
+  "motion": {
+    "ok": true,
+    "errorCount": 0,
+    "warningCount": 0,
+    "infoCount": 0,
+    "findings": [],
+    "enabled": false,
+    "samples": 0
+  },
+  "contrast": {
+    "ok": true,
+    "errorCount": 0,
+    "warningCount": 0,
+    "infoCount": 0,
+    "findings": [],
+    "enabled": true,
+    "samples": [
+      1.949,
+      9.744,
+      17.54,
+      25.336,
+      33.131
+    ],
+    "checked": 5,
+    "passed": 5
+  },
+  "craft": {
+    "ok": true,
+    "errorCount": 0,
+    "warningCount": 1,
+    "infoCount": 0,
+    "findings": [
+      {
+        "code": "text_below_floor",
+        "severity": "warning",
+        "message": "Type floor is 28 px (2.6% of the 1080 px short side, what a phone can read) and 32 text elements stay under it for 0.5 s or more, the smallest \"03 / ADVANCE\" at 14 px: set reading text to at least 28 px, or put data-layout-ignore on text that is texture rather than reading; see references/look.md.",
+        "text": "03 / ADVANCE",
+        "selector": "#learn-card-3 > span:nth-of-type(1)",
+        "dataAttributes": {},
+        "sourceFile": "index.html",
+        "bbox": {
+          "x": 791.29,
+          "y": 1306.82,
+          "width": 121.25,
+          "height": 18.09
+        },
+        "time": 13.108,
+        "times": [
+          0.375,
+          1.623,
+          3.745,
+          6.242,
+          7.49,
+          7.615,
+          8.864,
+          8.988,
+          8.988,
+          9.113,
+          9.113,
+          9.238,
+          11.985,
+          12.234,
+          12.234,
+          12.734,
+          12.734,
+          13.108,
+          13.108,
+          15.605,
+          17.852,
+          19.225,
+          19.475,
+          19.475,
+          19.6,
+          19.6,
+          20.973,
+          22.596,
+          25.717,
+          27.215,
+          30.336,
+          33.083
+        ],
+        "fontPx": 13.83,
+        "floorPx": 28,
+        "seconds": 4.994,
+        "elements": [
+          {
+            "selector": "#learn-card-3 > span:nth-of-type(1)",
+            "text": "03 / ADVANCE",
+            "fontPx": 13.83,
+            "time": 13.108,
+            "seconds": 4.994
+          },
+          {
+            "selector": "#learn-card-1 > span:nth-of-type(1)",
+            "text": "01 / LEARN",
+            "fontPx": 14.18,
+            "time": 12.234,
+            "seconds": 5.868
+          },
+          {
+            "selector": "#learn-card-2 > span:nth-of-type(1)",
+            "text": "02 / PLAY",
+            "fontPx": 14.57,
+            "time": 12.734,
+            "seconds": 5.368
+          },
+          {
+            "selector": "#faculty-chips > span:nth-of-type(5)",
+            "text": "Economics",
+            "fontPx": 17.22,
+            "time": 9.113,
+            "seconds": 2.997
+          },
+          {
+            "selector": "#faculty-chips > span:nth-of-type(3)",
+            "text": "Law",
+            "fontPx": 17.35,
+            "time": 8.988,
+            "seconds": 3.122
+          },
+          {
+            "selector": "#faculty-chips > span:nth-of-type(1)",
+            "text": "Medicine",
+            "fontPx": 17.47,
+            "time": 8.864,
+            "seconds": 3.246
+          },
+          {
+            "selector": "#faculty-chips > span:nth-of-type(6)",
+            "text": "Languages",
+            "fontPx": 18.24,
+            "time": 9.238,
+            "seconds": 2.872
+          },
+          {
+            "selector": "#faculty-chips > span:nth-of-type(4)",
+            "text": "Sciences",
+            "fontPx": 18.33,
+            "time": 9.113,
+            "seconds": 2.997
+          },
+          {
+            "selector": "#faculty-chips > span:nth-of-type(2)",
+            "text": "Technology",
+            "fontPx": 18.4,
+            "time": 8.988,
+            "seconds": 3.122
+          },
+          {
+            "selector": "#learn-card-3 > div:nth-of-type(1) > small:nth-of-type(1)",
+            "text": "Earn experience with every lesson.",
+            "fontPx": 18.43,
+            "time": 13.108,
+            "seconds": 4.994
+          },
+          {
+            "selector": "#learn-card-1 > div:nth-of-type(1) > small:nth-of-type(1)",
+            "text": "Short lessons make key concepts clear.",
+            "fontPx": 18.91,
+            "time": 12.234,
+            "seconds": 5.868
+          },
+          {
+            "selector": "#learn-card-2 > div:nth-of-type(1) > small:nth-of-type(1)",
+            "text": "Quizzes and games make ideas stick.",
+            "fontPx": 19.43,
+            "time": 12.734,
+            "seconds": 5.368
+          },
+          {
+            "selector": "#camera-2 > p:nth-of-type(3)",
+            "text": "stclearnit.netlify.app",
+            "fontPx": 22,
+            "time": 6.242,
+            "seconds": 1.373
+          },
+          {
+            "selector": "#end-url",
+            "text": "stclearnit.netlify.app",
+            "fontPx": 22,
+            "time": 33.083,
+            "seconds": 1.997
+          },
+          {
+            "selector": "div.faculty-count",
+            "text": "12 Faculties & Institutes",
+            "fontPx": 23,
+            "time": 7.615,
+            "seconds": 4.495
+          },
+          {
+            "selector": "#theme-tag",
+            "text": "STUDY YOUR WAY",
+            "fontPx": 23.37,
+            "time": 30.336,
+            "seconds": 1.498
+          },
+          {
+            "selector": "#camera-1 > p:nth-of-type(1)",
+            "text": "YOUR NEXT LEVEL AWAITS",
+            "fontPx": 24,
+            "time": 0.375,
+            "seconds": 3.246
+          },
+          {
+            "selector": "#camera-2 > p:nth-of-type(1)",
+            "text": "A NEW WAY TO STUDY",
+            "fontPx": 24,
+            "time": 3.745,
+            "seconds": 3.87
+          },
+          {
+            "selector": "#camera-3 > p:nth-of-type(1)",
+            "text": "YOUR UNIVERSITY · YOUR DIRECTION",
+            "fontPx": 24,
+            "time": 7.49,
+            "seconds": 4.62
+          },
+          {
+            "selector": "#camera-4 > p:nth-of-type(1)",
+            "text": "LEARN · PLAY · ADVANCE",
+            "fontPx": 24,
+            "time": 11.985,
+            "seconds": 6.117
+          },
+          {
+            "selector": "#camera-5 > p:nth-of-type(1)",
+            "text": "PROGRESS THAT ADDS UP",
+            "fontPx": 24,
+            "time": 17.852,
+            "seconds": 4.994
+          },
+          {
+            "selector": "#camera-6 > p:nth-of-type(1)",
+            "text": "LEARN TOGETHER · CLIMB TOGETHER",
+            "fontPx": 24,
+            "time": 22.596,
+            "seconds": 4.869
+          },
+          {
+            "selector": "#camera-7 > p:nth-of-type(1)",
+            "text": "YOUR STUDY SPACE · YOUR STYLE",
+            "fontPx": 24,
+            "time": 27.215,
+            "seconds": 4.619
+          },
+          {
+            "selector": "#first-tag",
+            "text": "STC LEARNIT · MADE FOR YOU",
+            "fontPx": 24.03,
+            "time": 1.623,
+            "seconds": 1.998
+          },
+          {
+            "selector": "#level-up",
+            "text": "PASS · EARN XP · LEVEL UP ↗",
+            "fontPx": 25.37,
+            "time": 20.973,
+            "seconds": 1.873
+          },
+          {
+            "selector": "#practice-tag",
+            "text": "LESSONS · QUIZZES · GAMES · EXAMS",
+            "fontPx": 25.86,
+            "time": 15.605,
+            "seconds": 2.497
+          },
+          {
+            "selector": "#path-steps > div:nth-of-type(1) > span:nth-of-type(2)",
+            "text": "Learn the foundations",
+            "fontPx": 26,
+            "time": 19.225,
+            "seconds": 3.621
+          },
+          {
+            "selector": "#path-steps > div:nth-of-type(2) > span:nth-of-type(1)",
+            "text": "02",
+            "fontPx": 26,
+            "time": 19.475,
+            "seconds": 3.371
+          },
+          {
+            "selector": "#path-steps > div:nth-of-type(2) > span:nth-of-type(2)",
+            "text": "Practise the concepts",
+            "fontPx": 26,
+            "time": 19.475,
+            "seconds": 3.371
+          },
+          {
+            "selector": "#path-steps > div:nth-of-type(3) > span:nth-of-type(1)",
+            "text": "03",
+            "fontPx": 26,
+            "time": 19.6,
+            "seconds": 3.246
+          },
+          {
+            "selector": "#path-steps > div:nth-of-type(3) > span:nth-of-type(2)",
+            "text": "Pass the unit exam",
+            "fontPx": 26,
+            "time": 19.6,
+            "seconds": 3.246
+          },
+          {
+            "selector": "#leader-tag",
+            "text": "SHOW UP · KEEP LEARNING · CLIMB",
+            "fontPx": 26,
+            "time": 25.717,
+            "seconds": 1.748
+          }
+        ]
+      }
+    ],
+    "enabled": true,
+    "step": 0.125,
+    "samples": 281
+  },
+  "audio": {
+    "ok": true,
+    "errorCount": 0,
+    "warningCount": 0,
+    "infoCount": 0,
+    "findings": []
+  },
+  "hdr": {
+    "autoPromotion": null,
+    "inspection": "available"
+  },
+  "snapshots": {
+    "enabled": false,
+    "files": [],
+    "times": [],
+    "findingFiles": []
+  }
+}

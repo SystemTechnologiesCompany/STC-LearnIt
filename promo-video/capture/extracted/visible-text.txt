@@ -1,0 +1,208 @@
+[span] STC My Way...Your Way...Our Way
+[a] Kasdi Merbah University
+[a] Follow us on LinkedIn
+[span] STC
+[span] Learn
+[a] Explore faculties
+[a] Learn & practice
+[a] Leaderboard
+[a] My profile
+[span] English
+[span] Français
+[span] Log in
+[span] Log out
+[span] Get started
+[div] YOUR UNIVERSITY, YOUR WAY
+[h1] Study smarter
+[span] Level up
+[p] University subjects made easier to learn, one little win at a time. Pick your speciality, play your way through lessons, and climb to your next level.
+[button] Start learning
+[a] See how it works
+[a] Support the developer
+[span] 👩🏽‍🎓
+[span] 👨🏻‍🎓
+[span] 👩🏻‍🎓
+[strong] Made by the STC team for students in Algeria
+[div] +20 XP
+[div] 5 day streak!
+[span] YOUR LEARNING PATH
+[h2] Geology
+[span] YEAR 1
+[span] Unit 1 · Earth basics
+[strong] 2 / 5
+[strong] Earth layers
+[small] Lesson complete
+[strong] Rocks & minerals
+[small] Up next · 5 min
+[strong] Plate tectonics
+[small] Unlock next
+[b] 120
+[span] XP earned
+[span] day streak
+[span] WATCH US TAKING IT SON
+[span] 01 — 12 FACULTIES & INSTITUTES
+[strong] Short lessons
+[small] Make every study break count
+[strong] Play to remember
+[small] Quizzes, games & quick reviews
+[strong] See your progress
+[small] Build a streak and earn XP
+[strong] Reach the next level
+[small] Unit tests & final exams
+[div] FIND YOUR STARTING POINT
+[h2] Big ambitions.
+[span] One place to begin.
+[p] Explore faculties and study areas from Kasdi Merbah University. Get AI study support, then build your skills with guided lessons, quizzes, games and exams.
+[span] YOUR STUDY AREA
+[h3] What are you studying?
+[span] faculties & institutes
+[button] All
+[button] Faculties
+[button] Institutes
+[span] Faculty of Medicine
+[span] Faculty · 1 department
+[span] Faculty of New Information Technologies & Communication
+[span] Faculty · 2 departments
+[span] Faculty of Hydrocarbons, Renewable Energy, Earth & Universe Sciences
+[span] Faculty · 4 departments
+[span] Institute of Technology
+[span] Institute · 1 department
+[span] Faculty of Natural Sciences and Life
+[span] Faculty · 2 departments
+[span] Faculty of Applied Sciences
+[span] Faculty · 4 departments
+[span] Faculty of Mathematics and Matter Sciences
+[span] Faculty · 3 departments
+[span] Faculty of Economics, Commercial Sciences and Management
+[span] Faculty · 3 departments
+[span] Faculty of Arts and Languages
+[span] Faculty · 3 departments
+[span] Faculty of Law and Political Sciences
+[span] Faculty · 2 departments
+[span] Faculty of Humanities and Social Sciences
+[span] Faculty · 4 departments
+[span] Institute of Science and Techniques of Physical and Sporting Activities
+[span] Institute · 1 department
+[span] YOUR STUDY PATH
+[h3] Choose a faculty
+[p] Select a study area and level to get started.
+[label] Department or subject
+[label] Study level
+[option] Licence · Year 1
+[option] Licence · Year 2
+[option] Licence · Year 3
+[option] Master · Year 1
+[option] Master · Year 2
+[button] Explore study path
+[span] Data based on Kasdi Merbah University of Ouargla
+[a] View university website ↗
+[div] YOUR STUDY ROUTINE, REIMAGINED
+[h2] Little lessons.
+[span] Big “I got this” energy.
+[p] A learning path designed around the way students actually study.
+[div] 01 / LEARN
+[h3] Get the idea, clearly
+[p] Break each university subject into focused lessons that are easier to understand and remember.
+[a] Pick a subject
+[div] 02 / PLAY
+[span] +XP
+[h3] Practice while you play
+[p] Use quick quizzes, matching games and challenges to make key concepts stick.
+[a] See the journey
+[div] 03 / ADVANCE
+[span] ✦ ✦ ✦
+[h3] Earn your next level
+[p] Collect XP, keep your streak, pass unit exams and unlock the next part of your course.
+[a] How levels work
+[span] 01 / 03
+[div] YOUR PROGRESS, MADE VISIBLE
+[h2] Every lesson
+[h2] gets you
+[span] closer.
+[p] Follow a clear path through your subject. Complete lessons and games, pass unit exams, then take a final exam to earn your next level.
+[button] See your learning path
+[div] YOUR
+[div] JOURNEY
+[strong] Learn the basics
+[small] Lessons + practice games
+[b] +120 XP
+[strong] Pass the unit exam
+[small] Show what you know
+[b] +250 XP
+[strong] Unlock the next unit
+[small] Keep your learning streak
+[b] IN PROGRESS
+[strong] Take the final exam
+[small] Complete your level
+[b] LEVEL UP ↑
+[div] YOUR NEXT CHAPTER STARTS HERE
+[h2] Ready to make
+[span] progress your thing?
+[p] Pick your study path and take your first small step today.
+[button] Find my study path
+[span] STC The Way To Greatness
+[a] Inspired by Kasdi Merbah University ↗
+[span] STC
+[span] Learn
+[span] YOUR NEXT LEVEL AWAITS
+[h2] Join the journey.
+[p] Create your account to save your study path, earn XP and keep your streak going.
+[span] Continue with Google
+[span] or use your Gmail
+[label] Student name
+[label] Gmail address
+[label] Password
+[button] Create account
+[button] Already have an account? Log in
+[small] We’ll send a confirmation link to your Gmail before your account is activated.
+[span] YOUR STUDY PATH
+[h2] Build your learning path.
+[p] Your selected study area and level will guide your learning. Ask Sewingo AI for explanations, examples, quizzes and revision help for any subject.
+[strong] Understand key concepts
+[small] Clear explanations and worked examples
+[b] LEARN
+[strong] Practice as you learn
+[small] Quick quizzes and activities to build confidence
+[b] QUIZ + GAME
+[strong] Prepare for exams
+[small] Review, test yourself and track your progress
+[b] EXAM
+[div] Personalized study path
+[div] ⚡ Earn XP
+[div] 🏁 Level up
+[button] Open learning path
+[button] Study with AI
+[strong] Need a study buddy?
+[small] Ask Sewingo AI
+[span] STC LEARNIT MEMBERSHIP
+[h2] Choose your way to grow.
+[p] More energy, focused learning and direct support when you need it.
+[span] BEST FOR STARTERS
+[span] PRO
+[span] Plan
+[strong] 250 DA
+[li] 50 Energy
+[li] Half the energy wait time
+[li] Sakura theme unlocked
+[li] No Ads
+[li] Direct Support
+[button] Choose plan
+[span] BEST VALUE
+[span] STC
+[span] Plan
+[strong] 700 DA
+[li] Unlimited AI
+[li] Unlimited Energy
+[li] All themes unlocked
+[li] No Ads
+[li] Admin Support
+[button] Choose plan
+[span] SETUP REQUIRED
+[strong] BaridiMob manual transfer
+[small] Transfer the plan amount to the STC BaridiMob RIP shown below.
+[strong] Visa
+[small] Secure card checkout through an approved bank or payment gateway.
+[p] Choose BaridiMob for manual transfer instructions. STC activates the plan after confirming payment.
+[label] Have a plan activation code?
+[button] Redeem code
+[p] Manual BaridiMob payments are verified by STC before a plan is activated.

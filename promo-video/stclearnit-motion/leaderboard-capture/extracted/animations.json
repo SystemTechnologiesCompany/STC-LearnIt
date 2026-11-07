@@ -1,0 +1,475 @@
+{
+  "summary": {
+    "webAnimations": 11,
+    "cssDeclarations": 75,
+    "scrollTargets": 0,
+    "cdpAnimations": 11,
+    "canvases": 0
+  },
+  "namedAnimations": [
+    "learnit-star-drift",
+    "nav-active-in",
+    "premium-gradient-drift",
+    "language-menu-in",
+    "leader-gold-glow",
+    "winner-avatar-glow",
+    "winner-button-glow",
+    "plans-modal-in",
+    "galaxy-twinkle",
+    "galaxy-meteor",
+    "plans-card-in",
+    "plan-petal-fall",
+    "pro-plan-gradient",
+    "plan-stars-twinkle",
+    "plan-logo-float",
+    "plan-meteor-sweep",
+    "stc-plan-gradient",
+    "plans-button-glow"
+  ],
+  "scrollTriggeredElements": 0,
+  "representativeAnimations": [
+    {
+      "type": "CSSAnimation",
+      "playState": "running",
+      "animationName": "learnit-star-drift",
+      "targetSelector": "i.sky-stars.sky-stars--small",
+      "targetRect": {
+        "x": 0,
+        "y": -86.28514862060547,
+        "width": 1,
+        "height": 1,
+        "top": -86.28514862060547,
+        "right": 1,
+        "bottom": -85.28514862060547,
+        "left": 0
+      },
+      "keyframes": [
+        {
+          "offset": 0,
+          "easing": "linear",
+          "composite": "auto",
+          "transform": "translateY(0px)",
+          "computedOffset": 0
+        },
+        {
+          "offset": 1,
+          "easing": "linear",
+          "composite": "auto",
+          "transform": "translateY(-1080px)",
+          "computedOffset": 1
+        }
+      ],
+      "timing": {
+        "duration": 130000,
+        "delay": 0,
+        "iterations": null,
+        "easing": "linear",
+        "direction": "normal"
+      }
+    },
+    {
+      "type": "CSSAnimation",
+      "playState": "running",
+      "animationName": "learnit-star-drift",
+      "targetSelector": "i.sky-stars.sky-stars--medium",
+      "targetRect": {
+        "x": 0,
+        "y": -1017.6829223632812,
+        "width": 2,
+        "height": 2,
+        "top": -1017.6829223632812,
+        "right": 2,
+        "bottom": -1015.6829223632812,
+        "left": 0
+      },
+      "keyframes": [
+        {
+          "offset": 0,
+          "easing": "linear",
+          "composite": "auto",
+          "transform": "translateY(0px)",
+          "computedOffset": 0
+        },
+        {
+          "offset": 1,
+          "easing": "linear",
+          "composite": "auto",
+          "transform": "translateY(-1080px)",
+          "computedOffset": 1
+        }
+      ],
+      "timing": {
+        "duration": 180000,
+        "delay": 0,
+        "iterations": null,
+        "easing": "linear",
+        "direction": "reverse"
+      }
+    },
+    {
+      "type": "CSSAnimation",
+      "playState": "running",
+      "animationName": "learnit-star-drift",
+      "targetSelector": "i.sky-stars.sky-stars--bright",
+      "targetRect": {
+        "x": 0,
+        "y": -50.98667907714844,
+        "width": 3,
+        "height": 3,
+        "top": -50.98667907714844,
+        "right": 3,
+        "bottom": -47.98667907714844,
+        "left": 0
+      },
+      "keyframes": [
+        {
+          "offset": 0,
+          "easing": "linear",
+          "composite": "auto",
+          "transform": "translateY(0px)",
+          "computedOffset": 0
+        },
+        {
+          "offset": 1,
+          "easing": "linear",
+          "composite": "auto",
+          "transform": "translateY(-1080px)",
+          "computedOffset": 1
+        }
+      ],
+      "timing": {
+        "duration": 220000,
+        "delay": 0,
+        "iterations": null,
+        "easing": "linear",
+        "direction": "normal"
+      }
+    },
+    {
+      "type": "CSSAnimation",
+      "playState": "finished",
+      "animationName": "nav-active-in",
+      "targetSelector": "a.active-leader-link",
+      "targetRect": {
+        "x": 902.234375,
+        "y": 55.5,
+        "width": 101.984375,
+        "height": 34,
+        "top": 55.5,
+        "right": 1004.21875,
+        "bottom": 89.5,
+        "left": 902.234375
+      },
+      "keyframes": [
+        {
+          "offset": 0,
+          "easing": "cubic-bezier(0.2, 0.8, 0.2, 1)",
+          "composite": "auto",
+          "transform": "translateY(4px) scale(0.97)",
+          "opacity": "0.55",
+          "computedOffset": 0
+        },
+        {
+          "offset": 1,
+          "easing": "cubic-bezier(0.2, 0.8, 0.2, 1)",
+          "composite": "auto",
+          "transform": "translateY(0px) scale(1)",
+          "opacity": "1",
+          "computedOffset": 1
+        }
+      ],
+      "timing": {
+        "duration": 420,
+        "delay": 0,
+        "iterations": 1,
+        "easing": "linear",
+        "direction": "normal"
+      }
+    },
+    {
+      "type": "CSSAnimation",
+      "playState": "running",
+      "animationName": "premium-gradient-drift",
+      "targetSelector": "button.button.premium-plans-button",
+      "targetRect": {
+        "x": 1105.671875,
+        "y": 53.5,
+        "width": 99.1875,
+        "height": 38,
+        "top": 53.5,
+        "right": 1204.859375,
+        "bottom": 91.5,
+        "left": 1105.671875
+      },
+      "keyframes": [
+        {
+          "offset": 0,
+          "easing": "linear",
+          "composite": "auto",
+          "backgroundPositionX": "0%",
+          "backgroundPositionY": "50%",
+          "computedOffset": 0
+        },
+        {
+          "offset": 1,
+          "easing": "linear",
+          "composite": "auto",
+          "backgroundPositionX": "100%",
+          "backgroundPositionY": "50%",
+          "computedOffset": 1
+        }
+      ],
+      "timing": {
+        "duration": 9000,
+        "delay": 0,
+        "iterations": null,
+        "easing": "linear",
+        "direction": "normal"
+      }
+    },
+    {
+      "type": "CSSAnimation",
+      "playState": "running",
+      "animationName": "leader-gold-glow",
+      "targetSelector": "button.leader-follow.leader-follow--gold",
+      "targetRect": {
+        "x": 732,
+        "y": 911,
+        "width": 88,
+        "height": 30,
+        "top": 911,
+        "right": 820,
+        "bottom": 941,
+        "left": 732
+      },
+      "keyframes": [
+        {
+          "offset": 0,
+          "easing": "ease-in-out",
+          "composite": "auto",
+          "boxShadow": "rgb(248, 229, 160) 0px 0px 0px 1px, rgba(174, 134, 39, 0.208) 0px 5px 16px 0px",
+          "computedOffset": 0
+        },
+        {
+          "offset": 0.5,
+          "easing": "ease-in-out",
+          "composite": "auto",
+          "boxShadow": "rgba(243, 213, 117, 0.333) 0px 0px 0px 3px, rgba(174, 134, 39, 0.333) 0px 6px 21px 0px",
+          "computedOffset": 0.5
+        },
+        {
+          "offset": 1,
+          "easing": "ease-in-out",
+          "composite": "auto",
+          "boxShadow": "rgb(248, 229, 160) 0px 0px 0px 1px, rgba(174, 134, 39, 0.208) 0px 5px 16px 0px",
+          "computedOffset": 1
+        }
+      ],
+      "timing": {
+        "duration": 2600,
+        "delay": 0,
+        "iterations": null,
+        "easing": "linear",
+        "direction": "normal"
+      }
+    },
+    {
+      "type": "CSSAnimation",
+      "playState": "running",
+      "animationName": "winner-avatar-glow",
+      "targetSelector": "div.podium-avatar.has-photo",
+      "targetRect": {
+        "x": 928,
+        "y": 766,
+        "width": 64,
+        "height": 64,
+        "top": 766,
+        "right": 992,
+        "bottom": 830,
+        "left": 928
+      },
+      "keyframes": [
+        {
+          "offset": 0,
+          "easing": "ease-in-out",
+          "composite": "auto",
+          "boxShadow": "rgba(241, 207, 100, 0.35) 0px 0px 0px 3px, rgba(174, 134, 39, 0.2) 0px 5px 17px 0px",
+          "computedOffset": 0
+        },
+        {
+          "offset": 0.5,
+          "easing": "ease-in-out",
+          "composite": "auto",
+          "boxShadow": "rgba(241, 207, 100, 0.18) 0px 0px 0px 8px, rgba(239, 194, 57, 0.72) 0px 0px 30px 0px, rgba(174, 134, 39, 0.28) 0px 5px 17px 0px",
+          "computedOffset": 0.5
+        },
+        {
+          "offset": 1,
+          "easing": "ease-in-out",
+          "composite": "auto",
+          "boxShadow": "rgba(241, 207, 100, 0.35) 0px 0px 0px 3px, rgba(174, 134, 39, 0.2) 0px 5px 17px 0px",
+          "computedOffset": 1
+        }
+      ],
+      "timing": {
+        "duration": 2800,
+        "delay": 0,
+        "iterations": null,
+        "easing": "linear",
+        "direction": "normal"
+      }
+    },
+    {
+      "type": "CSSAnimation",
+      "playState": "running",
+      "animationName": "winner-photo-shine",
+      "targetSelector": "div.podium-avatar.has-photo",
+      "targetRect": {
+        "x": 928,
+        "y": 766,
+        "width": 64,
+        "height": 64,
+        "top": 766,
+        "right": 992,
+        "bottom": 830,
+        "left": 928
+      },
+      "keyframes": [
+        {
+          "offset": 0,
+          "easing": "ease-in-out",
+          "composite": "auto",
+          "transform": "translateX(-115%) rotate(10deg)",
+          "computedOffset": 0
+        },
+        {
+          "offset": 0.2,
+          "easing": "ease-in-out",
+          "composite": "auto",
+          "transform": "translateX(-115%) rotate(10deg)",
+          "computedOffset": 0.2
+        },
+        {
+          "offset": 0.55,
+          "easing": "ease-in-out",
+          "composite": "auto",
+          "transform": "translateX(115%) rotate(10deg)",
+          "computedOffset": 0.55
+        },
+        {
+          "offset": 1,
+          "easing": "ease-in-out",
+          "composite": "auto",
+          "transform": "translateX(115%) rotate(10deg)",
+          "computedOffset": 1
+        }
+      ],
+      "timing": {
+        "duration": 4200,
+        "delay": 0,
+        "iterations": null,
+        "easing": "linear",
+        "direction": "normal"
+      }
+    },
+    {
+      "type": "CSSAnimation",
+      "playState": "running",
+      "animationName": "winner-button-glow",
+      "targetSelector": "button.leader-follow.leader-follow--gold",
+      "targetRect": {
+        "x": 916,
+        "y": 875,
+        "width": 88,
+        "height": 30,
+        "top": 875,
+        "right": 1004,
+        "bottom": 905,
+        "left": 916
+      },
+      "keyframes": [
+        {
+          "offset": 0,
+          "easing": "ease-in-out",
+          "composite": "auto",
+          "boxShadow": "rgba(248, 229, 160, 0.7) 0px 0px 0px 2px, rgba(174, 134, 39, 0.28) 0px 5px 16px 0px",
+          "computedOffset": 0
+        },
+        {
+          "offset": 0.5,
+          "easing": "ease-in-out",
+          "composite": "auto",
+          "boxShadow": "rgba(243, 213, 117, 0.36) 0px 0px 0px 5px, rgba(222, 177, 58, 0.72) 0px 0px 23px 0px",
+          "computedOffset": 0.5
+        },
+        {
+          "offset": 1,
+          "easing": "ease-in-out",
+          "composite": "auto",
+          "boxShadow": "rgba(248, 229, 160, 0.7) 0px 0px 0px 2px, rgba(174, 134, 39, 0.28) 0px 5px 16px 0px",
+          "computedOffset": 1
+        }
+      ],
+      "timing": {
+        "duration": 2400,
+        "delay": 0,
+        "iterations": null,
+        "easing": "linear",
+        "direction": "normal"
+      }
+    },
+    {
+      "type": "CSSAnimation",
+      "playState": "running",
+      "animationName": "winner-button-shine",
+      "targetSelector": "button.leader-follow.leader-follow--gold",
+      "targetRect": {
+        "x": 916,
+        "y": 875,
+        "width": 88,
+        "height": 30,
+        "top": 875,
+        "right": 1004,
+        "bottom": 905,
+        "left": 916
+      },
+      "keyframes": [
+        {
+          "offset": 0,
+          "easing": "ease-in-out",
+          "composite": "auto",
+          "transform": "translateX(-80%) rotate(10deg)",
+          "computedOffset": 0
+        },
+        {
+          "offset": 0.25,
+          "easing": "ease-in-out",
+          "composite": "auto",
+          "transform": "translateX(-80%) rotate(10deg)",
+          "computedOffset": 0.25
+        },
+        {
+          "offset": 0.65,
+          "easing": "ease-in-out",
+          "composite": "auto",
+          "transform": "translateX(80%) rotate(10deg)",
+          "computedOffset": 0.65
+        },
+        {
+          "offset": 1,
+          "easing": "ease-in-out",
+          "composite": "auto",
+          "transform": "translateX(80%) rotate(10deg)",
+          "computedOffset": 1
+        }
+      ],
+      "timing": {
+        "duration": 3400,
+        "delay": 0,
+        "iterations": null,
+        "easing": "linear",
+        "direction": "normal"
+      }
+    }
+  ]
+}

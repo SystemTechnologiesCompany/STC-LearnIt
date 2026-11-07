@@ -1,0 +1,467 @@
+{
+  "summary": {
+    "webAnimations": 30,
+    "cssDeclarations": 113,
+    "scrollTargets": 0,
+    "cdpAnimations": 35,
+    "canvases": 0
+  },
+  "namedAnimations": [
+    "learnit-star-drift",
+    "premium-gradient-drift",
+    "language-menu-in",
+    "cosmic-halo",
+    "star-twinkle",
+    "meteor-dash",
+    "hero-chip-float",
+    "path-card-float",
+    "hero-orbit-float",
+    "faculty-filter-in",
+    "plans-modal-in",
+    "galaxy-twinkle",
+    "galaxy-meteor",
+    "plans-card-in",
+    "plan-petal-fall",
+    "pro-plan-gradient",
+    "plan-stars-twinkle",
+    "plan-logo-float",
+    "plan-meteor-sweep",
+    "stc-plan-gradient",
+    "plans-button-glow"
+  ],
+  "scrollTriggeredElements": 0,
+  "representativeAnimations": [
+    {
+      "type": "CSSAnimation",
+      "playState": "running",
+      "animationName": "learnit-star-drift",
+      "targetSelector": "i.sky-stars.sky-stars--small",
+      "targetRect": {
+        "x": 0,
+        "y": -119.77169799804688,
+        "width": 1,
+        "height": 1,
+        "top": -119.77169799804688,
+        "right": 1,
+        "bottom": -118.77169799804688,
+        "left": 0
+      },
+      "keyframes": [
+        {
+          "offset": 0,
+          "easing": "linear",
+          "composite": "auto",
+          "transform": "translateY(0px)",
+          "computedOffset": 0
+        },
+        {
+          "offset": 1,
+          "easing": "linear",
+          "composite": "auto",
+          "transform": "translateY(-1080px)",
+          "computedOffset": 1
+        }
+      ],
+      "timing": {
+        "duration": 130000,
+        "delay": 0,
+        "iterations": null,
+        "easing": "linear",
+        "direction": "normal"
+      }
+    },
+    {
+      "type": "CSSAnimation",
+      "playState": "running",
+      "animationName": "learnit-star-drift",
+      "targetSelector": "i.sky-stars.sky-stars--medium",
+      "targetRect": {
+        "x": 0,
+        "y": -993.4982299804688,
+        "width": 2,
+        "height": 2,
+        "top": -993.4982299804688,
+        "right": 2,
+        "bottom": -991.4982299804688,
+        "left": 0
+      },
+      "keyframes": [
+        {
+          "offset": 0,
+          "easing": "linear",
+          "composite": "auto",
+          "transform": "translateY(0px)",
+          "computedOffset": 0
+        },
+        {
+          "offset": 1,
+          "easing": "linear",
+          "composite": "auto",
+          "transform": "translateY(-1080px)",
+          "computedOffset": 1
+        }
+      ],
+      "timing": {
+        "duration": 180000,
+        "delay": 0,
+        "iterations": null,
+        "easing": "linear",
+        "direction": "reverse"
+      }
+    },
+    {
+      "type": "CSSAnimation",
+      "playState": "running",
+      "animationName": "learnit-star-drift",
+      "targetSelector": "i.sky-stars.sky-stars--bright",
+      "targetRect": {
+        "x": 0,
+        "y": -70.77418518066406,
+        "width": 3,
+        "height": 3,
+        "top": -70.77418518066406,
+        "right": 3,
+        "bottom": -67.77418518066406,
+        "left": 0
+      },
+      "keyframes": [
+        {
+          "offset": 0,
+          "easing": "linear",
+          "composite": "auto",
+          "transform": "translateY(0px)",
+          "computedOffset": 0
+        },
+        {
+          "offset": 1,
+          "easing": "linear",
+          "composite": "auto",
+          "transform": "translateY(-1080px)",
+          "computedOffset": 1
+        }
+      ],
+      "timing": {
+        "duration": 220000,
+        "delay": 0,
+        "iterations": null,
+        "easing": "linear",
+        "direction": "normal"
+      }
+    },
+    {
+      "type": "CSSAnimation",
+      "playState": "running",
+      "animationName": "premium-gradient-drift",
+      "targetSelector": "button.button.premium-plans-button",
+      "targetRect": {
+        "x": 1034.53125,
+        "y": 53.5,
+        "width": 99.1875,
+        "height": 38,
+        "top": 53.5,
+        "right": 1133.71875,
+        "bottom": 91.5,
+        "left": 1034.53125
+      },
+      "keyframes": [
+        {
+          "offset": 0,
+          "easing": "linear",
+          "composite": "auto",
+          "backgroundPositionX": "0%",
+          "backgroundPositionY": "50%",
+          "computedOffset": 0
+        },
+        {
+          "offset": 1,
+          "easing": "linear",
+          "composite": "auto",
+          "backgroundPositionX": "100%",
+          "backgroundPositionY": "50%",
+          "computedOffset": 1
+        }
+      ],
+      "timing": {
+        "duration": 9000,
+        "delay": 0,
+        "iterations": null,
+        "easing": "linear",
+        "direction": "normal"
+      }
+    },
+    {
+      "type": "CSSAnimation",
+      "playState": "running",
+      "animationName": "cosmic-halo",
+      "targetSelector": "div.sunburst",
+      "targetRect": {
+        "x": 1324.530029296875,
+        "y": 194.15504455566406,
+        "width": 432.68994140625,
+        "height": 432.68994140625,
+        "top": 194.15504455566406,
+        "right": 1757.219970703125,
+        "bottom": 626.8449859619141,
+        "left": 1324.530029296875
+      },
+      "keyframes": [
+        {
+          "offset": 0,
+          "easing": "ease-in-out",
+          "composite": "auto",
+          "transform": "scale(0.96) rotate(0deg)",
+          "filter": "drop-shadow(rgba(158, 206, 99, 0.18) 0px 0px 20px)",
+          "computedOffset": 0
+        },
+        {
+          "offset": 0.5,
+          "easing": "ease-in-out",
+          "composite": "auto",
+          "transform": "scale(1.07) rotate(4deg)",
+          "filter": "drop-shadow(rgba(158, 226, 105, 0.43) 0px 0px 43px)",
+          "computedOffset": 0.5
+        },
+        {
+          "offset": 1,
+          "easing": "ease-in-out",
+          "composite": "auto",
+          "transform": "scale(0.96) rotate(0deg)",
+          "filter": "drop-shadow(rgba(158, 206, 99, 0.18) 0px 0px 20px)",
+          "computedOffset": 1
+        }
+      ],
+      "timing": {
+        "duration": 8000,
+        "delay": 0,
+        "iterations": null,
+        "easing": "linear",
+        "direction": "normal"
+      }
+    },
+    {
+      "type": "CSSAnimation",
+      "playState": "running",
+      "animationName": "ring-turn",
+      "targetSelector": "div.sunburst",
+      "targetRect": {
+        "x": 1324.530029296875,
+        "y": 194.15504455566406,
+        "width": 432.68994140625,
+        "height": 432.68994140625,
+        "top": 194.15504455566406,
+        "right": 1757.219970703125,
+        "bottom": 626.8449859619141,
+        "left": 1324.530029296875
+      },
+      "keyframes": [
+        {
+          "offset": 0,
+          "easing": "linear",
+          "composite": "replace",
+          "transform": "none",
+          "computedOffset": 0
+        },
+        {
+          "offset": 1,
+          "easing": "linear",
+          "composite": "auto",
+          "transform": "rotate(360deg)",
+          "computedOffset": 1
+        }
+      ],
+      "timing": {
+        "duration": 32000,
+        "delay": 0,
+        "iterations": null,
+        "easing": "linear",
+        "direction": "normal"
+      }
+    },
+    {
+      "type": "CSSAnimation",
+      "playState": "running",
+      "animationName": "ring-turn",
+      "targetSelector": "div.sunburst",
+      "targetRect": {
+        "x": 1324.530029296875,
+        "y": 194.15504455566406,
+        "width": 432.68994140625,
+        "height": 432.68994140625,
+        "top": 194.15504455566406,
+        "right": 1757.219970703125,
+        "bottom": 626.8449859619141,
+        "left": 1324.530029296875
+      },
+      "keyframes": [
+        {
+          "offset": 0,
+          "easing": "linear",
+          "composite": "replace",
+          "transform": "none",
+          "computedOffset": 0
+        },
+        {
+          "offset": 1,
+          "easing": "linear",
+          "composite": "auto",
+          "transform": "rotate(360deg)",
+          "computedOffset": 1
+        }
+      ],
+      "timing": {
+        "duration": 48000,
+        "delay": 0,
+        "iterations": null,
+        "easing": "linear",
+        "direction": "reverse"
+      }
+    },
+    {
+      "type": "CSSAnimation",
+      "playState": "running",
+      "animationName": "star-twinkle",
+      "targetSelector": "i.cosmic-star.star-a",
+      "targetRect": {
+        "x": 1064.118896484375,
+        "y": 262.55645751953125,
+        "width": 7.26220703125,
+        "height": 7.2620849609375,
+        "top": 262.55645751953125,
+        "right": 1071.381103515625,
+        "bottom": 269.81854248046875,
+        "left": 1064.118896484375
+      },
+      "keyframes": [
+        {
+          "offset": 0,
+          "easing": "ease-in-out",
+          "composite": "auto",
+          "transform": "scale(0.65)",
+          "opacity": "0.36",
+          "computedOffset": 0
+        },
+        {
+          "offset": 0.5,
+          "easing": "ease-in-out",
+          "composite": "auto",
+          "transform": "scale(1.6)",
+          "opacity": "1",
+          "computedOffset": 0.5
+        },
+        {
+          "offset": 1,
+          "easing": "ease-in-out",
+          "composite": "auto",
+          "transform": "scale(0.65)",
+          "opacity": "0.36",
+          "computedOffset": 1
+        }
+      ],
+      "timing": {
+        "duration": 2800,
+        "delay": -600,
+        "iterations": null,
+        "easing": "linear",
+        "direction": "normal"
+      }
+    },
+    {
+      "type": "CSSAnimation",
+      "playState": "running",
+      "animationName": "star-twinkle",
+      "targetSelector": "i.cosmic-star.star-b",
+      "targetRect": {
+        "x": 1637.402099609375,
+        "y": 290.93341064453125,
+        "width": 5.32080078125,
+        "height": 5.3206787109375,
+        "top": 290.93341064453125,
+        "right": 1642.722900390625,
+        "bottom": 296.25408935546875,
+        "left": 1637.402099609375
+      },
+      "keyframes": [
+        {
+          "offset": 0,
+          "easing": "ease-in-out",
+          "composite": "auto",
+          "transform": "scale(0.65)",
+          "opacity": "0.36",
+          "computedOffset": 0
+        },
+        {
+          "offset": 0.5,
+          "easing": "ease-in-out",
+          "composite": "auto",
+          "transform": "scale(1.6)",
+          "opacity": "1",
+          "computedOffset": 0.5
+        },
+        {
+          "offset": 1,
+          "easing": "ease-in-out",
+          "composite": "auto",
+          "transform": "scale(0.65)",
+          "opacity": "0.36",
+          "computedOffset": 1
+        }
+      ],
+      "timing": {
+        "duration": 2800,
+        "delay": -1500,
+        "iterations": null,
+        "easing": "linear",
+        "direction": "normal"
+      }
+    },
+    {
+      "type": "CSSAnimation",
+      "playState": "running",
+      "animationName": "star-twinkle",
+      "targetSelector": "i.cosmic-star.star-c",
+      "targetRect": {
+        "x": 1120.2889404296875,
+        "y": 535.5388793945312,
+        "width": 2.047119140625,
+        "height": 2.04718017578125,
+        "top": 535.5388793945312,
+        "right": 1122.3360595703125,
+        "bottom": 537.5860595703125,
+        "left": 1120.2889404296875
+      },
+      "keyframes": [
+        {
+          "offset": 0,
+          "easing": "ease-in-out",
+          "composite": "auto",
+          "transform": "scale(0.65)",
+          "opacity": "0.36",
+          "computedOffset": 0
+        },
+        {
+          "offset": 0.5,
+          "easing": "ease-in-out",
+          "composite": "auto",
+          "transform": "scale(1.6)",
+          "opacity": "1",
+          "computedOffset": 0.5
+        },
+        {
+          "offset": 1,
+          "easing": "ease-in-out",
+          "composite": "auto",
+          "transform": "scale(0.65)",
+          "opacity": "0.36",
+          "computedOffset": 1
+        }
+      ],
+      "timing": {
+        "duration": 2800,
+        "delay": -2200,
+        "iterations": null,
+        "easing": "linear",
+        "direction": "normal"
+      }
+    }
+  ]
+}

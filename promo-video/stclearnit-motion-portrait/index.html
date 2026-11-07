@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=1080,height=1920">
+  <title>STC Learnit — The Way to Greatness</title>
+  <script src="assets/vendor/gsap.min.js"></script>
+  <style>
+    @font-face{font-family:Manrope;src:url("assets/fonts/manrope.woff2") format("woff2");font-style:normal;font-weight:200 800;font-display:swap}
+    @font-face{font-family:DMSans;src:url("assets/fonts/dm-sans.woff2") format("woff2");font-style:normal;font-weight:400 800;font-display:swap}
+    :root{--navy:#050812;--navy2:#0d1930;--panel:#152642;--blue:#78afff;--ice:#a8d1ff;--cream:#f4f2ec;--green:#bfec62;--emerald:#10291e;--pink:#ed78ad;--pink2:#ffb5d4;--sakura:#100810}
+    *{box-sizing:border-box}html,body{margin:0;width:1080px;height:1920px;overflow:hidden;background:var(--navy);color:var(--cream);font-family:DMSans,sans-serif}
+    #root{position:relative;width:1080px;height:1920px;overflow:hidden;isolation:isolate;background:var(--navy)}
+    .scene{position:absolute;inset:0;display:flex;width:100%;height:100%;overflow:hidden;opacity:0;transform-origin:center;}
+    #scene-1{opacity:1;z-index:1}.scene:nth-of-type(2){z-index:2}.scene:nth-of-type(3){z-index:3}.scene:nth-of-type(4){z-index:4}.scene:nth-of-type(5){z-index:5}.scene:nth-of-type(6){z-index:6}.scene:nth-of-type(7){z-index:7}.scene:nth-of-type(8){z-index:8}
+    .scene-content{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;justify-content:center;width:100%;height:100%;padding:128px 72px;gap:34px;text-align:center}
+    .scene-blue{background:radial-gradient(ellipse at 50% 42%,#102342 0%,#09152b 38%,var(--navy) 77%);color:var(--cream)}
+    .scene-green{background:radial-gradient(ellipse at 50% 35%,#193627 0%,#0b1b14 43%,#07100c 82%);color:var(--cream)}
+    .scene-pink{background:radial-gradient(ellipse at 50% 38%,#352037 0%,#1b101d 44%,var(--sakura) 82%);color:#fff5fa}
+    .scene-glow{position:absolute;z-index:0;width:730px;height:730px;border-radius:50%;pointer-events:none;filter:blur(18px);background:radial-gradient(circle,rgba(79,143,245,.24),rgba(24,69,141,.1) 42%,rgba(5,8,18,0) 72%)}
+    .eyebrow{margin:0;color:var(--ice);font:800 24px/1.2 DMSans,sans-serif;letter-spacing:.18em;text-transform:uppercase}
+    .scene-green .eyebrow{color:var(--green)}.scene-pink .eyebrow{color:var(--pink2)}
+    .headline{max-width:900px;margin:0;font:800 112px/.94 Manrope,sans-serif;letter-spacing:-.065em;text-wrap:balance}
+    .headline .accent{color:var(--blue)}.scene-green .headline .accent{color:var(--green)}.scene-pink .headline .accent{color:var(--pink2)}
+    .copy{max-width:840px;margin:0;color:#c8d3e2;font:500 30px/1.45 DMSans,sans-serif}
+    .scene-green .copy{color:#d0dfd2}.scene-pink .copy{color:#f1dce7}
+    .tag{padding:17px 24px;border:1px solid rgba(168,209,255,.35);border-radius:999px;background:rgba(21,38,66,.66);color:var(--ice);font-size:26px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;box-shadow:0 0 28px rgba(120,175,255,.12)}
+    .scene-green .tag{border-color:rgba(191,236,98,.38);background:rgba(32,62,42,.7);color:#d9f6a2}.scene-pink .tag{border-color:rgba(237,120,173,.45);background:rgba(61,32,54,.72);color:#ffd0e5}
+    .orbital{position:absolute;left:50%;top:47%;width:780px;height:780px;transform:translate(-50%,-50%);border:1px solid rgba(168,209,255,.22);border-radius:50%;box-shadow:0 0 70px rgba(72,139,245,.13),inset 0 0 65px rgba(72,139,245,.08)}
+    .orbital:before,.orbital:after{content:"";position:absolute;inset:52px;border:1px solid rgba(168,209,255,.16);border-radius:50%}.orbital:after{inset:126px;border-style:dashed;opacity:.7}
+    .satellite{position:absolute;left:50%;top:50%;width:30px;height:30px;border-radius:50%;background:var(--ice);box-shadow:0 0 35px 12px rgba(120,175,255,.55)}
+    .orbital-core{display:grid;place-items:center;width:260px;height:260px;margin-top:2px;border:1px solid rgba(168,209,255,.42);border-radius:50%;background:radial-gradient(circle at 32% 26%,rgba(168,209,255,.28),rgba(21,38,66,.7) 68%);box-shadow:0 0 80px rgba(120,175,255,.22),inset 0 0 42px rgba(168,209,255,.14)}
+    .level-token{display:grid;place-items:center;width:154px;height:154px;border:2px solid rgba(240,248,255,.82);border-radius:43% 57% 48% 52%;background:linear-gradient(145deg,#e3f2ff,#8dbfff 58%,#4c81d8);color:#10203a;font:800 63px/1 Manrope,sans-serif;box-shadow:0 0 68px rgba(107,169,255,.7),inset 0 8px 22px rgba(255,255,255,.72);transform:rotate(-8deg)}
+    .screen-card{position:relative;width:860px;overflow:hidden;border:1px solid rgba(201,222,255,.42);border-radius:30px;background:#0c1525;box-shadow:0 35px 90px rgba(0,0,0,.55),0 0 56px rgba(86,153,255,.2);transform-style:preserve-3d}
+    .screen-bar{display:flex;align-items:center;height:42px;padding:0 18px;gap:8px;border-bottom:1px solid rgba(168,209,255,.15);background:#101c30}.screen-bar i{width:8px;height:8px;border-radius:50%;background:#8494aa}.screen-bar span{margin-left:auto;color:#bdcce0;font-size:13px;letter-spacing:.06em}
+    .screen-card img{display:block;width:100%;height:auto;object-fit:contain}.screen-caption{position:absolute;left:0;right:0;bottom:0;padding:26px 30px 22px;background:linear-gradient(0deg,rgba(5,8,18,.92),rgba(5,8,18,0));color:#e6f0ff;text-align:left;font-weight:800;font-size:28px;letter-spacing:.06em;text-transform:uppercase}
+    .scene-green .screen-card{border-color:rgba(191,236,98,.34);box-shadow:0 35px 90px rgba(0,0,0,.45),0 0 45px rgba(137,201,76,.14)}
+    .scene-pink .screen-card{border-color:rgba(255,181,212,.42);box-shadow:0 35px 90px rgba(0,0,0,.5),0 0 55px rgba(237,120,173,.2)}
+    .mark-row{display:flex;align-items:center;justify-content:center;gap:18px}.mark-row img{width:62px;height:62px;object-fit:contain;filter:brightness(0) saturate(100%) invert(72%) sepia(26%) saturate(865%) hue-rotate(179deg) brightness(105%) drop-shadow(0 0 20px rgba(120,175,255,.55))}.scene-green .mark-row img{filter:brightness(0) saturate(100%) invert(83%) sepia(28%) saturate(818%) hue-rotate(28deg) brightness(104%) drop-shadow(0 0 18px rgba(191,236,98,.4))}.scene-pink .mark-row img{filter:brightness(0) saturate(100%) invert(74%) sepia(19%) saturate(1162%) hue-rotate(283deg) brightness(103%) drop-shadow(0 0 20px rgba(237,120,173,.5))}
+    .wordmark{font:800 47px/1 Manrope,sans-serif;letter-spacing:-.055em}.wordmark span{color:var(--blue)}.scene-green .wordmark span{color:var(--green)}.scene-pink .wordmark span{color:var(--pink2)}
+    .web-address{color:var(--ice);font:700 22px/1.2 DMSans,sans-serif;letter-spacing:.08em}.scene-pink .web-address{color:var(--pink2)}
+    .faculty-count{color:var(--ice);font:800 23px/1.2 DMSans,sans-serif;letter-spacing:.18em;text-transform:uppercase}
+    .chips{display:flex;justify-content:center;flex-wrap:wrap;gap:13px;max-width:850px}.chip{padding:13px 18px;border:1px solid rgba(168,209,255,.3);border-radius:999px;background:rgba(21,38,66,.72);color:#ecf4ff;font-size:19px;font-weight:700;box-shadow:inset 0 1px 0 rgba(255,255,255,.08)}
+    .learn-stack{display:flex;flex-direction:column;gap:18px;width:860px}.learn-card{position:relative;display:grid;grid-template-columns:180px 1fr;align-items:center;min-height:255px;padding:24px 32px;gap:28px;border:1px solid rgba(168,209,255,.3);border-radius:26px;background:linear-gradient(140deg,rgba(21,38,66,.96),rgba(10,20,37,.94));box-shadow:0 24px 55px rgba(0,0,0,.3),inset 0 1px 0 rgba(255,255,255,.08);text-align:left;transform-style:preserve-3d}.learn-card img{width:160px;height:160px;object-fit:contain;filter:drop-shadow(0 14px 25px rgba(120,175,255,.28))}.learn-card strong{display:block;color:#f5f7fb;font:800 35px/1.05 Manrope,sans-serif;letter-spacing:-.035em}.learn-card small{display:block;margin-top:15px;color:#bdcce0;font-size:20px;line-height:1.35}
+    .learn-index{position:absolute;top:18px;right:21px;color:var(--ice);font-size:15px;font-weight:800;letter-spacing:.15em}
+    .path-frame{width:860px;overflow:hidden;border:1px solid rgba(168,209,255,.32);border-radius:27px;background:#0b1423;box-shadow:0 30px 75px rgba(0,0,0,.45)}.path-frame img{display:block;width:100%;height:auto}.path-steps{position:relative;display:flex;flex-direction:column;gap:18px;width:850px;padding:16px 22px 16px 42px;text-align:left}.path-steps:before{content:"";position:absolute;left:58px;top:43px;bottom:43px;width:3px;background:linear-gradient(var(--blue),rgba(120,175,255,.18));box-shadow:0 0 17px rgba(120,175,255,.4)}.path-step{position:relative;display:flex;align-items:center;min-height:92px;gap:25px;color:#f1f5fd;font-size:26px;font-weight:800}.node{z-index:1;display:grid;place-items:center;width:55px;height:55px;flex:0 0 55px;border:2px solid #91c0ff;border-radius:50%;background:#19365c;color:#eaf4ff;box-shadow:0 0 28px rgba(120,175,255,.35)}.path-step:last-child .node{background:#bfe0ff;color:#102039}
+    .podium{display:flex;align-items:flex-end;justify-content:center;width:860px;height:600px;gap:16px;padding:0 18px}.place{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;width:260px;text-align:center}.place.second,.place.third{height:410px}.place.first{height:535px}.avatar{z-index:2;display:grid;place-items:center;width:132px;height:132px;margin-bottom:18px;border:4px solid #eef4ff;border-radius:50%;background:radial-gradient(circle at 35% 28%,#f3f5ed,#bdc9bb 70%);color:#5e6d62;font:800 47px/1 Manrope,sans-serif;box-shadow:0 0 34px rgba(255,255,255,.28)}.first .avatar{border-color:#ffe08a;background:radial-gradient(circle at 35% 25%,#fff8d8,#ffce55 74%);color:#594316;box-shadow:0 0 42px rgba(255,204,79,.65)}.place-label{margin:0 0 12px;color:#dce7f7;font-size:28px;font-weight:800;letter-spacing:.06em}.podium-block{display:grid;place-items:center;width:100%;flex:1;border:1px solid rgba(168,209,255,.28);border-bottom:0;border-radius:25px 25px 0 0;background:linear-gradient(160deg,#1c3558,#10203a);color:#c9e1ff;font:800 64px/1 Manrope,sans-serif;box-shadow:inset 0 1px 0 rgba(255,255,255,.1)}.first .podium-block{border-color:rgba(255,217,112,.65);background:linear-gradient(160deg,#655021,#322810);color:#ffe08a;box-shadow:0 0 65px rgba(244,190,54,.2),inset 0 1px 0 rgba(255,255,255,.15)}.crown{position:absolute;top:-38px;color:#ffd961;font-size:49px;text-shadow:0 0 24px #ffca4d}
+    .theme-orbit{position:absolute;inset:50% auto auto 50%;width:950px;height:950px;transform:translate(-50%,-50%);border:1px solid rgba(168,209,255,.2);border-radius:50%;box-shadow:0 0 90px rgba(82,150,252,.12),inset 0 0 90px rgba(82,150,252,.07)}
+    .theme-card{position:relative;width:860px;overflow:hidden;border:1px solid rgba(168,209,255,.42);border-radius:30px;background:#0b1423;box-shadow:0 35px 85px rgba(0,0,0,.48),0 0 55px rgba(120,175,255,.17);transform-style:preserve-3d}
+    .theme-card img{display:block;width:100%;height:auto}.theme-card-title{position:absolute;top:20px;left:25px;z-index:2;padding:12px 18px;border-radius:999px;background:rgba(8,16,31,.84);color:#b8dbff;font:800 28px/1 DMSans,sans-serif;letter-spacing:.08em}
+    .theme-card.sakura{border-color:rgba(255,181,212,.45);box-shadow:0 35px 85px rgba(0,0,0,.48),0 0 60px rgba(237,120,173,.2)}.theme-card.sakura .theme-card-title{color:#ffd5e7}
+    .meteor{position:absolute;z-index:1;top:16%;right:-45%;width:620px;height:6px;border-radius:50%;background:linear-gradient(90deg,rgba(120,175,255,0),#78afff,#e3f2ff);box-shadow:0 0 22px 6px rgba(120,175,255,.55);transform:rotate(38deg);pointer-events:none}
+    .petal{position:absolute;z-index:1;width:18px;height:29px;border-radius:80% 10% 80% 10%;background:linear-gradient(145deg,#ffe4ef,#ed78ad);box-shadow:0 0 15px rgba(237,120,173,.35);pointer-events:none}
+    .stars{position:absolute;inset:0;z-index:1;pointer-events:none}.star{position:absolute;width:8px;height:8px;border-radius:50%;background:#d9e9ff;box-shadow:0 0 15px 4px rgba(168,209,255,.48)}.star.big{width:14px;height:14px}
+    .end-logo{display:grid;place-items:center;width:215px;height:215px;border:1px solid rgba(168,209,255,.5);border-radius:50%;background:radial-gradient(circle at 30% 25%,rgba(168,209,255,.24),rgba(21,38,66,.74));box-shadow:0 0 90px rgba(89,153,248,.35),inset 0 0 50px rgba(168,209,255,.14)}.end-logo img{width:130px;height:130px;object-fit:contain;filter:brightness(0) saturate(100%) invert(72%) sepia(26%) saturate(865%) hue-rotate(179deg) brightness(105%) drop-shadow(0 0 24px rgba(120,175,255,.65))}
+    .closing{max-width:850px;margin:0;font:800 91px/.98 Manrope,sans-serif;letter-spacing:-.055em}.closing span{color:var(--ice)}
+    .micro{color:rgba(220,233,250,.82);font:700 24px/1.2 DMSans,sans-serif;letter-spacing:.12em;text-transform:uppercase}
+    .orbit-dot{position:absolute;width:17px;height:17px;border-radius:50%;background:#9ac6ff;box-shadow:0 0 26px 9px rgba(120,175,255,.42)}
+    @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto}}
+  </style>
+</head>
+<body>
+  <div id="root" data-composition-id="main" data-start="0" data-duration="35.08" data-width="1080" data-height="1920">
+    <audio id="narration" src="narration.mp3" data-start="0" data-duration="35.08" data-track-index="0" data-volume="1"></audio>
+    <section id="scene-1" class="scene scene-blue">
+      <div class="scene-glow" style="left:170px;top:470px" data-layout-ignore></div><div class="orbital" data-layout-ignore></div>
+      <div id="orbit-dot" class="orbit-dot" data-layout-ignore></div>
+      <div class="stars"><i class="star big" style="left:14%;top:22%"></i><i class="star" style="left:84%;top:30%"></i><i class="star" style="left:23%;top:76%"></i><i class="star big" style="left:78%;top:78%"></i><i class="star" style="left:50%;top:18%"></i></div>
+      <div class="scene-content" data-layout-allow-overlap data-layout-allow-occlusion id="camera-1"><p class="eyebrow">YOUR NEXT LEVEL AWAITS</p><h1 class="headline"><span id="title-one">One small</span><br><span class="accent" id="title-two">step.</span></h1><p class="copy" id="copy-one">Your next level starts with one small step.</p><div class="tag" id="first-tag">STC LEARNIT · MADE FOR YOU</div><div class="orbital-core" id="orbital-core"><div class="level-token">01</div></div></div>
+    </section>
+    <section id="scene-2" class="scene scene-green">
+      <div class="scene-glow" style="left:160px;top:410px;background:radial-gradient(circle,rgba(131,203,94,.2),rgba(22,72,40,.1) 42%,rgba(5,8,18,0) 72%)" data-layout-ignore></div><div class="scene-content" data-layout-allow-overlap data-layout-allow-occlusion id="camera-2"><p class="eyebrow">A NEW WAY TO STUDY</p><div class="mark-row" id="brand-row"><img src="assets/stc-head.png" alt=""><div class="wordmark">STC <span>Learnit</span></div></div><h2 class="headline">Study <span class="accent">smarter.</span></h2><p class="copy">University subjects, built into a learning path made for you.</p><div class="screen-card" id="home-screen"><div class="screen-bar"><i></i><i></i><i></i><span data-layout-ignore>stclearnit.netlify.app</span></div><img src="assets/screens/hero.png" alt="STC Learnit study path interface"><div class="screen-caption">CHOOSE YOUR SUBJECT · BUILD YOUR PATH</div></div><p class="web-address">stclearnit.netlify.app</p></div>
+    </section>
+    <section id="scene-3" class="scene scene-blue">
+      <div class="scene-content" data-layout-allow-overlap data-layout-allow-occlusion id="camera-3"><p class="eyebrow">YOUR UNIVERSITY · YOUR DIRECTION</p><h2 class="headline">Find your <span class="accent">starting point.</span></h2><div class="faculty-count">12 Faculties &amp; Institutes</div><div class="screen-card" id="faculty-screen"><div class="screen-bar"><i></i><i></i><i></i><span data-layout-ignore>EXPLORE FACULTIES</span></div><img src="assets/screens/faculties.png" alt="Faculty and subject choices"></div><div class="chips" id="faculty-chips"><span class="chip">Medicine</span><span class="chip">Technology</span><span class="chip">Law</span><span class="chip">Sciences</span><span class="chip">Economics</span><span class="chip">Languages</span></div><p class="copy">Explore subjects. Find your path.</p></div>
+    </section>
+    <section id="scene-4" class="scene scene-blue">
+      <div class="scene-content" data-layout-allow-overlap data-layout-allow-occlusion id="camera-4"><p class="eyebrow">LEARN · PLAY · ADVANCE</p><h2 class="headline">Knowledge that <span class="accent">moves.</span></h2><div class="learn-stack"><article class="learn-card" id="learn-card-1"><span class="learn-index">01 / LEARN</span><img src="assets/illustrations/book.png" alt=""><div><strong>Understand the idea.</strong><small>Short lessons make key concepts clear.</small></div></article><article class="learn-card" id="learn-card-2"><span class="learn-index">02 / PLAY</span><img src="assets/illustrations/controller.png" alt=""><div><strong>Practise as you learn.</strong><small>Quizzes and games make ideas stick.</small></div></article><article class="learn-card" id="learn-card-3"><span class="learn-index">03 / ADVANCE</span><img src="assets/illustrations/trophy.png" alt=""><div><strong>Build your skills.</strong><small>Earn experience with every lesson.</small></div></article></div><div class="tag" id="practice-tag">LESSONS · QUIZZES · GAMES · EXAMS</div></div>
+    </section>
+    <section id="scene-5" class="scene scene-blue">
+      <div class="scene-glow" style="right:-240px;top:240px" data-layout-ignore></div><div class="scene-content" data-layout-allow-overlap data-layout-allow-occlusion id="camera-5"><p class="eyebrow">PROGRESS THAT ADDS UP</p><h2 class="headline">One level <span class="accent">at a time.</span></h2><p class="copy">Learn the material, pass unit exams, and keep climbing toward your final exam.</p><div class="path-frame" id="path-screen"><img src="assets/screens/progress.png" alt="Learning progress and exam milestones"></div><div class="path-steps" id="path-steps"><div class="path-step"><span class="node">✓</span><span>Learn the foundations</span></div><div class="path-step"><span class="node">02</span><span>Practise the concepts</span></div><div class="path-step"><span class="node">03</span><span>Pass the unit exam</span></div></div><div class="tag" id="level-up">PASS · EARN XP · LEVEL UP ↗</div></div>
+    </section>
+    <section id="scene-6" class="scene scene-blue">
+      <div class="scene-content" data-layout-allow-overlap data-layout-allow-occlusion id="camera-6"><p class="eyebrow">LEARN TOGETHER · CLIMB TOGETHER</p><h2 class="headline">Your place is <span class="accent">waiting.</span></h2><p class="copy">Bring your progress to the leaderboard and compete for the top three.</p><div class="podium" id="podium"><div class="place second"><div class="avatar">02</div><p class="place-label">2ND PLACE</p><div class="podium-block">02</div></div><div class="place first"><div class="crown">♛</div><div class="avatar">01</div><p class="place-label">1ST PLACE</p><div class="podium-block">01</div></div><div class="place third"><div class="avatar">03</div><p class="place-label">3RD PLACE</p><div class="podium-block">03</div></div></div><div class="tag" id="leader-tag">SHOW UP · KEEP LEARNING · CLIMB</div></div>
+    </section>
+    <section id="scene-7" class="scene scene-pink">
+      <div class="theme-orbit" data-layout-ignore></div><div class="meteor" id="theme-meteor" data-layout-ignore></div>
+      <div class="petal" style="left:11%;top:10%" data-layout-ignore></div><div class="petal" style="left:22%;top:5%;width:14px;height:22px" data-layout-ignore></div><div class="petal" style="left:83%;top:14%;width:13px;height:22px" data-layout-ignore></div><div class="petal" style="left:91%;top:8%;width:18px;height:28px" data-layout-ignore></div><div class="petal" style="left:70%;top:5%;width:15px;height:23px" data-layout-ignore></div><div class="petal" style="left:38%;top:3%;width:13px;height:21px" data-layout-ignore></div>
+      <div class="scene-content" data-layout-allow-overlap data-layout-allow-occlusion id="camera-7"><p class="eyebrow">YOUR STUDY SPACE · YOUR STYLE</p><h2 class="headline">Make it <span class="accent">yours.</span></h2><p class="copy">Choose Galaxy or Sakura and make your study space feel like you.</p><div class="theme-card galaxy" id="galaxy-card"><span class="theme-card-title">GALAXY · DEEP BLUE</span><img src="assets/screens/galaxy.png" alt="Galaxy premium theme"></div><div class="theme-card sakura" id="sakura-card"><span class="theme-card-title">SAKURA · LUMINOUS PINK</span><img src="assets/screens/sakura.png" alt="Sakura premium theme"></div><div class="tag" id="theme-tag">STUDY YOUR WAY</div></div>
+    </section>
+    <section id="scene-8" class="scene scene-blue">
+      <div class="scene-glow" style="left:190px;top:420px;width:700px;height:700px" data-layout-ignore></div><div class="stars"><i class="star big" style="left:20%;top:22%"></i><i class="star" style="left:82%;top:35%"></i><i class="star" style="left:14%;top:76%"></i><i class="star big" style="left:80%;top:82%"></i></div>
+      <div class="scene-content" data-layout-allow-overlap data-layout-allow-occlusion id="camera-8"><div class="end-logo" id="end-logo"><img src="assets/stc-head-end.png" alt="STC"></div><div class="wordmark" id="end-wordmark">STC <span>Learnit</span></div><h2 class="closing" id="closing-line">The way to <span>greatness.</span></h2><p class="web-address" id="end-url">stclearnit.netlify.app</p></div>
+    </section>
+    <script>
+      window.__timelines=window.__timelines||{};
+      const tl=gsap.timeline({paused:true});
+      const beats=[{id:"#scene-1",start:0,end:3.05},{id:"#scene-2",start:3.05,end:7.05},{id:"#scene-3",start:7.05,end:11.55},{id:"#scene-4",start:11.55,end:17.55},{id:"#scene-5",start:17.55,end:22.25},{id:"#scene-6",start:22.25,end:26.85},{id:"#scene-7",start:26.85,end:31.25},{id:"#scene-8",start:31.25,end:35.08}];
+      beats.forEach((b,i)=>{if(i>0){tl.fromTo(b.id,{opacity:0,scale:.985},{opacity:1,scale:1,duration:.55,ease:"power3.out"},b.start);tl.set(beats[i-1].id,{opacity:0},b.start+.55)}tl.fromTo(b.id+" .scene-content",{scale:1.055,y:34},{scale:1,y:0,duration:Math.min(1.7,b.end-b.start),ease:"power2.out"},b.start+.08)});
+      tl.fromTo("#scene-1 .eyebrow",{opacity:0,y:-28,scaleX:.86},{opacity:1,y:0,scaleX:1,duration:.62,ease:"power3.out"},.24);
+      tl.fromTo("#title-one",{opacity:0,x:-140,scaleX:.72,transformOrigin:"left center"},{opacity:1,x:0,scaleX:1,duration:.85,ease:"expo.out"},.36);
+      tl.fromTo("#title-two",{opacity:0,x:130,scaleX:.76,transformOrigin:"right center"},{opacity:1,x:0,scaleX:1,duration:.82,ease:"back.out(1.25)"},.56);
+      tl.fromTo("#copy-one",{opacity:0,y:32},{opacity:1,y:0,duration:.55,ease:"power2.out"},1.05);
+      tl.fromTo("#first-tag",{opacity:0,scale:.72,rotation:-5},{opacity:1,scale:1,rotation:0,duration:.65,ease:"back.out(1.35)"},1.45);
+      tl.fromTo("#scene-1 .orbital",{scale:.28,rotation:-24,opacity:0},{scale:1,rotation:0,opacity:1,duration:1.15,ease:"power3.out"},.45);
+      tl.to("#scene-1 .orbital",{rotation:18,duration:1.0,ease:"sine.inOut"},1.6);
+      tl.fromTo("#orbit-dot",{x:0,y:-390,scale:.45},{x:390,y:0,scale:1,duration:2.2,ease:"none"},.8);
+      tl.fromTo("#brand-row",{opacity:0,y:-42,scale:.8},{opacity:1,y:0,scale:1,duration:.65,ease:"back.out(1.3)"},3.25);
+      tl.fromTo("#scene-2 .eyebrow, #scene-2 .headline, #scene-2 .copy",{opacity:0,y:42},{opacity:1,y:0,duration:.62,stagger:.13,ease:"power3.out"},3.6);
+      tl.fromTo("#home-screen",{opacity:0,y:100,rotationY:18,rotationX:7,scale:.84},{opacity:1,y:0,rotationY:-4,rotationX:0,scale:1,duration:1.05,ease:"power3.out",transformPerspective:1400},4.08);
+      tl.to("#home-screen",{rotationY:3,duration:1.6,ease:"sine.inOut"},5.35);
+      tl.fromTo("#scene-2 .web-address",{opacity:0,y:22},{opacity:1,y:0,duration:.45,ease:"power2.out"},6.12);
+      tl.fromTo("#scene-3 .eyebrow, #scene-3 .headline, #scene-3 .faculty-count",{opacity:0,y:38},{opacity:1,y:0,duration:.62,stagger:.12,ease:"power3.out"},7.24);
+      tl.fromTo("#faculty-screen",{opacity:0,x:150,rotationY:-16,scale:.87},{opacity:1,x:0,rotationY:3,scale:1,duration:.92,ease:"power3.out",transformPerspective:1300},7.68);
+      tl.fromTo("#faculty-chips .chip",{opacity:0,y:35,scale:.8},{opacity:1,y:0,scale:1,duration:.52,stagger:.07,ease:"back.out(1.25)"},8.74);
+      tl.fromTo("#scene-3 .copy",{opacity:0,y:24},{opacity:1,y:0,duration:.5,ease:"power2.out"},9.3);
+      tl.fromTo("#scene-4 .eyebrow, #scene-4 .headline",{opacity:0,y:35},{opacity:1,y:0,duration:.58,stagger:.14,ease:"power3.out"},11.78);
+      tl.fromTo("#learn-card-1",{opacity:0,x:-170,rotationY:15,scale:.83},{opacity:1,x:0,rotationY:3,scale:1,duration:.7,ease:"back.out(1.22)",transformPerspective:1300},12.1);
+      tl.fromTo("#learn-card-2",{opacity:0,x:170,rotationY:-15,scale:.83},{opacity:1,x:0,rotationY:-3,scale:1,duration:.72,ease:"back.out(1.22)",transformPerspective:1300},12.52);
+      tl.fromTo("#learn-card-3",{opacity:0,y:150,rotationX:12,scale:.84},{opacity:1,y:0,rotationX:0,scale:1,duration:.78,ease:"back.out(1.18)",transformPerspective:1300},12.98);
+      tl.to("#learn-card-1",{y:-12,rotationZ:-1.2,duration:1.2,ease:"sine.inOut"},14.15);
+      tl.to("#learn-card-2",{y:-18,rotationZ:1.2,duration:1.1,ease:"sine.inOut"},14.32);
+      tl.to("#learn-card-3",{y:-10,rotationZ:-.8,duration:1.15,ease:"sine.inOut"},14.52);
+      tl.fromTo("#practice-tag",{opacity:0,scale:.75,y:25},{opacity:1,scale:1,y:0,duration:.5,ease:"back.out(1.35)"},15.4);
+      tl.fromTo("#scene-5 .eyebrow, #scene-5 .headline, #scene-5 .copy",{opacity:0,y:34},{opacity:1,y:0,duration:.55,stagger:.12,ease:"power3.out"},17.74);
+      tl.fromTo("#path-screen",{opacity:0,scale:.82,rotationY:12,x:90},{opacity:1,scale:1,rotationY:-2,x:0,duration:.88,ease:"power3.out",transformPerspective:1400},18.18);
+      tl.fromTo("#path-steps .path-step",{opacity:0,x:-70},{opacity:1,x:0,duration:.46,stagger:.22,ease:"power3.out"},19.05);
+      tl.fromTo("#level-up",{opacity:0,scale:.7,y:34},{opacity:1,scale:1,y:0,duration:.56,ease:"back.out(1.45)"},20.78);
+      tl.fromTo("#scene-6 .eyebrow, #scene-6 .headline, #scene-6 .copy",{opacity:0,y:33},{opacity:1,y:0,duration:.56,stagger:.12,ease:"power3.out"},22.44);
+      tl.fromTo("#scene-6 .second",{opacity:0,y:120,rotationY:13},{opacity:1,y:0,rotationY:5,duration:.65,ease:"back.out(1.3)",transformPerspective:1300},22.82);
+      tl.fromTo("#scene-6 .third",{opacity:0,y:120,rotationY:-13},{opacity:1,y:0,rotationY:-5,duration:.65,ease:"back.out(1.3)",transformPerspective:1300},23.02);
+      tl.fromTo("#scene-6 .first",{opacity:0,y:165,scale:.78},{opacity:1,y:0,scale:1,duration:.82,ease:"back.out(1.5)"},22.94);
+      tl.fromTo("#scene-6 .crown",{opacity:0,y:30,scale:.5},{opacity:1,y:0,scale:1,duration:.45,ease:"back.out(1.8)"},23.35);
+      tl.to("#scene-6 .crown",{y:-13,scale:1.08,duration:.48,yoyo:true,repeat:3,ease:"sine.inOut"},24.25);
+      tl.fromTo("#leader-tag",{opacity:0,y:22},{opacity:1,y:0,duration:.42,ease:"power2.out"},25.55);
+      tl.fromTo("#scene-7 .eyebrow, #scene-7 .headline, #scene-7 .copy",{opacity:0,y:31},{opacity:1,y:0,duration:.55,stagger:.12,ease:"power3.out"},27.05);
+      tl.fromTo("#galaxy-card",{opacity:0,x:-170,rotationY:15,scale:.86},{opacity:1,x:0,rotationY:4,scale:1,duration:.76,ease:"power3.out",transformPerspective:1300},27.52);
+      tl.fromTo("#theme-meteor",{opacity:0,x:580,y:-280,scaleX:.45},{opacity:1,x:-980,y:1130,scaleX:1.1,duration:1.05,ease:"power2.in"},27.18);
+      tl.fromTo("#sakura-card",{opacity:0,x:180,y:95,rotationY:-12,scale:.84},{opacity:1,x:0,y:0,rotationY:-3,scale:1,duration:.78,ease:"back.out(1.25)",transformPerspective:1300},29.12);
+      document.querySelectorAll("#scene-7 .petal").forEach((p,i)=>tl.fromTo(p,{opacity:0,x:0,y:-30,rotation:-35},{opacity:.9,x:i%2?85:-75,y:700+i*60,rotation:210+i*29,duration:3.2,ease:"none"},27.45+i*.2));
+      tl.fromTo("#theme-tag",{opacity:0,scale:.78,y:24},{opacity:1,scale:1,y:0,duration:.48,ease:"back.out(1.35)"},30.26);
+      tl.fromTo("#end-logo",{opacity:0,scale:.25,rotation:-75},{opacity:1,scale:1,rotation:0,duration:.88,ease:"back.out(1.5)"},31.55);
+      tl.fromTo("#end-wordmark",{opacity:0,y:32,scaleX:.75},{opacity:1,y:0,scaleX:1,duration:.62,ease:"power3.out"},32.18);
+      tl.fromTo("#closing-line",{opacity:0,y:55,scale:.9},{opacity:1,y:0,scale:1,duration:.76,ease:"back.out(1.22)"},32.72);
+      tl.fromTo("#end-url",{opacity:0,y:20},{opacity:1,y:0,duration:.45,ease:"power2.out"},32.96);
+      window.__timelines["main"]=tl;
+    </script>
+  </div>
+</body>
+</html>

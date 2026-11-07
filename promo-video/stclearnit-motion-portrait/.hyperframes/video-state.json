@@ -1,0 +1,364 @@
+{
+  "version": 1,
+  "historyId": "21899f2b-68d8-4df5-b5d5-ca85e81ede04",
+  "currentRevision": "866f56de-8442-418a-ba5d-dfbea407abdf",
+  "pendingChanges": false,
+  "files": {
+    "DESIGN.md": {
+      "hash": "cca12cfa8aefc46effb6d26309189d5dbe8b9414daa2bf653ef8d39859d4c384",
+      "content": "C:\\Users\\stalo\\.cache\\hyperframes\\history\\21899f2b-68d8-4df5-b5d5-ca85e81ede04\\blobs\\cc\\cca12cfa8aefc46effb6d26309189d5dbe8b9414daa2bf653ef8d39859d4c384"
+    },
+    "STORYBOARD.md": {
+      "hash": "d71b62f8f9a71e0d1813058a088377a8857d008b3bc04e73d37a4ea688bb4d75",
+      "content": "C:\\Users\\stalo\\.cache\\hyperframes\\history\\21899f2b-68d8-4df5-b5d5-ca85e81ede04\\blobs\\d7\\d71b62f8f9a71e0d1813058a088377a8857d008b3bc04e73d37a4ea688bb4d75"
+    },
+    "assets/fonts/dm-sans.woff2": {
+      "hash": "468d56b6b25b05b70190b6c233d773f6f1770e8579827ce022a57f03fa8002fb",
+      "content": "C:\\Users\\stalo\\.cache\\hyperframes\\history\\21899f2b-68d8-4df5-b5d5-ca85e81ede04\\blobs\\46\\468d56b6b25b05b70190b6c233d773f6f1770e8579827ce022a57f03fa8002fb"
+    },
+    "assets/fonts/manrope.woff2": {
+      "hash": "ddbf28cebf2fbbf800d307f020689bed6d1a96c5a22aed50fee23bf7de80d0f1",
+      "content": "C:\\Users\\stalo\\.cache\\hyperframes\\history\\21899f2b-68d8-4df5-b5d5-ca85e81ede04\\blobs\\dd\\ddbf28cebf2fbbf800d307f020689bed6d1a96c5a22aed50fee23bf7de80d0f1"
+    },
+    "assets/illustrations/book.png": {
+      "hash": "fe120a345e9c869224a76ef5a4d19ee25d084312ff51bb8b7532ca4086ce8f9c",
+      "content": "C:\\Users\\stalo\\.cache\\hyperframes\\history\\21899f2b-68d8-4df5-b5d5-ca85e81ede04\\blobs\\fe\\fe120a345e9c869224a76ef5a4d19ee25d084312ff51bb8b7532ca4086ce8f9c"
+    },
+    "assets/illustrations/controller.png": {
+      "hash": "2a643bbe6502333e4a77923de98d101b9029c7ed3af2ecdd06508a160079b01f",
+      "content": "C:\\Users\\stalo\\.cache\\hyperframes\\history\\21899f2b-68d8-4df5-b5d5-ca85e81ede04\\blobs\\2a\\2a643bbe6502333e4a77923de98d101b9029c7ed3af2ecdd06508a160079b01f"
+    },
+    "assets/illustrations/trophy.png": {
+      "hash": "99b7a684d79d154d5f7dfe428b80ac44710c86d644abdfd3a0a51275a58a135a",
+      "content": "C:\\Users\\stalo\\.cache\\hyperframes\\history\\21899f2b-68d8-4df5-b5d5-ca85e81ede04\\blobs\\99\\99b7a684d79d154d5f7dfe428b80ac44710c86d644abdfd3a0a51275a58a135a"
+    },
+    "assets/screens/faculties.png": {
+      "hash": "d9a89cc7d15b26ade7f6c849c2410d0b45218d29977e294ded723c975a382dd6",
+      "content": "C:\\Users\\stalo\\.cache\\hyperframes\\history\\21899f2b-68d8-4df5-b5d5-ca85e81ede04\\blobs\\d9\\d9a89cc7d15b26ade7f6c849c2410d0b45218d29977e294ded723c975a382dd6"
+    },
+    "assets/screens/galaxy.png": {
+      "hash": "6eb145d4b6d98de74d41b3b9ca576431b12e7d87d55f2d8de51de5988b58caf7",
+      "content": "C:\\Users\\stalo\\.cache\\hyperframes\\history\\21899f2b-68d8-4df5-b5d5-ca85e81ede04\\blobs\\6e\\6eb145d4b6d98de74d41b3b9ca576431b12e7d87d55f2d8de51de5988b58caf7"
+    },
+    "assets/screens/hero.png": {
+      "hash": "cd91f3c73756d3e191b738c308c9af450860aac35f6e00674facd8fa237714f8",
+      "content": "C:\\Users\\stalo\\.cache\\hyperframes\\history\\21899f2b-68d8-4df5-b5d5-ca85e81ede04\\blobs\\cd\\cd91f3c73756d3e191b738c308c9af450860aac35f6e00674facd8fa237714f8"
+    },
+    "assets/screens/leaderboard.png": {
+      "hash": "97377af89c2f60c7a6d8af73ff9062cae75f2e14ad596f024a764807773e1cb4",
+      "content": "C:\\Users\\stalo\\.cache\\hyperframes\\history\\21899f2b-68d8-4df5-b5d5-ca85e81ede04\\blobs\\97\\97377af89c2f60c7a6d8af73ff9062cae75f2e14ad596f024a764807773e1cb4"
+    },
+    "assets/screens/lesson.png": {
+      "hash": "3f49d3abf47dca04b32f22ca0a5065f62c98e49fc249c48be7d8d59276fb568f",
+      "content": "C:\\Users\\stalo\\.cache\\hyperframes\\history\\21899f2b-68d8-4df5-b5d5-ca85e81ede04\\blobs\\3f\\3f49d3abf47dca04b32f22ca0a5065f62c98e49fc249c48be7d8d59276fb568f"
+    },
+    "assets/screens/progress.png": {
+      "hash": "01efe79cbfe003c9ebc2c0c39fdb0568e314e8a4fec3190f41cb7bfc06087cc7",
+      "content": "C:\\Users\\stalo\\.cache\\hyperframes\\history\\21899f2b-68d8-4df5-b5d5-ca85e81ede04\\blobs\\01\\01efe79cbfe003c9ebc2c0c39fdb0568e314e8a4fec3190f41cb7bfc06087cc7"
+    },
+    "assets/screens/sakura.png": {
+      "hash": "664cf8c5e1bf58163ea1ead68b8044857a5ad0eb9f0ffc495642a7b91776df5d",
+      "content": "C:\\Users\\stalo\\.cache\\hyperframes\\history\\21899f2b-68d8-4df5-b5d5-ca85e81ede04\\blobs\\66\\664cf8c5e1bf58163ea1ead68b8044857a5ad0eb9f0ffc495642a7b91776df5d"
+    },
+    "assets/stc-head.png": {
+      "hash": "98baa1f16e43cc8c6b36ec0b064d50a4207dfbe3910ddb4a982553ab095ec1fb",
+      "content": "C:\\Users\\stalo\\.cache\\hyperframes\\history\\21899f2b-68d8-4df5-b5d5-ca85e81ede04\\blobs\\98\\98baa1f16e43cc8c6b36ec0b064d50a4207dfbe3910ddb4a982553ab095ec1fb"
+    },
+    "assets/vendor/gsap.min.js": {
+      "hash": "92bb9a96476f983d212a2bc4f54c889039c1696dd4461d40a736860938570fbb",
+      "content": "C:\\Users\\stalo\\.cache\\hyperframes\\history\\21899f2b-68d8-4df5-b5d5-ca85e81ede04\\blobs\\92\\92bb9a96476f983d212a2bc4f54c889039c1696dd4461d40a736860938570fbb"
+    },
+    "hyperframes.json": {
+      "hash": "53dbce1e19aa713cbb12ee0bc4d206143b45ab15e6ffbfcaa8f69572d4d24d50",
+      "content": "C:\\Users\\stalo\\.cache\\hyperframes\\history\\21899f2b-68d8-4df5-b5d5-ca85e81ede04\\blobs\\53\\53dbce1e19aa713cbb12ee0bc4d206143b45ab15e6ffbfcaa8f69572d4d24d50"
+    },
+    "index.html": {
+      "hash": "e203605469e557f26cd2b4c35485171fb04a1a5e1ddee38ebc7ed44b18f54ca7",
+      "content": "C:\\Users\\stalo\\.cache\\hyperframes\\history\\21899f2b-68d8-4df5-b5d5-ca85e81ede04\\blobs\\e2\\e203605469e557f26cd2b4c35485171fb04a1a5e1ddee38ebc7ed44b18f54ca7"
+    },
+    "meta.json": {
+      "hash": "8ff122ff7000cf7c0348843d577fc71911ee26271ba9d09c2438e313fd0383c1",
+      "content": "C:\\Users\\stalo\\.cache\\hyperframes\\history\\21899f2b-68d8-4df5-b5d5-ca85e81ede04\\blobs\\8f\\8ff122ff7000cf7c0348843d577fc71911ee26271ba9d09c2438e313fd0383c1"
+    },
+    "narration.mp3": {
+      "hash": "6d9574a99c125312a5cc2beaf5da55b0c07a69322f7f45f5dabab4de4ca3218d",
+      "content": "C:\\Users\\stalo\\.cache\\hyperframes\\history\\21899f2b-68d8-4df5-b5d5-ca85e81ede04\\blobs\\6d\\6d9574a99c125312a5cc2beaf5da55b0c07a69322f7f45f5dabab4de4ca3218d"
+    },
+    "package.json": {
+      "hash": "cc24e7c331f2c29d42c3ac331648a935fdfd2e0e4555fe5039244f5306f777c0",
+      "content": "C:\\Users\\stalo\\.cache\\hyperframes\\history\\21899f2b-68d8-4df5-b5d5-ca85e81ede04\\blobs\\cc\\cc24e7c331f2c29d42c3ac331648a935fdfd2e0e4555fe5039244f5306f777c0"
+    },
+    "assets/stc-head-end.png": {
+      "hash": "98baa1f16e43cc8c6b36ec0b064d50a4207dfbe3910ddb4a982553ab095ec1fb",
+      "content": "C:\\Users\\stalo\\.cache\\hyperframes\\history\\21899f2b-68d8-4df5-b5d5-ca85e81ede04\\blobs\\98\\98baa1f16e43cc8c6b36ec0b064d50a4207dfbe3910ddb4a982553ab095ec1fb"
+    }
+  },
+  "revisions": {
+    "1134ebab-1750-4456-8977-29a4aa4e36a2": {
+      "actor": {
+        "kind": "outside",
+        "name": "Outside"
+      },
+      "label": "Changed outside the app",
+      "startedAt": 1793379112475,
+      "endedAt": 1793379112718,
+      "files": {
+        "assets/stc-head-end.png": {
+          "before": null,
+          "after": "C:\\Users\\stalo\\.cache\\hyperframes\\history\\21899f2b-68d8-4df5-b5d5-ca85e81ede04\\blobs\\98\\98baa1f16e43cc8c6b36ec0b064d50a4207dfbe3910ddb4a982553ab095ec1fb"
+        },
+        "index.html": {
+          "before": "C:\\Users\\stalo\\.cache\\hyperframes\\history\\21899f2b-68d8-4df5-b5d5-ca85e81ede04\\blobs\\22\\221212507e3a0ff5d3b95e2001271d883690987c735e3967bd8cdfb53ec2600a",
+          "after": "C:\\Users\\stalo\\.cache\\hyperframes\\history\\21899f2b-68d8-4df5-b5d5-ca85e81ede04\\blobs\\b7\\b77d24ea643550e70efb3bc8e0687de83c1078f7a460ac59177c9d3067a46a48"
+        }
+      }
+    },
+    "6bd33e0b-bcf8-4c6e-9ade-7e12e5af31d7": {
+      "actor": {
+        "kind": "outside",
+        "name": "Outside"
+      },
+      "label": "Changed outside the app",
+      "startedAt": 1793379218442,
+      "endedAt": 1793379218444,
+      "files": {
+        "index.html": {
+          "before": "C:\\Users\\stalo\\.cache\\hyperframes\\history\\21899f2b-68d8-4df5-b5d5-ca85e81ede04\\blobs\\b7\\b77d24ea643550e70efb3bc8e0687de83c1078f7a460ac59177c9d3067a46a48",
+          "after": "C:\\Users\\stalo\\.cache\\hyperframes\\history\\21899f2b-68d8-4df5-b5d5-ca85e81ede04\\blobs\\a9\\a981d42444e9b2d9c35f8341d4628ace65f05773dd1e88a2f4448c1ca10f6320"
+        }
+      }
+    },
+    "0fb9af8c-fdcf-4ec1-9eb0-69e104687853": {
+      "actor": {
+        "kind": "outside",
+        "name": "Outside"
+      },
+      "label": "Changed outside the app",
+      "startedAt": 1793379322401,
+      "endedAt": 1793379322403,
+      "files": {
+        "index.html": {
+          "before": "C:\\Users\\stalo\\.cache\\hyperframes\\history\\21899f2b-68d8-4df5-b5d5-ca85e81ede04\\blobs\\a9\\a981d42444e9b2d9c35f8341d4628ace65f05773dd1e88a2f4448c1ca10f6320",
+          "after": "C:\\Users\\stalo\\.cache\\hyperframes\\history\\21899f2b-68d8-4df5-b5d5-ca85e81ede04\\blobs\\0d\\0ddead61e4ec580cfd6750122204fb022bd51bc12b15ba1f7d85bb923946d15a"
+        }
+      }
+    },
+    "866f56de-8442-418a-ba5d-dfbea407abdf": {
+      "actor": {
+        "kind": "outside",
+        "name": "Outside"
+      },
+      "label": "Changed outside the app",
+      "startedAt": 1793379458116,
+      "endedAt": 1793379458118,
+      "files": {
+        "index.html": {
+          "before": "C:\\Users\\stalo\\.cache\\hyperframes\\history\\21899f2b-68d8-4df5-b5d5-ca85e81ede04\\blobs\\0d\\0ddead61e4ec580cfd6750122204fb022bd51bc12b15ba1f7d85bb923946d15a",
+          "after": "C:\\Users\\stalo\\.cache\\hyperframes\\history\\21899f2b-68d8-4df5-b5d5-ca85e81ede04\\blobs\\e2\\e203605469e557f26cd2b4c35485171fb04a1a5e1ddee38ebc7ed44b18f54ca7"
+        }
+      }
+    }
+  },
+  "checks": {
+    "latest": {
+      "revision": "866f56de-8442-418a-ba5d-dfbea407abdf",
+      "id": "0a30d929-5d29-46cb-a756-b9905d2a0e9e"
+    },
+    "revisions": {
+      "1134ebab-1750-4456-8977-29a4aa4e36a2": [
+        {
+          "id": "cdbb1faf-71ad-41aa-99a6-5d177e4ec189",
+          "scope": "project",
+          "metadata": {
+            "ok": false,
+            "browserSkipped": false,
+            "options": {
+              "samples": 9,
+              "atTransitions": false,
+              "maxIssues": 80,
+              "collapseStatic": true,
+              "tolerance": 2,
+              "timeout": 10000,
+              "contrast": true,
+              "strict": false,
+              "snapshots": false,
+              "browserGpuMode": "auto"
+            }
+          },
+          "createdAt": 1793379131202,
+          "contentHash": "1e08eda105e54f0200bc81ecec12aced538bea6a372d8577ae3772d9e204e5c2",
+          "revision": "1134ebab-1750-4456-8977-29a4aa4e36a2",
+          "inputFingerprint": "3ab7dc27264e3c2fd862e106ac5ff06b1d1414d74e0a054f04feed0c4317448d",
+          "inputScope": "local-project-files",
+          "attribution": "recorded-revision",
+          "status": "cleaned",
+          "cleanedAfterRender": "5e4168df-d8d7-46b2-8e10-33a1a53febd3"
+        }
+      ],
+      "6bd33e0b-bcf8-4c6e-9ade-7e12e5af31d7": [
+        {
+          "id": "1e335407-9250-4c45-a0db-f706cc5d416f",
+          "scope": "project",
+          "metadata": {
+            "ok": false,
+            "browserSkipped": false,
+            "options": {
+              "samples": 9,
+              "atTransitions": false,
+              "maxIssues": 80,
+              "collapseStatic": true,
+              "tolerance": 2,
+              "timeout": 10000,
+              "contrast": true,
+              "strict": false,
+              "snapshots": false,
+              "browserGpuMode": "auto"
+            }
+          },
+          "createdAt": 1793379233845,
+          "contentHash": "b53909ae47cee7ce22282dd99973b6af2b340afd6f31e37cbfab6a9aecd2c7d9",
+          "revision": "6bd33e0b-bcf8-4c6e-9ade-7e12e5af31d7",
+          "inputFingerprint": "5f20f60363280a988b970cdc898acd9c1a36bd31ebad86bfdac0ea2e32a443d6",
+          "inputScope": "local-project-files",
+          "attribution": "recorded-revision",
+          "status": "cleaned",
+          "cleanedAfterRender": "5e4168df-d8d7-46b2-8e10-33a1a53febd3"
+        }
+      ],
+      "0fb9af8c-fdcf-4ec1-9eb0-69e104687853": [
+        {
+          "id": "04567ecd-0915-435c-8678-bb179425f7ad",
+          "scope": "project",
+          "metadata": {
+            "ok": true,
+            "browserSkipped": false,
+            "options": {
+              "samples": 9,
+              "atTransitions": false,
+              "maxIssues": 80,
+              "collapseStatic": true,
+              "tolerance": 2,
+              "timeout": 10000,
+              "contrast": true,
+              "strict": false,
+              "snapshots": false,
+              "browserGpuMode": "auto"
+            }
+          },
+          "createdAt": 1793379332976,
+          "contentHash": "70c257dd3cc3db5548d4ef8c41c38d834602768811a6b508fcca4cb600d80d90",
+          "revision": "0fb9af8c-fdcf-4ec1-9eb0-69e104687853",
+          "inputFingerprint": "60d9527e5a2d11657e15b1b1389e09a6dfe3cfb9fcbf57ccd5c2fddc43d360b5",
+          "inputScope": "local-project-files",
+          "attribution": "recorded-revision",
+          "status": "cleaned",
+          "cleanedAfterRender": "5e4168df-d8d7-46b2-8e10-33a1a53febd3"
+        },
+        {
+          "id": "71625922-a7a3-419b-97df-dc0230ae0f51",
+          "scope": "project",
+          "metadata": {
+            "ok": true,
+            "browserSkipped": false,
+            "options": {
+              "samples": 9,
+              "atTransitions": false,
+              "maxIssues": 80,
+              "collapseStatic": true,
+              "tolerance": 2,
+              "timeout": 10000,
+              "contrast": true,
+              "strict": false,
+              "snapshots": false,
+              "browserGpuMode": "auto"
+            }
+          },
+          "createdAt": 1793379418347,
+          "contentHash": "70c257dd3cc3db5548d4ef8c41c38d834602768811a6b508fcca4cb600d80d90",
+          "revision": "0fb9af8c-fdcf-4ec1-9eb0-69e104687853",
+          "inputFingerprint": "60d9527e5a2d11657e15b1b1389e09a6dfe3cfb9fcbf57ccd5c2fddc43d360b5",
+          "inputScope": "local-project-files",
+          "attribution": "recorded-revision",
+          "status": "cleaned",
+          "cleanedAfterRender": "5e4168df-d8d7-46b2-8e10-33a1a53febd3"
+        }
+      ],
+      "866f56de-8442-418a-ba5d-dfbea407abdf": [
+        {
+          "id": "0a30d929-5d29-46cb-a756-b9905d2a0e9e",
+          "scope": "project",
+          "report": "C:\\Users\\stalo\\Desktop\\STC LearnIt\\promo-video\\stclearnit-motion-portrait\\.hyperframes\\artifacts\\checks\\0a30d929-5d29-46cb-a756-b9905d2a0e9e.json",
+          "metadata": {
+            "ok": true,
+            "browserSkipped": false,
+            "options": {
+              "samples": 9,
+              "atTransitions": false,
+              "maxIssues": 80,
+              "collapseStatic": true,
+              "tolerance": 2,
+              "timeout": 10000,
+              "contrast": true,
+              "strict": false,
+              "snapshots": false,
+              "browserGpuMode": "auto"
+            }
+          },
+          "createdAt": 1793379469141,
+          "contentHash": "d4a31a210385d161d700f37fe7f649a03c7e343b8a573bfbb2a374b412bf6365",
+          "revision": "866f56de-8442-418a-ba5d-dfbea407abdf",
+          "inputFingerprint": "aa5b8f39c67d9aa9b8f7375924fb8c93fba375135befd2fb59a01294867cf46a",
+          "inputScope": "local-project-files",
+          "attribution": "recorded-revision"
+        }
+      ]
+    },
+    "unversioned": [
+      {
+        "id": "893ead93-b729-416b-b3d2-45186e01f047",
+        "scope": "project",
+        "report": "C:\\Users\\stalo\\Desktop\\STC LearnIt\\promo-video\\stclearnit-motion-portrait\\.hyperframes\\artifacts\\checks\\893ead93-b729-416b-b3d2-45186e01f047.json",
+        "metadata": {
+          "ok": false,
+          "browserSkipped": true,
+          "options": {
+            "samples": 9,
+            "atTransitions": false,
+            "maxIssues": 80,
+            "collapseStatic": true,
+            "tolerance": 2,
+            "timeout": 10000,
+            "contrast": true,
+            "strict": false,
+            "snapshots": false,
+            "browserGpuMode": "auto"
+          }
+        },
+        "createdAt": 1793379091769,
+        "contentHash": "a8da2b2efb4bf24086dc32d0c8440971b9260a146b5559e7199f87cde606e774",
+        "revision": null,
+        "inputFingerprint": "87854ec459c03f802b6f2d9fdaa6d6b3b83cf1454f359f1f402831dfa2194362",
+        "inputScope": "local-project-files",
+        "attribution": "unversioned"
+      }
+    ]
+  },
+  "snapshots": {
+    "latest": null,
+    "revisions": {},
+    "unversioned": []
+  },
+  "renders": {
+    "latest": {
+      "id": "5e4168df-d8d7-46b2-8e10-33a1a53febd3",
+      "completedAt": 1793379563289,
+      "output": "C:\\Users\\stalo\\Desktop\\STC LearnIt\\promo-video\\stclearnit-motion-portrait\\renders\\STC-Learnit-portrait-final.mp4",
+      "status": "completed",
+      "revision": "866f56de-8442-418a-ba5d-dfbea407abdf"
+    },
+    "retainedRevisions": [
+      "866f56de-8442-418a-ba5d-dfbea407abdf"
+    ]
+  },
+  "pendingArtifactCleanup": []
+}

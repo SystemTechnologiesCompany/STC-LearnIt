@@ -1,0 +1,64 @@
+STC LEARNIT — MOTION GRAPHICS VIDEO SCRIPT
+
+PROJECT
+Brand: STC Learnit
+Website: https://stclearnit.netlify.app/
+Format: 16:9, 4K master, 30 fps
+Voice-over: STC Learnit Voice Over.mp3 (provided in the project folder)
+Measured audio duration: approximately 35.1 seconds
+Edit length: Let the supplied voice-over determine the final duration. Do not cut or speed up the narration to force a 30-second runtime; use a 30-second version only if a separate shortened voice-over is recorded.
+
+CREATIVE DIRECTION
+Create a modern, cinematic, high-energy learning brand film. Use seamless camera moves, kinetic typography, restrained letter stretching, polished 3D elements, morphing shapes, depth, and fluid transitions. Begin in the Galaxy premium theme (dark navy, electric and light blue, creamy white), flow into the Sakura premium theme (layered pinks and white with falling petals), and briefly reveal the Basic theme. Keep all on-screen text legible and avoid covering key UI or the voice-over message with particles. Use the actual STC Learnit logo and website UI where available. Do not invent features or show fake user data.
+
+VOICE-OVER — USE THE PROVIDED RECORDING
+“Your next level starts with one small step. Meet STC Learnit: a new way to study university subjects. Explore faculties, choose your subject, and follow a learning path made for you. Learn the concepts, practise with quizzes and games, and build your knowledge step by step. Pass unit exams, earn experience, and climb through your levels. And take your place among the tops on the leaderboard for weeks! Make your study space yours with Galaxy and Sakura themes. Study your way, wherever your ambition takes you. STC. The way to greatness.”
+
+TIMED VISUAL CUE SHEET
+Timing is a guide. Snap each transition to the actual words and pauses in the MP3; keep the complete recording intact.
+
+00:00–00:03 | THE FIRST STEP
+Start from near-black. A tiny blue point of light ignites. The camera dives toward it as a meteor-like streak draws a path through a deep Galaxy-blue space. The light resolves into a floating 3D level marker.
+VO: “Your next level starts with one small step.”
+
+00:03–00:07 | BRAND REVEAL
+The level marker unfolds into the STC head logo. Morph the logo into the STC Learnit wordmark; give the letters a tasteful stretch-and-settle motion. The camera passes through the wordmark into a clean, dimensional view of the website. Show stclearnit.netlify.app clearly and accurately.
+VO: “Meet STC Learnit: a new way to study university subjects.”
+
+00:07–00:12 | CHOOSE YOUR PATH
+A course card rises from the site interface. Faculty and subject cards fan into a precise orbit, then glide into a readable selection layout. Push the camera through the selected subject card into its learning path.
+VO: “Explore faculties, choose your subject, and follow a learning path made for you.”
+
+00:12–00:18 | LEARN, THEN PRACTISE
+Show a short lesson concept forming from clean 3D shapes. Morph the lesson into a quiz; answer tiles slide and settle with a satisfying selection. Flow into a matching game with varied positions, then show XP appearing as a small reward.
+VO: “Learn the concepts, practise with quizzes and games, and build your knowledge step by step.”
+
+00:18–00:23 | CLIMB THROUGH LEVELS
+The camera follows a smooth rising path through level markers. A unit exam panel assembles from thin luminous lines; on completion, the next level unlocks with a restrained burst of light. Keep the interface text short and readable.
+VO: “Pass unit exams, earn experience, and climb through your levels.”
+
+00:23–00:27 | LEADERBOARD
+The rising path curves into the leaderboard. Three podium forms lift into frame, with a golden glow reserved for first place. Names and XP may appear only if using real, approved site data; otherwise use abstract placeholders without readable personal details. Let the camera arc across the podium.
+VO: “And take your place among the tops on the leaderboard for weeks!”
+
+00:27–00:31 | MAKE IT YOURS
+A blue meteor crosses the frame. Its trail blooms into Sakura-pink petals. Galaxy and Sakura theme previews rotate into view, followed by a brief Basic theme preview. The colors change smoothly across the UI, not just in the background.
+VO: “Make your study space yours with Galaxy and Sakura themes.”
+
+00:31–00:34 | STUDY ANYWHERE
+Pull back to reveal the site on a phone and laptop, connected by a single fluid camera move. Keep device screens bright enough to read, with the Galaxy and Sakura accents visible.
+VO: “Study your way, wherever your ambition takes you.”
+
+00:34–00:35.1 | END CARD
+The devices and particles draw inward and resolve into the STC Learnit logo. End on a clean, still brand lockup with the website address. Hold the final frame through the audio tail; finish on the final sound, not before it.
+VO: “STC. The way to greatness.”
+
+SOUND AND FINISH
+Use the supplied narration as the timing master. Keep music under the voice, building gently from curiosity to confidence. Add restrained whooshes for camera transitions, light UI ticks for selections, a warm unlock accent, a soft petal shimmer for the Sakura transition, and one confident final logo hit. Preserve a short clean audio tail. Avoid loud impacts, busy particle noise, or effects that compete with speech.
+
+HANDOFF NOTES
+- Use STC Learnit Voice Over.mp3 from the project folder as the narration track.
+- The supplied MP3 is about 35.1 seconds, so the requested full narration does not naturally fit a 30-second cut at a comfortable speaking pace.
+- If exactly 30 seconds is mandatory, record a shortened voice-over or approve a faster delivery before editing. Do not silently remove words.
+- Keep the on-screen brand spelling exactly: STC Learnit.
+- Use the full website URL on the end card: https://stclearnit.netlify.app/

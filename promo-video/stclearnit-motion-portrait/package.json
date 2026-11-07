@@ -1,0 +1,9 @@
+{
+  "name": "stclearnit-motion-portrait",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "check": "node ../node_modules/hyperframes/bin/hyperframes.mjs check",
+    "render": "node ../node_modules/hyperframes/bin/hyperframes.mjs render --output renders/STC-Learnit-portrait-final.mp4 --fps 30 --quality delivery --workers 1 --no-browser-gpu --low-memory-mode"
+  }
+}
