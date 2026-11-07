@@ -5,13 +5,15 @@ import Stripe from "npm:stripe@23.1.0";
 import { createClient } from "npm:@supabase/supabase-js@2.81.1";
 var site = "https://stclearnit.netlify.app";
 var prices = {
-  pro: Deno.env.get("STRIPE_PRICE_PRO") || "price_1UZ6aR4Mzb2FMoC9OpncOXVr",
-  stc: Deno.env.get("STRIPE_PRICE_STC") || "price_1UZ6bB4Mzb2FMoC9GHMFVvtZ"
+  pro: Deno.env.get("STRIPE_PRICE_PRO") || "price_1UZ7jk4Mzb2FMoC9REskIl6F",
+  stc: Deno.env.get("STRIPE_PRICE_STC") || "price_1UZ7k54Mzb2FMoC9htZNQwMR"
 };
 function clients() {
-  const key = Deno.env.get("STRIPE_SECRET_KEY") || "";
+  const key = (Deno.env.get("STRIPE_SECRET_KEY") || "").trim();
+  if (!key) throw new Error("BILLING_KEY_MISSING");
   const live = Deno.env.get("STRIPE_MODE") === "live";
   if (!(live ? /^(rk|sk)_live_/ : /^(rk|sk)_test_/).test(key)) throw new Error("BILLING_MODE_MISMATCH");
+  if (!Deno.env.get("SUPABASE_URL") || !Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")) throw new Error("SUPABASE_ENV_MISSING");
   const stripe = new Stripe(key, { apiVersion: "2026-10-28.endive", maxNetworkRetries: 2 });
   const db = createClient(Deno.env.get("SUPABASE_URL"), Deno.env.get("SUPABASE_SERVICE_ROLE_KEY"), { auth: { persistSession: false } });
   return { stripe, db, live };
@@ -40,6 +42,7 @@ Deno.serve(async (request) => {
     const { data: { user }, error: authError } = await db.auth.getUser(token);
     if (authError || !user) return json({ reason: "SIGN_IN_REQUIRED" }, 401);
     const body = await request.json();
+    if (body.expectedMode !== (live ? "live" : "test")) return json({ reason: "BILLING_MODE_MISMATCH" }, 409);
     const { data: mapping, error: mapError } = await db.from("stripe_customers").select("customer_id").eq("user_id", user.id).eq("livemode", live).maybeSingle();
     if (mapError) throw mapError;
     let customerId = mapping?.customer_id;
@@ -73,7 +76,10 @@ Deno.serve(async (request) => {
     }, { idempotencyKey: `learnit-checkout-${user.id}-${bucket}` });
     return json({ url: session.url });
   } catch (error) {
-    console.error("Stripe billing failed", error.code || error.name);
-    return json({ reason: "BILLING_UNAVAILABLE" }, 503);
+    const problem = error;
+    const setupReasons = ["WEBHOOK_NOT_CONFIGURED", "BILLING_KEY_MISSING", "BILLING_MODE_MISMATCH", "PRICE_CONFIGURATION", "SUPABASE_ENV_MISSING"];
+    const reason = setupReasons.includes(problem.message || "") ? problem.message : problem.type === "StripePermissionError" ? "STRIPE_PERMISSION_MISSING" : problem.type === "StripeAuthenticationError" ? "STRIPE_KEY_INVALID" : problem.code === "resource_missing" ? "STRIPE_RESOURCE_MISSING" : "BILLING_UNAVAILABLE";
+    console.error("Stripe billing failed", reason);
+    return json({ reason }, 503);
   }
 });

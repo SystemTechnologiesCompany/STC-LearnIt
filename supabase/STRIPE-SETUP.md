@@ -15,8 +15,8 @@ Keep your restricted sandbox key in `STRIPE_SECRET_KEY`. The function uses the S
 | Name | Value |
 | --- | --- |
 | STRIPE_MODE | test |
-| STRIPE_PRICE_PRO | price_1UZ6aR4Mzb2FMoC9OpncOXVr |
-| STRIPE_PRICE_STC | price_1UZ6bB4Mzb2FMoC9GHMFVvtZ |
+| STRIPE_PRICE_PRO | price_1UZ7jk4Mzb2FMoC9REskIl6F |
+| STRIPE_PRICE_STC | price_1UZ7k54Mzb2FMoC9htZNQwMR |
 | STRIPE_WEBHOOK_SECRET | Copy privately from the Stripe event destination created below |
 
 Both Prices must belong to the same sandbox as the API key, be active, recurring monthly, and have amounts 250 DZD and 700 DZD respectively. DZD amounts in the API are 25000 and 70000 minor units. A key/environment/currency/amount mismatch fails closed. Never put keys in website files or chat.

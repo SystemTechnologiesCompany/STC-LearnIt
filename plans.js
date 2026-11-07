@@ -190,13 +190,23 @@
       const { data: auth, error: authError } = await client.auth.getSession();
       if (authError || !auth?.session) { status.textContent = t.billingSignIn; return; }
       const { data, error } = await client.functions.invoke('stripe-billing', { body: {
-        action, plan: q('.payment-methods').dataset.plan, language: french() ? 'fr' : 'en',
+        action, plan: q('.payment-methods').dataset.plan, language: french() ? 'fr' : 'en', expectedMode: billingLive ? 'live' : 'test',
       } });
-      if (error || !data?.url) throw error || new Error('No checkout URL');
+      if (error) {
+        let detail = {};
+        try { detail = await error.context.clone().json(); } catch {}
+        const reasons = ['WEBHOOK_NOT_CONFIGURED', 'BILLING_KEY_MISSING', 'BILLING_MODE_MISMATCH', 'PRICE_CONFIGURATION', 'SUPABASE_ENV_MISSING', 'STRIPE_PERMISSION_MISSING', 'STRIPE_KEY_INVALID', 'STRIPE_RESOURCE_MISSING'];
+        if (reasons.includes(detail.reason)) throw new Error(detail.reason);
+        throw error;
+      }
+      if (!data?.url) throw new Error('No checkout URL');
       const target = new URL(data.url);
       if (target.protocol !== 'https:' || !['checkout.stripe.com', 'billing.stripe.com'].includes(target.hostname)) throw new Error('Invalid redirect');
       window.location.assign(target.href);
-    } catch { status.textContent = client ? t.billingError : t.billingSignIn; }
+    } catch (error) {
+      const diagnostic = billingTest && /^[A-Z_]+$/.test(error?.message || '') ? ` (${error.message})` : '';
+      status.textContent = (client ? t.billingError : t.billingSignIn) + diagnostic;
+    }
     finally { billingBusy = false; button.disabled = false; }
   }
   q('.manage-card-billing').addEventListener('click', event => openBilling('portal', event.currentTarget));

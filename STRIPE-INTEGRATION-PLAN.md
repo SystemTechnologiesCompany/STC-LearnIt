@@ -13,8 +13,8 @@ Prepared 7 November 2026 from the existing website and official Stripe integrati
 ### Confirmed setup
 
 - Automatic monthly renewal selected by the owner.
-- Pro: 250 DZD/month, Price ID `price_1UZ6aR4Mzb2FMoC9OpncOXVr`.
-- STC: 700 DZD/month, Price ID `price_1UZ6bB4Mzb2FMoC9GHMFVvtZ`.
+- Pro: 250 DZD/month, Price ID `price_1UZ7jk4Mzb2FMoC9REskIl6F`.
+- STC: 700 DZD/month, Price ID `price_1UZ7k54Mzb2FMoC9htZNQwMR`.
 - Owner reports a US Stripe account. Live charges/payouts and the supplied Prices' sandbox/live mode have not been independently verified.
 - Price IDs are public identifiers. Actual amount, currency, recurring interval, active status and account/environment must be checked server-side before accepting payments.
 

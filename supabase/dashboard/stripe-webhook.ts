@@ -4,13 +4,15 @@
 import Stripe from "npm:stripe@23.1.0";
 import { createClient } from "npm:@supabase/supabase-js@2.81.1";
 var prices = {
-  pro: Deno.env.get("STRIPE_PRICE_PRO") || "price_1UZ6aR4Mzb2FMoC9OpncOXVr",
-  stc: Deno.env.get("STRIPE_PRICE_STC") || "price_1UZ6bB4Mzb2FMoC9GHMFVvtZ"
+  pro: Deno.env.get("STRIPE_PRICE_PRO") || "price_1UZ7jk4Mzb2FMoC9REskIl6F",
+  stc: Deno.env.get("STRIPE_PRICE_STC") || "price_1UZ7k54Mzb2FMoC9htZNQwMR"
 };
 function clients() {
-  const key = Deno.env.get("STRIPE_SECRET_KEY") || "";
+  const key = (Deno.env.get("STRIPE_SECRET_KEY") || "").trim();
+  if (!key) throw new Error("BILLING_KEY_MISSING");
   const live = Deno.env.get("STRIPE_MODE") === "live";
   if (!(live ? /^(rk|sk)_live_/ : /^(rk|sk)_test_/).test(key)) throw new Error("BILLING_MODE_MISMATCH");
+  if (!Deno.env.get("SUPABASE_URL") || !Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")) throw new Error("SUPABASE_ENV_MISSING");
   const stripe = new Stripe(key, { apiVersion: "2026-10-28.endive", maxNetworkRetries: 2 });
   const db = createClient(Deno.env.get("SUPABASE_URL"), Deno.env.get("SUPABASE_SERVICE_ROLE_KEY"), { auth: { persistSession: false } });
   return { stripe, db, live };

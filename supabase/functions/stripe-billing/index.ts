@@ -16,6 +16,7 @@ Deno.serve(async request => {
     const { data: { user }, error: authError } = await db.auth.getUser(token);
     if (authError || !user) return json({ reason: 'SIGN_IN_REQUIRED' }, 401);
     const body = await request.json();
+    if (body.expectedMode !== (live ? 'live' : 'test')) return json({ reason: 'BILLING_MODE_MISMATCH' }, 409);
     const { data: mapping, error: mapError } = await db.from('stripe_customers').select('customer_id').eq('user_id', user.id).eq('livemode', live).maybeSingle();
     if (mapError) throw mapError;
     let customerId = mapping?.customer_id;
@@ -46,7 +47,15 @@ Deno.serve(async request => {
     }, { idempotencyKey: `learnit-checkout-${user.id}-${bucket}` });
     return json({ url: session.url });
   } catch (error) {
-    console.error('Stripe billing failed', (error as { code?: string }).code || (error as Error).name);
-    return json({ reason: 'BILLING_UNAVAILABLE' }, 503);
+    // Never log provider messages, request headers, key values or environment contents.
+    const problem = error as { code?: string; name?: string; type?: string; message?: string };
+    const setupReasons = ['WEBHOOK_NOT_CONFIGURED', 'BILLING_KEY_MISSING', 'BILLING_MODE_MISMATCH', 'PRICE_CONFIGURATION', 'SUPABASE_ENV_MISSING'];
+    const reason = setupReasons.includes(problem.message || '') ? problem.message
+      : problem.type === 'StripePermissionError' ? 'STRIPE_PERMISSION_MISSING'
+      : problem.type === 'StripeAuthenticationError' ? 'STRIPE_KEY_INVALID'
+      : problem.code === 'resource_missing' ? 'STRIPE_RESOURCE_MISSING'
+      : 'BILLING_UNAVAILABLE';
+    console.error('Stripe billing failed', reason);
+    return json({ reason }, 503);
   }
 });
